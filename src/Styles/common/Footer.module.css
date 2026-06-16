@@ -1,0 +1,144 @@
+.footer {
+  background: #000;
+  color: #fff;
+  padding-top: 3rem;
+  padding-bottom: 2rem;
+}
+
+/* ===== TOP SECTION ===== */
+.footer-top {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 4rem 3rem;
+}
+
+.footer-logo {
+  font-size: 2rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  max-width: 30%;
+  margin-top: 25px;
+}
+
+.footer-links {
+  display: flex;
+  gap: 6rem;
+}
+
+.footer-col p {
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #777;
+  margin-bottom: 0.8rem;
+}
+
+.footer-col a {
+  display: block;
+  color: #fff;
+  text-decoration: none;
+  font-size: 0.95rem;
+  line-height: 2;
+  letter-spacing: 0.02em;
+  font-weight: 500;
+}
+
+/* ===== MARQUEE ===== */
+.footer-marquee {
+  border-top: 1px solid #333;
+  border-bottom: 1px solid #333;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.marquee-track {
+  display: inline-flex;
+  align-items: center;
+  will-change: transform;
+}
+
+.marquee-track span {
+  font-size: 8vw;
+  font-weight: 300;
+  letter-spacing: 0.12em;
+  padding: 2rem 1rem;
+}
+
+.dot {
+  width: 1.5vw;
+  height: 1.5vw;
+  background: #fff;
+  border-radius: 50%;
+  margin: 0 2vw;
+}
+
+/* ===== BOTTOM ===== */
+.footer-bottom {
+  display: flex;
+  justify-content: flex-end;
+  padding: 2.5rem 4rem 0;
+}
+
+.back-to-top {
+  background: none;
+  border: none;
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.arrow {
+  border: 2px solid white;
+  border-radius: 50%;
+  padding: 0.8rem 1rem;
+  transition: transform 0.3s ease;
+}
+
+.back-to-top:hover .arrow {
+  transform: translateY(-4px);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1024px) {
+  .footer-top {
+    flex-direction: column;
+    gap: 3rem;
+  }
+
+  .footer-links {
+    gap: 3rem;
+    justify-content: space-between;
+  }
+}
+
+@media (max-width: 768px) {
+  .footer-links {
+    flex-direction: column;
+    gap: 2.5rem;
+  }
+
+  .footer-bottom {
+    justify-content: center;
+  }
+
+  .marquee-track span {
+    font-size: 14vw;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer {
+    padding-top: 2rem;
+  }
+
+  .footer-logo {
+    font-size: 1.6rem;
+  }
+
+  .marquee-track span {
+    font-size: 18vw;
+  }
+}

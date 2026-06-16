@@ -1,0 +1,6 @@
+/* src/styles/roka/RokaBlog.module.css */
+.blogSection {
+  background-color: #000000;
+  border-top: 1px solid #333333;
+  border-bottom: 1px solid #333333;
+}

@@ -1,0 +1,146 @@
+/* src/styles/common/GalleryGrid.module.css */
+
+.galleryMainWrapper {
+  padding: 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.noImages {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #666;
+  padding: 40px;
+}
+
+.galleryGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  grid-auto-flow: dense;
+}
+
+.gridItem {
+  overflow: hidden;
+  background-color: #1a1a1a;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.gridItem:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.gridItem img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+.gridItem:hover img {
+  transform: scale(1.05);
+}
+
+/* ===== LANDSCAPE: Width 2x, Height 1x ===== */
+.gridItemLandscape {
+  grid-column: span 2;
+  grid-row: span 1;
+  aspect-ratio: 2 / 1;
+}
+
+/* ===== PORTRAIT: Width 1x, Height 2x ===== */
+.gridItemPortrait {
+  grid-column: span 1;
+  grid-row: span 2;
+  aspect-ratio: 1 / 2;
+}
+
+/* ===== SQUARE: 1x1 ===== */
+.gridItemSquare {
+  grid-column: span 1;
+  grid-row: span 1;
+  aspect-ratio: 1 / 1;
+}
+
+/* ===== RESPONSIVE ===== */
+
+/* Tablet: 3 columns */
+@media (max-width: 1024px) {
+  .galleryGrid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+  
+  .galleryMainWrapper {
+    padding: 20px;
+  }
+  
+  .gridItemLandscape {
+    grid-column: span 2;
+    grid-row: span 1;
+  }
+  
+  .gridItemPortrait {
+    grid-column: span 1;
+    grid-row: span 2;
+  }
+  
+  .gridItemSquare {
+    grid-column: span 1;
+    grid-row: span 1;
+  }
+}
+
+/* Mobile: 2 columns */
+@media (max-width: 768px) {
+  .galleryGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  
+  .galleryMainWrapper {
+    padding: 16px;
+  }
+  
+  .gridItemLandscape {
+    grid-column: span 2;
+    grid-row: span 1;
+    aspect-ratio: 2 / 1;
+  }
+  
+  .gridItemPortrait {
+    grid-column: span 1;
+    grid-row: span 2;
+    aspect-ratio: 1 / 2;
+  }
+  
+  .gridItemSquare {
+    grid-column: span 1;
+    grid-row: span 1;
+    aspect-ratio: 1 / 1;
+  }
+}
+
+/* Small Mobile: 1 column */
+@media (max-width: 480px) {
+  .galleryGrid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  
+  .galleryMainWrapper {
+    padding: 12px;
+  }
+  
+  .gridItemLandscape,
+  .gridItemPortrait,
+  .gridItemSquare {
+    grid-column: span 1;
+    grid-row: span 1;
+    aspect-ratio: 1 / 1;
+  }
+}

@@ -1,0 +1,236 @@
+/* src/styles/common/Blog.module.css */
+
+.blogsContainer {
+  padding: 80px 0;
+  background-color: #000000;
+}
+
+/* ===== SECTION HEADER ===== */
+.sectionHeader {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.sectionTitle {
+  font-size: 42px;
+  font-weight: 600;
+  letter-spacing: 4px;
+  color: #FFFFFF;
+  margin-bottom: 15px;
+  font-family: 'Playfair Display', serif;
+}
+
+.sectionLine {
+  width: 70px;
+  height: 3px;
+  background-color: #FFFFFF;
+  margin: 0 auto 20px auto;
+}
+
+.sectionSubtitle {
+  font-size: 16px;
+  color: #AAAAAA;
+  font-family: 'Inter', sans-serif;
+  letter-spacing: 1px;
+}
+
+/* ===== CSS GRID - 3 COLUMNS ===== */
+.blogGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);  /* ✅ 3 FIXED COLUMNS */
+  gap: 30px;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+/* ===== BLOG CARD ===== */
+.blogCard {
+  background-color: #111111;
+  cursor: pointer;
+  border-radius: 16px;
+  overflow: hidden;
+  transition: all 0.4s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  position: relative;
+}
+
+.blogCard:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.4);
+}
+
+/* Card Number */
+.cardNumber {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  font-size: 12px;
+  font-weight: bold;
+  color: #FFFFFF;
+  letter-spacing: 2px;
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 5px 12px;
+  z-index: 2;
+  font-family: 'Inter', sans-serif;
+  border-radius: 20px;
+  backdrop-filter: blur(4px);
+}
+
+/* Image */
+.imageWrapper {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+}
+
+.blogImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.blogCard:hover .blogImage {
+  transform: scale(1.05);
+}
+
+/* Content */
+.cardContent {
+  padding: 22px 20px 26px 20px;
+}
+
+.cardSubtitle {
+  font-size: 11px;
+  color: #888888;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 10px;
+  font-family: 'Inter', sans-serif;
+}
+
+.cardTitle {
+  font-size: 20px;
+  font-weight: 600;
+  color: #FFFFFF;
+  margin-bottom: 12px;
+  letter-spacing: 0.5px;
+  font-family: 'Playfair Display', serif;
+  line-height: 1.3;
+}
+
+.cardDescription {
+  font-size: 14px;
+  color: #AAAAAA;
+  line-height: 1.6;
+  margin-bottom: 18px;
+  font-family: 'Inter', sans-serif;
+}
+
+.cardFooter {
+  border-top: 1px solid #333333;
+  padding-top: 16px;
+}
+
+.readMore {
+  font-size: 11px;
+  color: #FFFFFF;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  transition: letter-spacing 0.3s ease;
+  font-family: 'Inter', sans-serif;
+}
+
+.blogCard:hover .readMore {
+  letter-spacing: 3px;
+}
+
+/* ===== RESPONSIVE ===== */
+
+/* Tablet: 2 columns */
+@media (max-width: 992px) {
+  .blogGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 25px;
+    padding: 0 30px;
+  }
+  
+  .sectionTitle {
+    font-size: 36px;
+  }
+}
+
+/* Mobile: 1 column */
+@media (max-width: 768px) {
+  .blogsContainer {
+    padding: 50px 0;
+  }
+  
+  .blogGrid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    padding: 0 20px;
+  }
+  
+  .sectionTitle {
+    font-size: 32px;
+  }
+  
+  .sectionLine {
+    width: 50px;
+  }
+  
+  .cardTitle {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 576px) {
+  .sectionTitle {
+    font-size: 28px;
+  }
+  
+  .cardContent {
+    padding: 18px 16px 22px 16px;
+  }
+  
+  .cardTitle {
+    font-size: 16px;
+  }
+}
+/* ===== ANIMATIONS ===== */
+
+/* Fade In */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Blog Card Animation */
+.blogCard {
+  opacity: 0;
+  animation: fadeIn 0.6s ease forwards;
+}
+
+/* Stagger children */
+.stagger-children > .blogCol:nth-child(1) .blogCard { animation-delay: 0.05s; }
+.stagger-children > .blogCol:nth-child(2) .blogCard { animation-delay: 0.1s; }
+.stagger-children > .blogCol:nth-child(3) .blogCard { animation-delay: 0.15s; }
+.stagger-children > .blogCol:nth-child(4) .blogCard { animation-delay: 0.2s; }
+.stagger-children > .blogCol:nth-child(5) .blogCard { animation-delay: 0.25s; }
+.stagger-children > .blogCol:nth-child(6) .blogCard { animation-delay: 0.3s; }
+.stagger-children > .blogCol:nth-child(7) .blogCard { animation-delay: 0.35s; }
+.stagger-children > .blogCol:nth-child(8) .blogCard { animation-delay: 0.4s; }
+.stagger-children > .blogCol:nth-child(9) .blogCard { animation-delay: 0.45s; }
+.stagger-children > .blogCol:nth-child(10) .blogCard { animation-delay: 0.5s; }
+.stagger-children > .blogCol:nth-child(11) .blogCard { animation-delay: 0.55s; }
+.stagger-children > .blogCol:nth-child(12) .blogCard { animation-delay: 0.6s; }

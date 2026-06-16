@@ -1,0 +1,163 @@
+/* src/styles/common/OtherWork.module.css */
+
+.otherWorkSection {
+  background-color: black;
+  padding: 60px 0;
+  border-top: 1px solid #333333;
+  border-bottom: 1px solid #333333;
+}
+
+.sectionHeader {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.sectionTitle {
+  font-size: 32px;
+  font-weight: 400;
+  letter-spacing: 3px;
+  color: #FFFFFF;
+  margin-bottom: 12px;
+  font-family: 'Playfair Display', serif;
+}
+
+.sectionLine {
+  width: 60px;
+  height: 2px;
+  background-color: #FFFFFF;
+  margin: 0 auto;
+}
+
+/* ===== LINKS CONTAINER ===== */
+.linksContainer {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* ===== BUTTON WITH BACKGROUND IMAGE ===== */
+.workLink {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border: 2px solid #333333;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  overflow: hidden;
+  min-width: 120px;
+  max-width: 160px;
+  height: 85px;  /* ← HEIGHT BADAYI */
+  padding: 0;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  position: relative;
+}
+
+.workLink:hover {
+  transform: translateY(-4px) scale(1.03);
+  border-color: #FFFFFF;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+}
+
+/* ===== TITLE OVERLAY ===== */
+.workLinkTitle {
+  color: #FFFFFF;
+  font-size: 12px;  /* ← CHOTA KIYA */
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  font-family: 'Inter', sans-serif;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  transition: all 0.3s ease;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9);
+  background: rgba(0, 0, 0, 0.35);
+  padding: 0 8px;
+  text-align: center;
+  white-space: normal;  /* ← LINE BREAK ALLOW */
+  word-wrap: break-word;  /* ← WORD WRAP */
+  line-height: 1.2;
+}
+
+.workLink:hover .workLinkTitle {
+  letter-spacing: 2px;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+/* ===== DESTINATION WEDDING SPECIAL ===== */
+.workLinkTitle.destination {
+  font-size: 10px;
+  letter-spacing: 1px;
+  line-height: 1.1;
+  padding: 0 4px;
+}
+
+/* ============================================================ */
+/* ===== RESPONSIVE ===== */
+/* ============================================================ */
+
+@media (max-width: 1100px) {
+  .workLink {
+    min-width: 110px;
+    height: 75px;
+  }
+  .workLinkTitle {
+    font-size: 11px;
+    white-space: normal;
+    line-height: 1.2;
+  }
+}
+
+@media (max-width: 900px) {
+  .workLink {
+    min-width: 100px;
+    height: 70px;
+  }
+  .workLinkTitle {
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 768px) {
+  .otherWorkSection { padding: 40px 0; }
+  .sectionTitle { font-size: 28px; }
+  
+  .workLink {
+    min-width: calc(33.33% - 10px);
+    flex: 0 0 calc(33.33% - 10px);
+    max-width: none;
+    height: 70px;
+  }
+  .workLinkTitle {
+    font-size: 10px;
+    white-space: normal;
+    line-height: 1.2;
+    padding: 0 5px;
+  }
+}
+
+@media (max-width: 550px) {
+  .workLink {
+    min-width: calc(50% - 8px);
+    flex: 0 0 calc(50% - 8px);
+    height: 65px;
+  }
+  .workLinkTitle { font-size: 9px; }
+  .sectionTitle { font-size: 24px; }
+}
+
+@media (max-width: 380px) {
+  .workLink {
+    min-width: 100%;
+    flex: 0 0 100%;
+    height: 60px;
+  }
+  .workLinkTitle { font-size: 11px; }
+}

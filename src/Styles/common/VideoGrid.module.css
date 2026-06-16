@@ -1,0 +1,204 @@
+/* src/styles/common/VideoGrid.module.css */
+
+/* Full Width Container */
+.fullWidthContainer {
+  width: 100vw;
+  max-width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  margin-right: calc(-50vw + 50%);
+  padding: 0 !important;
+  overflow-x: hidden;
+}
+
+/* Single Video - Full Screen Size */
+.singleVideoContainer {
+  width: 100%;
+  margin: 0 auto;
+  overflow: hidden;
+  background-color: #000000;
+}
+
+.singleFullscreen {
+  width: 100vw;
+  max-width: 100vw;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  border-radius: 0;
+}
+
+.singleLarge {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.singleMedium {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.singleSmall {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Full Screen Video Card */
+.fullScreenVideoCard {
+  width: 100%;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+
+.fullScreenVideo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Regular Video Card */
+.videoCard {
+  position: relative;
+  width: 100%;
+  aspect-ratio: var(--aspect-ratio, 16/9);
+  background-color: #000000;
+  overflow: hidden;
+  border-radius: 12px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.videoCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+.video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Video Controls Styling */
+.video::-webkit-media-controls-panel {
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+}
+
+.video::-webkit-media-controls-play-button {
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+  padding: 8px;
+}
+
+.video::-webkit-media-controls-timeline {
+  border-radius: 10px;
+  margin: 0 10px;
+}
+
+/* Video Title Overlay */
+.videoTitle {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+  padding: 40px 15px 15px 15px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.videoCard:hover .videoTitle {
+  opacity: 1;
+}
+
+.videoTitle span {
+  color: #FFFFFF;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: 'Inter', sans-serif;
+  letter-spacing: 1px;
+}
+
+/* Video Grid Container */
+.videoGridContainer {
+  width: 100%;
+  padding: 60px 0;
+  background-color: #000000;
+}
+
+.grid {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+.fullWidthContainer .grid {
+  max-width: 100%;
+  padding: 0 20px;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .grid {
+    padding: 0 30px;
+  }
+}
+
+@media (max-width: 992px) {
+  .singleFullscreen {
+    height: 70vh;
+  }
+  
+  .fullScreenVideoCard {
+    height: 70vh;
+  }
+}
+
+@media (max-width: 768px) {
+  .videoGridContainer {
+    padding: 40px 0;
+  }
+  
+  .grid {
+    padding: 0 20px;
+    gap: 15px !important;
+  }
+  
+  .videoCard {
+    border-radius: 8px;
+  }
+  
+  .singleFullscreen {
+    height: 50vh;
+  }
+  
+  .fullScreenVideoCard {
+    height: 50vh;
+  }
+  
+  .videoTitle span {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 576px) {
+  .grid {
+    grid-template-columns: 1fr !important;
+    gap: 15px;
+  }
+  
+  .singleFullscreen {
+    height: 40vh;
+  }
+  
+  .fullScreenVideoCard {
+    height: 40vh;
+  }
+}
