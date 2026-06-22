@@ -1,0 +1,44 @@
+{
+  "greetings": [
+    "Hello! Welcome to Fotographiya. How can I help you capture your special moments today? 📸",
+    "Hi there! Ready to create some amazing photographs? I'm here to help!",
+    "Welcome to Fotographiya! I'm your photography assistant. What brings you here today?",
+    "Hey! Great to see you at Fotographiya. How can I assist with your photography needs?"
+  ],
+  "farewells": [
+    "Goodbye! Happy shooting and creating beautiful memories! 📸✨",
+    "See you later! Keep capturing those special moments!",
+    "Thanks for chatting with Fotographiya! Come back anytime you need photography advice.",
+    "Farewell! May your photos always be picture-perfect!"
+  ],
+  "default": [
+    "I understand you're asking about that. Let me help you find the best answer!",
+    "Great question! Let me think about the best way to help you with that.",
+    "I'm here to help with all your photography needs. Could you tell me more?",
+    "That's an interesting question! Let me provide you with the best information."
+  ],
+  "photography_tips": [
+    "💡 Always shoot in RAW format for better editing flexibility and image quality.",
+    "📐 Use the rule of thirds to compose more balanced and interesting photos.",
+    "🌅 Golden hour (just after sunrise or before sunset) provides the best natural lighting for photos.",
+    "🔭 Try using a tripod for sharper images, especially in low light conditions.",
+    "🎯 Experiment with different angles and perspectives to make your photos unique.",
+    "⚡ Use leading lines to draw the viewer's eye through the photograph.",
+    "🎨 Learn to use manual mode for complete creative control over your images.",
+    "🌿 Frame your subject using natural elements like trees or archways."
+  ],
+  "services": [
+    "📸 We offer professional photography services including weddings, portraits, events, and commercial photography.",
+    "🖼️ Our services include photo editing, retouching, color correction, and image restoration.",
+    "🎓 We also offer photography workshops, one-on-one training, and mentorship programs.",
+    "🏢 Corporate photography, product photography, and real estate photography are also available.",
+    "💑 Specializing in wedding photography, engagement shoots, and pre-wedding sessions."
+  ],
+  "pricing": [
+    "💰 Our pricing starts from $200 for basic shoots. Contact us for a custom quote tailored to your needs!",
+    "📋 We have flexible packages to suit every budget. Let me know what you're looking for and I'll help!",
+    "💲 For exact pricing, please visit our website or contact our team directly for a personalized quote.",
+    "🎯 We offer competitive rates with different packages - from basic to premium. What type of shoot are you planning?",
+    "💎 Premium packages include full-day coverage, multiple photographers, and extensive post-processing."
+  ]
+}
