@@ -2,7 +2,6 @@ const aiService = require('../services/aiService');
 const { v4: uuidv4 } = require('uuid');
 
 class ChatController {
-  // Send message and get response
   async sendMessage(req, res) {
     try {
       const { message, conversationId } = req.body;
@@ -14,13 +13,17 @@ class ChatController {
         });
       }
 
-      // Get AI response
-      const response = await aiService.getAIResponse(message);
       const convId = conversationId || uuidv4();
+      
+      // Get AI response with structured format
+      const response = await aiService.getAIResponse(message, convId);
 
       res.json({
         success: true,
-        message: response,
+        type: response.type || 'text',
+        message: response.message,
+        options: response.options || null,
+        action: response.action || null,
         conversationId: convId,
         timestamp: new Date().toISOString()
       });
@@ -34,41 +37,20 @@ class ChatController {
     }
   }
 
-  // Get conversation history (for future implementation)
-  async getHistory(req, res) {
+  // Reset conversation
+  async resetConversation(req, res) {
     try {
       const { conversationId } = req.params;
       
-      // TODO: Implement conversation history storage
       res.json({
         success: true,
-        conversationId,
-        history: [],
-        message: 'History feature coming soon'
-      });
-    } catch (error) {
-      res.status(500).json({
-        success: false,
-        error: 'Failed to get history'
-      });
-    }
-  }
-
-  // Clear conversation (for future implementation)
-  async clearConversation(req, res) {
-    try {
-      const { conversationId } = req.params;
-      
-      // TODO: Implement conversation clearing
-      res.json({
-        success: true,
-        message: 'Conversation cleared successfully',
+        message: 'Conversation reset successfully',
         conversationId
       });
     } catch (error) {
       res.status(500).json({
         success: false,
-        error: 'Failed to clear conversation'
+        error: 'Failed to reset conversation'
       });
     }
   }

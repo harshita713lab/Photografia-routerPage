@@ -10,12 +10,17 @@ const ChatWindow = ({
   isLoading,
   inputValue,
   onInputChange,
-  onSendMessage
+  onSendMessage,
+  onOptionSelect
 }) => {
   return (
     <div className={`chat-window ${isOpen ? 'open' : ''}`}>
       <ChatHeader onClose={onClose} />
-      <ChatMessages messages={messages} isLoading={isLoading} />
+      <ChatMessages 
+        messages={messages} 
+        isLoading={isLoading}
+        onOptionSelect={onOptionSelect}
+      />
       <ChatInput 
         value={inputValue}
         onChange={onInputChange}

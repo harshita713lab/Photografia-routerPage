@@ -1,17 +1,27 @@
 const express = require('express');
 const router = express.Router();
 const chatController = require('../controllers/chatController');
+const aiService = require('../services/aiService');
 
-// Send message
 router.post('/message', chatController.sendMessage);
 
-// Get conversation history
-router.get('/history/:conversationId', chatController.getHistory);
+// Reload config without restarting server
+router.post('/reload-config', (req, res) => {
+  try {
+    const config = aiService.reloadConfig();
+    res.json({ 
+      success: true, 
+      message: 'Config reloaded successfully',
+      config: config 
+    });
+  } catch (error) {
+    res.status(500).json({ 
+      success: false, 
+      error: error.message 
+    });
+  }
+});
 
-// Clear conversation
-router.delete('/clear/:conversationId', chatController.clearConversation);
-
-// Health check for chat
 router.get('/health', (req, res) => {
   res.json({ 
     status: 'OK', 

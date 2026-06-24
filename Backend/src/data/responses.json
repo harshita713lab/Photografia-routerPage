@@ -1,44 +1,183 @@
 {
-  "greetings": [
-    "Hello! Welcome to Fotographiya. How can I help you capture your special moments today? 📸",
-    "Hi there! Ready to create some amazing photographs? I'm here to help!",
-    "Welcome to Fotographiya! I'm your photography assistant. What brings you here today?",
-    "Hey! Great to see you at Fotographiya. How can I assist with your photography needs?"
-  ],
-  "farewells": [
-    "Goodbye! Happy shooting and creating beautiful memories! 📸✨",
-    "See you later! Keep capturing those special moments!",
-    "Thanks for chatting with Fotographiya! Come back anytime you need photography advice.",
-    "Farewell! May your photos always be picture-perfect!"
-  ],
-  "default": [
-    "I understand you're asking about that. Let me help you find the best answer!",
-    "Great question! Let me think about the best way to help you with that.",
-    "I'm here to help with all your photography needs. Could you tell me more?",
-    "That's an interesting question! Let me provide you with the best information."
-  ],
-  "photography_tips": [
-    "💡 Always shoot in RAW format for better editing flexibility and image quality.",
-    "📐 Use the rule of thirds to compose more balanced and interesting photos.",
-    "🌅 Golden hour (just after sunrise or before sunset) provides the best natural lighting for photos.",
-    "🔭 Try using a tripod for sharper images, especially in low light conditions.",
-    "🎯 Experiment with different angles and perspectives to make your photos unique.",
-    "⚡ Use leading lines to draw the viewer's eye through the photograph.",
-    "🎨 Learn to use manual mode for complete creative control over your images.",
-    "🌿 Frame your subject using natural elements like trees or archways."
-  ],
-  "services": [
-    "📸 We offer professional photography services including weddings, portraits, events, and commercial photography.",
-    "🖼️ Our services include photo editing, retouching, color correction, and image restoration.",
-    "🎓 We also offer photography workshops, one-on-one training, and mentorship programs.",
-    "🏢 Corporate photography, product photography, and real estate photography are also available.",
-    "💑 Specializing in wedding photography, engagement shoots, and pre-wedding sessions."
-  ],
-  "pricing": [
-    "💰 Our pricing starts from $200 for basic shoots. Contact us for a custom quote tailored to your needs!",
-    "📋 We have flexible packages to suit every budget. Let me know what you're looking for and I'll help!",
-    "💲 For exact pricing, please visit our website or contact our team directly for a personalized quote.",
-    "🎯 We offer competitive rates with different packages - from basic to premium. What type of shoot are you planning?",
-    "💎 Premium packages include full-day coverage, multiple photographers, and extensive post-processing."
-  ]
+  "menu": {
+    "welcome": "Welcome to Fotographiya! How can I assist you today?",
+    "options": [
+      {
+        "id": "services",
+        "label": "📸 Our Services",
+        "description": "Learn about our photography services"
+      },
+      {
+        "id": "pricing",
+        "label": "💰 Pricing & Packages",
+        "description": "Check our pricing plans"
+      }
+    ]
+  },
+  "services": {
+    "title": "📸 Our Photography Services",
+    "description": "Choose the service you're interested in:",
+    "options": [
+      {
+        "id": "wedding",
+        "label": "💑 Wedding Photography",
+        "description": "Capture your special day"
+      },
+      {
+        "id": "portrait",
+        "label": "👤 Portrait Photography",
+        "description": "Professional portraits"
+      },
+      {
+        "id": "event",
+        "label": "🎉 Event Photography",
+        "description": "Corporate & private events"
+      },
+      {
+        "id": "commercial",
+        "label": "🏢 Commercial Photography",
+        "description": "Product & business shoots"
+      }
+    ]
+  },
+  "pricing": {
+    "title": "💰 Our Pricing Packages",
+    "description": "Select a package that fits your needs:",
+    "options": [
+      {
+        "id": "basic",
+        "label": "📷 Basic Package",
+        "description": "Starting at $200 - 2 hours shoot"
+      },
+      {
+        "id": "standard",
+        "label": "⭐ Standard Package",
+        "description": "Starting at $450 - 4 hours shoot + editing"
+      },
+      {
+        "id": "premium",
+        "label": "💎 Premium Package",
+        "description": "Starting at $800 - Full day coverage"
+      },
+      {
+        "id": "custom",
+        "label": "🎯 Custom Package",
+        "description": "Tailored to your specific needs"
+      }
+    ]
+  },
+  "details": {
+    "wedding": {
+      "title": "💑 Wedding Photography",
+      "description": "Our wedding photography service includes:",
+      "details": [
+        "📸 Pre-wedding consultation and planning",
+        "👰 Full-day coverage (8-10 hours)",
+        "🖼️ 500+ high-resolution edited photos",
+        "🎥 Same-day highlight reel (optional)",
+        "📱 Online gallery for easy sharing",
+        "💑 Engagement shoot included in premium packages",
+        "🎞️ Professional lighting and equipment",
+        "📋 Unlimited poses and candid moments"
+      ],
+      "pricing": "Starting from $800"
+    },
+    "portrait": {
+      "title": "👤 Portrait Photography",
+      "description": "Professional portrait sessions include:",
+      "details": [
+        "🎯 1-2 hour professional photoshoot",
+        "👔 Multiple outfit changes allowed",
+        "🖼️ 50+ high-resolution edited photos",
+        "🎨 Professional retouching and color grading",
+        "📱 Digital gallery with download access",
+        "📍 Studio or on-location shoot available",
+        "🎭 Creative direction and posing guidance"
+      ],
+      "pricing": "Starting from $250"
+    },
+    "event": {
+      "title": "🎉 Event Photography",
+      "description": "Event coverage includes:",
+      "details": [
+        "📸 Full event coverage (up to 6 hours)",
+        "🖼️ 200+ edited photos",
+        "🎯 Candid and posed shots",
+        "📱 Online sharing gallery",
+        "🎞️ Quick turnaround (3-5 days)",
+        "🏢 Corporate event packages available",
+        "🎭 Professional lighting setup"
+      ],
+      "pricing": "Starting from $400"
+    },
+    "commercial": {
+      "title": "🏢 Commercial Photography",
+      "description": "Commercial photography services:",
+      "details": [
+        "📷 Product photography",
+        "🏢 Corporate headshots",
+        "🖼️ Real estate photography",
+        "🎨 Professional retouching",
+        "📱 E-commerce ready images",
+        "🎯 Consistent branding across all photos",
+        "⚡ Quick delivery options available"
+      ],
+      "pricing": "Custom quote based on requirements"
+    },
+    "basic": {
+      "title": "📷 Basic Package",
+      "description": "Perfect for small shoots:",
+      "details": [
+        "⏰ 2 hours of shooting time",
+        "📸 50+ edited photos",
+        "📍 Single location",
+        "💻 Digital gallery access",
+        "🎨 Basic color correction"
+      ],
+      "pricing": "$200"
+    },
+    "standard": {
+      "title": "⭐ Standard Package",
+      "description": "Our most popular package:",
+      "details": [
+        "⏰ 4 hours of shooting time",
+        "📸 150+ edited photos",
+        "📍 Up to 2 locations",
+        "🖼️ Advanced retouching",
+        "💻 Digital gallery with sharing",
+        "🎞️ Behind-the-scenes video (optional)",
+        "📅 2-3 day delivery time"
+      ],
+      "pricing": "$450"
+    },
+    "premium": {
+      "title": "💎 Premium Package",
+      "description": "The ultimate experience:",
+      "details": [
+        "⏰ Full day coverage (8+ hours)",
+        "📸 500+ edited photos",
+        "📍 Unlimited locations",
+        "🖼️ Professional retouching",
+        "📱 Private online gallery",
+        "🎞️ Highlight video included",
+        "👥 Second photographer included",
+        "📖 Premium photo album (optional)",
+        "⚡ 24-hour delivery option"
+      ],
+      "pricing": "$800+"
+    },
+    "custom": {
+      "title": "🎯 Custom Package",
+      "description": "Tailored to your needs:",
+      "details": [
+        "📞 Free consultation call",
+        "📋 Personalized package creation",
+        "💰 Flexible pricing",
+        "🎯 Your requirements, our expertise",
+        "🤝 Satisfaction guaranteed",
+        "📱 Contact us for a quote today!"
+      ],
+      "pricing": "Contact for custom quote"
+    }
+  }
 }

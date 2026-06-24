@@ -9,28 +9,32 @@ const Chatbot = () => {
     { 
       id: 1, 
       text: 'Welcome to Fotographiya! How can I assist you today?', 
-      sender: 'bot' 
+      sender: 'bot',
+      type: 'menu',
+      options: [
+        { id: 'services', label: '📸 Our Services', description: 'Learn about our photography services' },
+        { id: 'pricing', label: '💰 Pricing & Packages', description: 'Check our pricing plans' }
+      ]
     }
   ]);
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [conversationId, setConversationId] = useState(null);
 
-  // Use environment variable for API URL
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
   const toggleChat = () => setIsOpen(!isOpen);
 
-  const handleSendMessage = async () => {
-    if (!inputValue.trim()) return;
+  const handleSendMessage = async (messageText) => {
+    if (!messageText || !messageText.trim()) return;
 
+    // Add user message
     const userMessage = { 
       id: Date.now(), 
-      text: inputValue, 
+      text: messageText, 
       sender: 'user' 
     };
     setMessages(prev => [...prev, userMessage]);
-    setInputValue('');
     setIsLoading(true);
 
     try {
@@ -40,7 +44,7 @@ const Chatbot = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ 
-          message: inputValue,
+          message: messageText,
           conversationId: conversationId
         })
       });
@@ -55,24 +59,33 @@ const Chatbot = () => {
         setConversationId(data.conversationId);
       }
 
-      const botResponse = {
+      const botMessage = {
         id: Date.now() + 1,
-        text: data.message || 'I received your message!',
-        sender: 'bot'
+        text: data.message,
+        sender: 'bot',
+        type: data.type || 'text',
+        options: data.options || null,
+        action: data.action || null
       };
-      setMessages(prev => [...prev, botResponse]);
+      setMessages(prev => [...prev, botMessage]);
 
     } catch (error) {
       console.error('Error:', error);
       const errorMessage = {
         id: Date.now() + 1,
         text: 'Sorry, I encountered an error. Please try again.',
-        sender: 'bot'
+        sender: 'bot',
+        type: 'text'
       };
       setMessages(prev => [...prev, errorMessage]);
     } finally {
       setIsLoading(false);
+      setInputValue('');
     }
+  };
+
+  const handleOptionSelect = (optionId) => {
+    handleSendMessage(optionId);
   };
 
   return (
@@ -85,7 +98,8 @@ const Chatbot = () => {
         isLoading={isLoading}
         inputValue={inputValue}
         onInputChange={setInputValue}
-        onSendMessage={handleSendMessage}
+        onSendMessage={() => handleSendMessage(inputValue)}
+        onOptionSelect={handleOptionSelect}
       />
     </>
   );
