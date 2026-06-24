@@ -5,7 +5,9 @@
     "options": [
       { "id": "wedding_coverage", "label": "Wedding & Event Coverage" },
       { "id": "investment_packages", "label": "Investment & Packages" },
-      { "id": "schedule_consultation", "label": "Schedule a Consultation" }
+      { "id": "schedule_consultation", "label": "Schedule a Consultation" },
+      { "id": "call_now", "label": "📞 Call Now" },
+      { "id": "send_call_request", "label": "📨 Send Call Request" }
     ]
   },
 
@@ -44,6 +46,24 @@
       { "id": "check_availability", "label": "Check Availability" },
       { "id": "phone_callback", "label": "Request Callback" },
       { "id": "back", "label": "Back to Main Menu" }
+    ]
+  },
+
+  "call_now": {
+    "type": "details",
+    "title": "📞 Call Us Now!",
+    "message": "Connect with us directly over the phone!\n\n📱 Phone Number: +91 8824127624\n🕐 Available: 9 AM - 9 PM, 7 days a week\n\nClick the link below to call us:\n👉 tel:+918824127624\n\nWe'd love to hear from you!",
+    "options": [
+      { "id": "menu", "label": "Return to Main Menu" }
+    ]
+  },
+
+  "send_call_request": {
+    "type": "text",
+    "title": "📨 Send Call Request",
+    "message": "We'll call you back!\n\nPlease enter your phone number in the chat box below:\n\nExample: 9876543210\n\n✅ Our team will call you within 30 minutes.\n✅ We'll assist you with packages, availability, and custom quotes.\n\n📞 Or call us directly: +91 8824127624",
+    "options": [
+      { "id": "menu", "label": "Return to Main Menu" }
     ]
   },
 
@@ -156,7 +176,7 @@
   "whatsapp": {
     "type": "text",
     "title": "Chat on WhatsApp",
-    "message": "Connect with us on WhatsApp!\n\nClick the link below to start chatting with our team instantly:\n\nhttps://wa.me/911234567890\n\nOur team is available from 9 AM to 9 PM, 7 days a week.\n\nWe'll respond to your queries within 5 minutes!",
+    "message": "Connect with us on WhatsApp!\n\nClick the link below to start chatting with our team instantly:\n\nhttps://wa.me/918824127624\n\nOur team is available from 9 AM to 9 PM, 7 days a week.\n\nWe'll respond to your queries within 5 minutes!",
     "options": [
       { "id": "menu", "label": "Return to Main Menu" }
     ]
@@ -225,7 +245,7 @@
   "book_consultation": {
     "type": "details",
     "title": "Book a Consultation",
-    "message": "Book Your Consultation\n\nPlease select your preferred method:\n\nWhatsApp: https://wa.me/911234567890\nPhone: +91 1234567890\nIn-Person: Visit our studio\nEmail: consultation@fotographiya.com\n\nConsultation duration: 45-60 minutes\n\nWe'll discuss your vision, budget, and create a custom plan!",
+    "message": "Book Your Consultation\n\nPlease select your preferred method:\n\nWhatsApp: https://wa.me/918824127624\nPhone: +91 8824127624\nIn-Person: Visit our studio\nEmail: consultation@fotographiya.com\n\nConsultation duration: 45-60 minutes\n\nWe'll discuss your vision, budget, and create a custom plan!",
     "options": [
       { "id": "menu", "label": "Return to Main Menu" }
     ]
@@ -243,7 +263,7 @@
   "customize_package": {
     "type": "text",
     "title": "Customize Your Package",
-    "message": "Talk to Our Team About Customizing!\n\nWe understand every wedding is unique. Tell us what you need:\n\nIn the chat box below, please share:\n- Your vision and requirements\n- Special requests\n- Preferred style\n- Any specific shots you want\n\nOr email us: customize@fotographiya.com\nWhatsApp: https://wa.me/911234567890\n\nWe'll create a package that's perfect for you!",
+    "message": "Talk to Our Team About Customizing!\n\nWe understand every wedding is unique. Tell us what you need:\n\nIn the chat box below, please share:\n- Your vision and requirements\n- Special requests\n- Preferred style\n- Any specific shots you want\n\nOr email us: customize@fotographiya.com\nWhatsApp: https://wa.me/918824127624\n\nWe'll create a package that's perfect for you!",
     "options": [
       { "id": "menu", "label": "Return to Main Menu" }
     ]
