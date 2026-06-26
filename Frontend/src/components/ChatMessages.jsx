@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import ChatMessage from './ChatMessage';
 import TypingIndicator from './TypingIndicator';
 
-const ChatMessages = ({ messages, isLoading, onOptionSelect }) => {
+const ChatMessages = ({ messages, isLoading, onOptionSelect, onSubmitForm }) => {
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
@@ -13,11 +13,13 @@ const ChatMessages = ({ messages, isLoading, onOptionSelect }) => {
 
   return (
     <div className="chat-messages">
-      {messages && messages.map((msg) => (
+      {messages && messages.map((msg, index) => (
         <ChatMessage 
           key={msg.id} 
           message={msg} 
           onOptionSelect={onOptionSelect}
+          onSubmitForm={onSubmitForm}
+          isLastMessage={index === messages.length - 1}
         />
       ))}
       {isLoading && <TypingIndicator />}

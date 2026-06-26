@@ -11,7 +11,8 @@ const ChatWindow = ({
   inputValue,
   onInputChange,
   onSendMessage,
-  onOptionSelect
+  onOptionSelect,
+  onSubmitForm  // ← ADD THIS
 }) => {
   return (
     <div className={`chat-window ${isOpen ? 'open' : ''}`}>
@@ -20,6 +21,7 @@ const ChatWindow = ({
         messages={messages} 
         isLoading={isLoading}
         onOptionSelect={onOptionSelect}
+        onSubmitForm={onSubmitForm}  // ← PASS THIS
       />
       <ChatInput 
         value={inputValue}

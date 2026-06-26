@@ -3,287 +3,502 @@
     "type": "menu",
     "message": "Welcome to Fotographiya. We are dedicated to preservation through cinematic storytelling and premium imagery. How may we assist you today? Please choose an option below:",
     "options": [
-      { "id": "wedding_coverage", "label": "Wedding & Event Coverage" },
-      { "id": "investment_packages", "label": "Investment & Packages" },
-      { "id": "schedule_consultation", "label": "Schedule a Consultation" },
-      { "id": "call_now", "label": "📞 Call Now" },
-      { "id": "send_call_request", "label": "📨 Send Call Request" }
+      { "id": "services", "label": "Our Services", "icon": "photo_camera" },
+      { "id": "pricing", "label": "Pricing & Packages", "icon": "payments" },
+      { "id": "about_us", "label": "About Us", "icon": "info" },
+      { "id": "contact_us", "label": "Contact Us", "icon": "contact_mail" }
     ]
   },
 
-  "wedding_coverage": {
+  "services": {
     "type": "submenu",
-    "message": "Wedding & Event Coverage\n\nChoose what you'd like to know about:",
+    "message": "Our Services\n\nChoose a service you are interested in:",
     "options": [
-      { "id": "standard_deliverables", "label": "Standard Deliverables" },
-      { "id": "team_size", "label": "Team Size & Allocation" },
-      { "id": "production_equipment", "label": "Production & Equipment" },
-      { "id": "coverage_policy", "label": "Coverage & Overtime Policy" },
-      { "id": "signature_highlights", "label": "Signature Highlights" },
-      { "id": "custom_inquiries", "label": "Custom Inquiries" },
-      { "id": "back", "label": "Back to Main Menu" }
+      { "id": "wedding_service", "label": "Wedding Photography", "icon": "favorite" },
+      { "id": "engagement_service", "label": "Engagement Photography", "icon": "favorite_border" },
+      { "id": "pre_wedding_service", "label": "Pre-Wedding Shoot", "icon": "photo_camera" },
+      { "id": "maternity_service", "label": "Maternity Shoot", "icon": "pregnant_woman" },
+      { "id": "baby_service", "label": "Baby Shoot", "icon": "child_care" },
+      { "id": "mehndi_service", "label": "Mehndi & Sangeet", "icon": "celebration" },
+      { "id": "parties_service", "label": "Parties", "icon": "party_mode" },
+      { "id": "corporate_service", "label": "Corporate Events", "icon": "business_center" },
+      { "id": "menu", "label": "Back to Main Menu", "icon": "arrow_back" },
+      { "id": "contact_us", "label": "Contact Us", "icon": "contact_mail" }
     ]
   },
 
-  "investment_packages": {
+  "wedding_service": {
+    "type": "details",
+    "title": "Wedding Photography",
+    "message": "Complete wedding photography coverage including:\n\n- Full-day coverage (10-12 hours)\n- Candid & Traditional photography\n- 500+ high-resolution edited photos\n- 45-minute documentary film\n- 3-minute cinematic trailer\n- Premium heirloom album\n- Online gallery\n- Team of 4-6 professionals\n\nOccasions Covered:\n• Wedding & Engagement\n• Mehndi & Sangeet\n• Reception\n\nPrice: Starting from ₹75,000",
+    "options": [
+      { "id": "book_event", "label": "Book My Event", "icon": "event_note" },
+      { "id": "pricing", "label": "View Packages", "icon": "payments" },
+      { "id": "menu", "label": "Back to Main Menu", "icon": "arrow_back" },
+      { "id": "contact_us", "label": "Contact Us", "icon": "contact_mail" }
+    ]
+  },
+
+  "engagement_service": {
+    "type": "details",
+    "title": "Engagement Photography",
+    "message": "Beautiful engagement photography coverage:\n\n- 4-6 hours coverage\n- Candid & Traditional photography\n- 200+ high-resolution edited photos\n- 2-minute highlight video\n- Online gallery\n- Professional editing\n\nPrice: Starting from ₹35,000",
+    "options": [
+      { "id": "book_event", "label": "Book My Event", "icon": "event_note" },
+      { "id": "pricing", "label": "View Packages", "icon": "payments" },
+      { "id": "menu", "label": "Back to Main Menu", "icon": "arrow_back" },
+      { "id": "contact_us", "label": "Contact Us", "icon": "contact_mail" }
+    ]
+  },
+
+  "pre_wedding_service": {
+    "type": "details",
+    "title": "Pre-Wedding Shoot",
+    "message": "Pre-Wedding Photography Package:\n\n- 4-5 hours photoshoot\n- 2-3 locations\n- 150+ edited photos\n- Professional styling guidance\n- 2-minute teaser video\n- Online gallery\n\nPrice: ₹35,000",
+    "options": [
+      { "id": "book_event", "label": "Book My Event", "icon": "event_note" },
+      { "id": "pricing", "label": "View Packages", "icon": "payments" },
+      { "id": "menu", "label": "Back to Main Menu", "icon": "arrow_back" },
+      { "id": "contact_us", "label": "Contact Us", "icon": "contact_mail" }
+    ]
+  },
+
+  "maternity_service": {
+    "type": "details",
+    "title": "Maternity Shoot",
+    "message": "Beautiful maternity photography:\n\n- 2-3 hours photoshoot\n- Studio or outdoor location\n- 50+ edited photos\n- Professional retouching\n- Digital gallery\n- Multiple outfit changes allowed\n\nPrice: ₹18,000",
+    "options": [
+      { "id": "book_event", "label": "Book My Event", "icon": "event_note" },
+      { "id": "pricing", "label": "View Packages", "icon": "payments" },
+      { "id": "menu", "label": "Back to Main Menu", "icon": "arrow_back" },
+      { "id": "contact_us", "label": "Contact Us", "icon": "contact_mail" }
+    ]
+  },
+
+  "baby_service": {
+    "type": "details",
+    "title": "Baby Shoot",
+    "message": "Precious baby photography:\n\n- 2 hours photoshoot\n- Studio setup\n- 30+ edited photos\n- Cute props and setups\n- Digital gallery\n- Professional editing\n\nPrice: ₹15,000",
+    "options": [
+      { "id": "book_event", "label": "Book My Event", "icon": "event_note" },
+      { "id": "pricing", "label": "View Packages", "icon": "payments" },
+      { "id": "menu", "label": "Back to Main Menu", "icon": "arrow_back" },
+      { "id": "contact_us", "label": "Contact Us", "icon": "contact_mail" }
+    ]
+  },
+
+  "mehndi_service": {
+    "type": "details",
+    "title": "Mehndi & Sangeet Photography",
+    "message": "Vibrant Mehndi & Sangeet coverage:\n\n- 4-6 hours coverage\n- Candid & Traditional photography\n- 200+ edited photos\n- 2-minute highlight video\n- Online gallery\n- Colorful traditional moments captured\n\nPrice: Starting from ₹35,000",
+    "options": [
+      { "id": "book_event", "label": "Book My Event", "icon": "event_note" },
+      { "id": "pricing", "label": "View Packages", "icon": "payments" },
+      { "id": "menu", "label": "Back to Main Menu", "icon": "arrow_back" },
+      { "id": "contact_us", "label": "Contact Us", "icon": "contact_mail" }
+    ]
+  },
+
+  "parties_service": {
+    "type": "details",
+    "title": "Parties Photography",
+    "message": "Party and celebration coverage:\n\n- 3-4 hours coverage\n- Candid photography\n- 100+ edited photos\n- Online gallery\n- Fun and energetic moments\n\nPrice: Starting from ₹20,000",
+    "options": [
+      { "id": "book_event", "label": "Book My Event", "icon": "event_note" },
+      { "id": "pricing", "label": "View Packages", "icon": "payments" },
+      { "id": "menu", "label": "Back to Main Menu", "icon": "arrow_back" },
+      { "id": "contact_us", "label": "Contact Us", "icon": "contact_mail" }
+    ]
+  },
+
+  "corporate_service": {
+    "type": "details",
+    "title": "Corporate Events Photography",
+    "message": "Professional corporate event coverage:\n\n- Full event coverage (4-8 hours)\n- Professional headshots\n- 150+ edited photos\n- Quick turnaround\n- Digital gallery\n- Corporate branding included\n\nPrice: Starting from ₹25,000",
+    "options": [
+      { "id": "book_event", "label": "Book My Event", "icon": "event_note" },
+      { "id": "pricing", "label": "View Packages", "icon": "payments" },
+      { "id": "menu", "label": "Back to Main Menu", "icon": "arrow_back" },
+      { "id": "contact_us", "label": "Contact Us", "icon": "contact_mail" }
+    ]
+  },
+
+  "pricing": {
     "type": "submenu",
-    "message": "Investment & Packages\n\nChoose a package or request a custom quote:",
+    "message": "Pricing & Packages\n\nChoose your package category:",
     "options": [
-      { "id": "pre_wedding", "label": "Pre-Wedding Package" },
-      { "id": "wedding_package", "label": "Wedding Package" },
-      { "id": "destination_package", "label": "Destination Wedding" },
-      { "id": "bespoke_pricing", "label": "Bespoke Pricing Request" },
-      { "id": "back", "label": "Back to Main Menu" }
+      { "id": "silver_package", "label": "Silver Package", "icon": "star_border" },
+      { "id": "golden_package", "label": "Golden Package", "icon": "star" },
+      { "id": "premium_package", "label": "Premium Package", "icon": "stars" },
+      { "id": "menu", "label": "Back to Main Menu", "icon": "arrow_back" },
+      { "id": "contact_us", "label": "Contact Us", "icon": "contact_mail" }
     ]
   },
 
-  "schedule_consultation": {
+  "silver_package": {
     "type": "submenu",
-    "message": "Schedule a Consultation\n\nChoose how you'd like to connect with us:",
+    "message": "Silver Package - Value for Money\n\nChoose your package:",
     "options": [
-      { "id": "whatsapp", "label": "Chat on WhatsApp" },
-      { "id": "visit_office", "label": "Visit Our Office" },
-      { "id": "check_availability", "label": "Check Availability" },
-      { "id": "phone_callback", "label": "Request Callback" },
-      { "id": "back", "label": "Back to Main Menu" }
+      { "id": "pre_wedding_silver", "label": "1 Day Pre-Wedding - ₹35,000", "icon": "photo_camera" },
+      { "id": "wedding_silver", "label": "1 Day Wedding - ₹75,000 to ₹99,999", "icon": "celebration" },
+      { "id": "pricing", "label": "Back to Packages", "icon": "arrow_back" },
+      { "id": "menu", "label": "Main Menu", "icon": "home" },
+      { "id": "contact_us", "label": "Contact Us", "icon": "contact_mail" }
     ]
   },
 
-  "call_now": {
+  "pre_wedding_silver": {
     "type": "details",
-    "title": "📞 Call Us Now!",
-    "message": "Connect with us directly over the phone!\n\n📱 Phone Number: +91 8824127624\n🕐 Available: 9 AM - 9 PM, 7 days a week\n\nClick the link below to call us:\n👉 tel:+918824127624\n\nWe'd love to hear from you!",
+    "title": "Silver Package - Pre-Wedding",
+    "message": "1 Day Pre-Wedding Photoshoot\n\nPackage Includes:\n- 4-5 hours photoshoot\n- 2-3 locations\n- 150+ edited photos\n- Teaser video\n- Highlight video\n- Candid & Traditional photography\n- Online gallery\n\nPrice: ₹35,000",
     "options": [
-      { "id": "menu", "label": "Return to Main Menu" }
+      { "id": "book_event", "label": "Book My Event", "icon": "event_note" },
+      { "id": "silver_package", "label": "Back to Silver Packages", "icon": "arrow_back" },
+      { "id": "menu", "label": "Back to Main Menu", "icon": "arrow_back" },
+      { "id": "contact_us", "label": "Contact Us", "icon": "contact_mail" }
     ]
   },
 
-  "send_call_request": {
-    "type": "text",
-    "title": "📨 Send Call Request",
-    "message": "We'll call you back!\n\nPlease enter your phone number in the chat box below:\n\nExample: 9876543210\n\n✅ Our team will call you within 30 minutes.\n✅ We'll assist you with packages, availability, and custom quotes.\n\n📞 Or call us directly: +91 8824127624",
-    "options": [
-      { "id": "menu", "label": "Return to Main Menu" }
-    ]
-  },
-
-  "standard_deliverables": {
+  "wedding_silver": {
     "type": "details",
-    "title": "Standard Deliverables",
-    "message": "Our standard assignment includes:\n\n- 100% color-corrected high-resolution digital files\n- 1 premium flush-mount hardcover heirloom album\n- 3-minute cinematic trailer\n- 45-minute documentary film\n\nAll photos are professionally edited and color-graded to our signature style.",
+    "title": "Silver Package - Wedding",
+    "message": "1 Day Wedding Photography & Videography\n\nPackage Includes:\n- 10-12 hours coverage\n- 300+ edited photos\n- 45-minute documentary film\n- 3-minute cinematic trailer\n- Candid & Traditional coverage\n- Online gallery\n- Team of 4 professionals\n\nPrice: ₹75,000 - ₹99,999\n(Audience: Up to 300 guests)",
     "options": [
-      { "id": "pricing_check", "label": "Check Prices for This" },
-      { "id": "check_availability", "label": "Check Our Availability" },
-      { "id": "menu", "label": "Return to Main Menu" }
+      { "id": "book_event", "label": "Book My Event", "icon": "event_note" },
+      { "id": "silver_package", "label": "Back to Silver Packages", "icon": "arrow_back" },
+      { "id": "menu", "label": "Back to Main Menu", "icon": "arrow_back" },
+      { "id": "contact_us", "label": "Contact Us", "icon": "contact_mail" }
     ]
   },
 
-  "team_size": {
+  "golden_package": {
+    "type": "submenu",
+    "message": "Golden Package - Most Popular\n\nChoose your package:",
+    "options": [
+      { "id": "wedding_golden_2day", "label": "2 Day Wedding - ₹1,50,000 to ₹1,99,999", "icon": "celebration" },
+      { "id": "wedding_golden_3day", "label": "3 Day Wedding - ₹2,25,000", "icon": "stars" },
+      { "id": "pricing", "label": "Back to Packages", "icon": "arrow_back" },
+      { "id": "menu", "label": "Main Menu", "icon": "home" },
+      { "id": "contact_us", "label": "Contact Us", "icon": "contact_mail" }
+    ]
+  },
+
+  "wedding_golden_2day": {
     "type": "details",
-    "title": "Team Size & Allocation",
-    "message": "Depending on your guest count, we deploy a disciplined team of 4 to 6 professionals including:\n\n- Dedicated candid shooters\n- Traditional photographers\n- Cinematographers\n- Certified drone operator\n\nAll team members are experienced and professionally trained.",
+    "title": "Golden Package - 2 Day Wedding",
+    "message": "2 Day Wedding Package\n\nCovers: Engagement/Reception + Wedding\n\nPackage Includes:\n- 2 days coverage (8-10 hours each day)\n- 600+ edited photos\n- 60-minute documentary film\n- 5-minute cinematic trailer\n- Candid & Traditional photography\n- Videography included\n- Premium heirloom album\n- Online gallery\n- Team of 5-6 professionals\n\nPrice: ₹1,50,000 - ₹1,99,999\n(Audience: Up to 300 guests)",
     "options": [
-      { "id": "portfolio", "label": "See Our Past Work" },
-      { "id": "call_back", "label": "Request a Call Back" },
-      { "id": "menu", "label": "Return to Main Menu" }
+      { "id": "book_event", "label": "Book My Event", "icon": "event_note" },
+      { "id": "golden_package", "label": "Back to Golden Packages", "icon": "arrow_back" },
+      { "id": "menu", "label": "Back to Main Menu", "icon": "arrow_back" },
+      { "id": "contact_us", "label": "Contact Us", "icon": "contact_mail" }
     ]
   },
 
-  "production_equipment": {
+  "wedding_golden_3day": {
     "type": "details",
-    "title": "Production & Equipment",
-    "message": "We record natively in 4K resolution utilizing:\n\n- Full-frame Sony/Canon cinema bodies\n- Specialized low-light prime glass\n- Electronic stabilization gimbals\n- Multi-channel audio systems\n- DJI drones for aerial shots\n\nWe use only professional-grade equipment to ensure the highest quality output.",
+    "title": "Golden Package - 3 Day Wedding",
+    "message": "3 Day Wedding Package\n\nCovers: Pre-Wedding + Engagement/Reception + Wedding\n\nPackage Includes:\n- 3 days coverage\n- 800+ edited photos\n- 75-minute documentary film\n- 5-minute cinematic trailer\n- Pre-wedding shoot included\n- Candid & Traditional photography\n- Videography included\n- Premium heirloom album\n- Online gallery\n- Team of 6 professionals\n\nPrice: ₹2,25,000\n(Audience: Up to 300 guests)",
     "options": [
-      { "id": "portfolio", "label": "See Video Quality (Past Work)" },
-      { "id": "premium_plans", "label": "View Premium Plans" },
-      { "id": "menu", "label": "Return to Main Menu" }
+      { "id": "book_event", "label": "Book My Event", "icon": "event_note" },
+      { "id": "golden_package", "label": "Back to Golden Packages", "icon": "arrow_back" },
+      { "id": "menu", "label": "Back to Main Menu", "icon": "arrow_back" },
+      { "id": "contact_us", "label": "Contact Us", "icon": "contact_mail" }
     ]
   },
 
-  "coverage_policy": {
+  "premium_package": {
+    "type": "submenu",
+    "message": "Premium Package - Luxury Experience\n\nChoose your package:",
+    "options": [
+      { "id": "wedding_premium_3day", "label": "3 Day Wedding - ₹2,00,000 to ₹2,49,999", "icon": "stars" },
+      { "id": "pricing", "label": "Back to Packages", "icon": "arrow_back" },
+      { "id": "menu", "label": "Main Menu", "icon": "home" },
+      { "id": "contact_us", "label": "Contact Us", "icon": "contact_mail" }
+    ]
+  },
+
+  "wedding_premium_3day": {
     "type": "details",
-    "title": "Coverage & Overtime Policy",
-    "message": "Our primary wedding packages include:\n\n- Up to 12 hours of active shooting per day\n- Our core team remains on-site to fully cover late-night pheras and traditional send-offs\n- No additional fee for extended coverage\n- Transparent and clear policy\n\nWe ensure every important moment is captured, no matter the time.",
+    "title": "Premium Package - 3 Day Wedding",
+    "message": "3 Day Premium Wedding Package\n\nCovers: Pre-Wedding + Engagement/Reception + Wedding\n\nPackage Includes:\n- 3 days coverage\n- 1000+ edited photos\n- 90-minute documentary film\n- 5-minute cinematic trailer\n- Pre-wedding shoot included\n- Candid & Traditional photography\n- Videography included\n- Drone coverage included\n- 2 Premium leather albums\n- Online gallery\n- Team of 6-7 professionals\n- Luxury deliverables\n\nPrice: ₹2,00,000 - ₹2,49,999\n(Audience: Up to 300 guests)",
     "options": [
-      { "id": "book_consultation", "label": "Book a Consultation" },
-      { "id": "download_terms", "label": "Download Detailed Terms" },
-      { "id": "menu", "label": "Return to Main Menu" }
+      { "id": "book_event", "label": "Book My Event", "icon": "event_note" },
+      { "id": "premium_package", "label": "Back to Premium Packages", "icon": "arrow_back" },
+      { "id": "menu", "label": "Back to Main Menu", "icon": "arrow_back" },
+      { "id": "contact_us", "label": "Contact Us", "icon": "contact_mail" }
     ]
   },
 
-  "signature_highlights": {
+  "about_us": {
+    "type": "submenu",
+    "message": "About Fotographiya\n\nChoose what you want to know:",
+    "options": [
+      { "id": "who_we_are", "label": "Who We Are", "icon": "info" },
+      { "id": "services_provided", "label": "Services We Provide", "icon": "list" },
+      { "id": "payment_options", "label": "Payment Options", "icon": "payments" },
+      { "id": "booking_policy", "label": "Booking Policy", "icon": "policy" },
+      { "id": "menu", "label": "Back to Main Menu", "icon": "arrow_back" },
+      { "id": "contact_us", "label": "Contact Us", "icon": "contact_mail" }
+    ]
+  },
+
+  "who_we_are": {
     "type": "details",
-    "title": "Signature Highlights",
-    "message": "You can browse our live, curated gallery of real weddings and watch award-winning cinematic films directly here:\n\nPortfolio Link: https://www.fotographiya.com/portfolio\nWatch Films: https://www.fotographiya.com/films\nGallery: https://www.fotographiya.com/gallery\n\nSee why couples trust us with their special day.",
+    "title": "Who We Are",
+    "message": "About Fotographiya\n\n• Established in 2023\n• 92% of couples recommend us\n• Overall Rating: 4.6 out of 5\n\nRatings Breakdown:\n• Quality of Service: 4.6\n• Average Response Time: 4.6\n• Flexibility: 4.6\n• Professionalism: 4.6\n• Value for Money: 4.6\n\nWe are dedicated to preservation through cinematic storytelling and premium imagery.",
     "options": [
-      { "id": "menu", "label": "Return to Main Menu" }
+      { "id": "about_us", "label": "Back to About Us", "icon": "arrow_back" },
+      { "id": "menu", "label": "Back to Main Menu", "icon": "arrow_back" },
+      { "id": "contact_us", "label": "Contact Us", "icon": "contact_mail" }
     ]
   },
 
-  "custom_inquiries": {
-    "type": "text",
-    "title": "Custom Inquiries",
-    "message": "Please type your specific question regarding our workflow below, and a production manager will review it immediately.\n\nType your question in the chat box below and our team will respond shortly.\n\nOr email us directly at: info@fotographiya.com",
-    "options": [
-      { "id": "menu", "label": "Return to Main Menu" }
-    ]
-  },
-
-  "pre_wedding": {
+  "services_provided": {
     "type": "details",
-    "title": "Pre-Wedding Package",
-    "message": "Pre-Wedding Photography Package\n\nPackage Includes:\n- 4-5 hours photoshoot\n- 2-3 locations\n- 150+ edited photos\n- Professional styling guidance\n- 2-minute teaser video\n- Online gallery\n\nPrice: Starting from ₹25,000\n\nBook your pre-wedding shoot today!",
+    "title": "Services We Provide",
+    "message": "Our Photography Services:\n\n📸 Traditional Photography\n🎯 Candid Photography\n🎬 Cinematography\n🚁 Drone Shoots\n📷 Photobooth\n📺 Live Screening\n\nAll services available for weddings, events, and special occasions.\n\nWe cover:\n✓ Wedding & Engagement\n✓ Pre-Wedding Shoots\n✓ Maternity & Baby Shoots\n✓ Mehndi & Sangeet\n✓ Parties & Celebrations\n✓ Corporate Events",
     "options": [
-      { "id": "customize_package", "label": "Talk to Team About Customizing" },
-      { "id": "book_date", "label": "Book this Package for My Date" },
-      { "id": "menu", "label": "Return to Main Menu" }
+      { "id": "about_us", "label": "Back to About Us", "icon": "arrow_back" },
+      { "id": "menu", "label": "Back to Main Menu", "icon": "arrow_back" },
+      { "id": "contact_us", "label": "Contact Us", "icon": "contact_mail" }
     ]
   },
 
-  "wedding_package": {
+  "payment_options": {
     "type": "details",
-    "title": "Wedding Package",
-    "message": "Complete Wedding Photography Package\n\nPackage Includes:\n- 10-12 hours coverage\n- 500+ edited photos\n- 45-minute documentary film\n- 3-minute cinematic trailer\n- Premium heirloom album\n- Online gallery\n- Second photographer\n\nPrice: Starting from ₹55,000\n\nBook your wedding coverage!",
+    "title": "Payment Options",
+    "message": "We accept the following payment methods:\n\n💳 Debit/Credit Cards\n🏦 Net Banking\n💰 Cash\n📝 Cheque/DD\n📱 Mobile Wallets\n🔄 UPI\n\nAll payments are secure and transparent.",
     "options": [
-      { "id": "customize_package", "label": "Talk to Team About Customizing" },
-      { "id": "book_date", "label": "Book this Package for My Date" },
-      { "id": "menu", "label": "Return to Main Menu" }
+      { "id": "about_us", "label": "Back to About Us", "icon": "arrow_back" },
+      { "id": "menu", "label": "Back to Main Menu", "icon": "arrow_back" },
+      { "id": "contact_us", "label": "Contact Us", "icon": "contact_mail" }
     ]
   },
 
-  "destination_package": {
+  "booking_policy": {
     "type": "details",
-    "title": "Destination Wedding Package",
-    "message": "Complete Destination Wedding Package\n\nPackage Includes:\n- Full event coverage (2-3 days)\n- 1000+ edited photos\n- 2 documentary films\n- Multiple cinematic teasers\n- Premium albums (2 copies)\n- Travel and accommodation included\n- Team of 6 professionals\n\nPrice: Starting from ₹1,20,000\n\nBook your dream destination wedding!",
+    "title": "Booking Policy",
+    "message": "Our Booking Policy:\n\n📌 Advance Payment: 25% to confirm booking\n📌 Cancellation Policy: Conditional\n✈️ Outstation Travel: Available\n✅ COVID-19: Following government guidelines\n\nFor more details, please contact our team.",
     "options": [
-      { "id": "customize_package", "label": "Talk to Team About Customizing" },
-      { "id": "book_date", "label": "Book this Package for My Date" },
-      { "id": "menu", "label": "Return to Main Menu" }
+      { "id": "about_us", "label": "Back to About Us", "icon": "arrow_back" },
+      { "id": "menu", "label": "Back to Main Menu", "icon": "arrow_back" },
+      { "id": "contact_us", "label": "Contact Us", "icon": "contact_mail" }
     ]
   },
 
-  "bespoke_pricing": {
-    "type": "text",
-    "title": "Bespoke Pricing Request",
-    "message": "Please enter your tentative budget range and event details below. Our finance team will generate a custom proposal for you.\n\nIn the chat box below, please tell us:\n- Your budget range\n- Type of event\n- Expected guest count\n- Date and location\n\nOr email us: pricing@fotographiya.com",
+  "contact_us": {
+    "type": "submenu",
+    "message": "Contact Us\n\nHow would you like to connect with us?",
     "options": [
-      { "id": "whatsapp", "label": "Submit Budget & Chat on WhatsApp" },
-      { "id": "call_back", "label": "Call Me Instead" },
-      { "id": "menu", "label": "Return to Main Menu" }
+      { "id": "whatsapp", "label": "Chat on WhatsApp", "icon": "chat" },
+      { "id": "call_now", "label": "Call Now", "icon": "phone" },
+      { "id": "send_call_request", "label": "Send Call Request", "icon": "contact_support" },
+      { "id": "menu", "label": "Back to Main Menu", "icon": "arrow_back" }
     ]
   },
 
   "whatsapp": {
     "type": "text",
     "title": "Chat on WhatsApp",
-    "message": "Connect with us on WhatsApp!\n\nClick the link below to start chatting with our team instantly:\n\nhttps://wa.me/918824127624\n\nOur team is available from 9 AM to 9 PM, 7 days a week.\n\nWe'll respond to your queries within 5 minutes!",
+    "message": "Connect with us on WhatsApp.\n\nTap the button below to start chatting with our team instantly.",
     "options": [
-      { "id": "menu", "label": "Return to Main Menu" }
+      { "id": "whatsapp_action", "label": "Chat on WhatsApp", "action": "https://wa.me/918824127624", "icon": "chat" },
+      { "id": "menu", "label": "Back to Main Menu", "icon": "arrow_back" },
+      { "id": "contact_us", "label": "Contact Us", "icon": "contact_mail" }
     ]
   },
 
-  "visit_office": {
+  "whatsapp_action": {
     "type": "text",
-    "title": "Visit Our Office",
-    "message": "Visit Our Studio!\n\nWe'd love to meet you in person and show you our work!\n\nAddress:\n123 Photography Lane,\nConnaught Place,\nNew Delhi - 110001\n\nOffice Hours:\nMonday - Saturday: 10 AM - 8 PM\nSunday: By appointment only\n\nGoogle Maps Link: https://maps.google.com/...",
+    "title": "WhatsApp Chat Opened",
+    "message": "WhatsApp chat has been opened in a new tab.\n\nOur team will respond to you shortly.\n\nIn the meantime, you can explore more options below:",
     "options": [
-      { "id": "menu", "label": "Return to Main Menu" }
+      { "id": "menu", "label": "Back to Main Menu", "icon": "arrow_back" },
+      { "id": "call_now", "label": "Call Us Instead", "icon": "phone" },
+      { "id": "contact_us", "label": "Contact Us", "icon": "contact_mail" }
     ]
   },
 
-  "check_availability": {
+  "call_now": {
     "type": "details",
-    "title": "Check Our Availability",
-    "message": "Check if your date is available!\n\nPlease provide your event date and we'll check availability:\n\nType your date in the chat box (e.g., December 15, 2025)\n\nWe recommend booking at least 6 months in advance for wedding photography.\n\nPopular dates fill up quickly, especially during wedding season (Nov - Feb).",
+    "title": "Call Us Now",
+    "message": "Connect with us directly over the phone!\n\nPhone Number: +91 8824127624\nAvailable: 9 AM - 9 PM, 7 days a week\n\nTap the button below to call us directly.",
     "options": [
-      { "id": "portfolio", "label": "Browse Photos While Waiting" },
-      { "id": "investment_packages", "label": "View Pricing Packages" },
-      { "id": "menu", "label": "Return to Main Menu" }
+      { "id": "call_action", "label": "Call Now", "action": "tel:+918824127624", "icon": "phone" },
+      { "id": "menu", "label": "Back to Main Menu", "icon": "arrow_back" },
+      { "id": "contact_us", "label": "Contact Us", "icon": "contact_mail" }
     ]
   },
 
-  "phone_callback": {
-    "type": "text",
-    "title": "Request a Call Back",
-    "message": "We'll Call You Back!\n\nPlease enter your phone number in the chat box below:\n\nExample: 9876543210\n\nWe'll call you back within 30 minutes during business hours.\n\nOur team will assist you with:\n- Package details\n- Availability check\n- Custom quotes\n- Any questions you have",
+  "call_action": {
+    "type": "action",
+    "title": "Calling...",
+    "message": "Tap the button below to call us directly:\n\n+91 8824127624\n\nWe are available 9 AM - 9 PM, 7 days a week.",
     "options": [
-      { "id": "menu", "label": "Return to Main Menu" }
+      { "id": "menu", "label": "Back to Main Menu", "icon": "arrow_back" },
+      { "id": "contact_us", "label": "Contact Us", "icon": "contact_mail" }
     ]
   },
 
-  "pricing_check": {
-    "type": "details",
-    "title": "Pricing for This Package",
-    "message": "Pricing Information\n\nStandard Package: ₹55,000\nPremium Package: ₹85,000\nLuxury Package: ₹1,20,000+\n\nDownload our complete rate card:\nhttps://www.fotographiya.com/rate-card.pdf\n\nCustom packages available - contact us for a personalized quote.",
+  "send_call_request": {
+    "type": "form",
+    "title": "Send Call Request",
+    "message": "Please fill in your details below and our team will call you back within 30 minutes:",
+    "formFields": [
+      { 
+        "id": "fullName", 
+        "label": "Full Name", 
+        "type": "text", 
+        "placeholder": "Enter your full name", 
+        "required": true 
+      },
+      { 
+        "id": "phoneNumber", 
+        "label": "Phone Number", 
+        "type": "tel", 
+        "placeholder": "Enter your phone number", 
+        "required": true 
+      },
+      { 
+        "id": "email", 
+        "label": "Email Address", 
+        "type": "email", 
+        "placeholder": "Enter your email", 
+        "required": false 
+      },
+      { 
+        "id": "eventType", 
+        "label": "Event Type", 
+        "type": "select", 
+        "placeholder": "Select your event type", 
+        "required": true, 
+        "options": [
+          { "value": "wedding", "label": "Wedding" },
+          { "value": "engagement", "label": "Engagement" },
+          { "value": "pre_wedding", "label": "Pre-Wedding Shoot" },
+          { "value": "maternity", "label": "Maternity Shoot" },
+          { "value": "baby", "label": "Baby Shoot" },
+          { "value": "mehndi", "label": "Mehndi & Sangeet" },
+          { "value": "parties", "label": "Parties" },
+          { "value": "corporate", "label": "Corporate Events" },
+          { "value": "other", "label": "Other" }
+        ]
+      },
+      { 
+        "id": "problem", 
+        "label": "Problem / Query", 
+        "type": "textarea", 
+        "placeholder": "What do you need help with? Please describe your requirements...", 
+        "required": true 
+      }
+    ],
+    "submitLabel": "Send Request",
+    "successMessage": "Call Request Submitted.\n\nThank you for contacting Fotographiya. Here is what happens next:\n\n1. Our team will call you back within 30 minutes\n2. We will discuss your event requirements\n3. We will share package details and pricing\n4. We will help you choose the best package\n\nFor immediate assistance:\n📞 Call: +91 8824127624\n💬 WhatsApp: https://wa.me/918824127624",
     "options": [
-      { "id": "customize_package", "label": "Talk to Team About Customizing" },
-      { "id": "book_date", "label": "Book this Package for My Date" },
-      { "id": "menu", "label": "Return to Main Menu" }
+      { "id": "menu", "label": "Back to Main Menu", "icon": "arrow_back" },
+      { "id": "contact_us", "label": "Contact Us", "icon": "contact_mail" }
     ]
   },
 
-  "portfolio": {
-    "type": "details",
-    "title": "Our Portfolio",
-    "message": "View Our Work\n\nWeddings: https://www.fotographiya.com/weddings\nCinematic Films: https://www.fotographiya.com/films\nPortraits: https://www.fotographiya.com/portraits\nEvents: https://www.fotographiya.com/events\n\nAward-winning photography and cinematography!\n\nSee why couples trust us with their special moments.",
+  "book_event": {
+    "type": "form",
+    "title": "Book My Event",
+    "message": "Please fill in your event details below and our team will get back to you within 24 hours:",
+    "formFields": [
+      { 
+        "id": "fullName", 
+        "label": "Full Name", 
+        "type": "text", 
+        "placeholder": "Enter your full name", 
+        "required": true 
+      },
+      { 
+        "id": "phoneNumber", 
+        "label": "Phone Number", 
+        "type": "tel", 
+        "placeholder": "Enter your phone number", 
+        "required": true 
+      },
+      { 
+        "id": "email", 
+        "label": "Email Address", 
+        "type": "email", 
+        "placeholder": "Enter your email address", 
+        "required": true 
+      },
+      { 
+        "id": "eventDate", 
+        "label": "Event Date", 
+        "type": "date", 
+        "placeholder": "Select your event date", 
+        "required": true 
+      },
+      { 
+        "id": "eventType", 
+        "label": "Type of Event", 
+        "type": "select", 
+        "placeholder": "Select your event type", 
+        "required": true, 
+        "options": [
+          { "value": "wedding", "label": "Wedding" },
+          { "value": "engagement", "label": "Engagement" },
+          { "value": "pre_wedding", "label": "Pre-Wedding Shoot" },
+          { "value": "maternity", "label": "Maternity Shoot" },
+          { "value": "baby", "label": "Baby Shoot" },
+          { "value": "mehndi", "label": "Mehndi & Sangeet" },
+          { "value": "parties", "label": "Parties" },
+          { "value": "corporate", "label": "Corporate Events" },
+          { "value": "other", "label": "Other" }
+        ]
+      },
+      { 
+        "id": "location", 
+        "label": "Event Location", 
+        "type": "text", 
+        "placeholder": "Where will the event be held?", 
+        "required": true 
+      },
+      { 
+        "id": "guestCount", 
+        "label": "Expected Guest Count", 
+        "type": "text", 
+        "placeholder": "Example: 100-200 guests", 
+        "required": false 
+      },
+      { 
+        "id": "packageSelected", 
+        "label": "Package Interested In", 
+        "type": "select", 
+        "placeholder": "Select a package", 
+        "required": true, 
+        "options": [
+          { "value": "silver", "label": "Silver Package - ₹75,000 to ₹99,999" },
+          { "value": "golden", "label": "Golden Package - ₹1,50,000 to ₹2,25,000" },
+          { "value": "premium", "label": "Premium Package - ₹2,00,000 to ₹2,49,999" },
+          { "value": "custom", "label": "Custom Package - Need Quote" }
+        ]
+      },
+      { 
+        "id": "budget", 
+        "label": "Budget Range", 
+        "type": "text", 
+        "placeholder": "Example: ₹1,50,000 - ₹2,00,000", 
+        "required": false 
+      },
+      { 
+        "id": "specialRequests", 
+        "label": "Special Requests or Questions", 
+        "type": "textarea", 
+        "placeholder": "Any special requirements, preferences, or questions for our team...", 
+        "required": false 
+      }
+    ],
+    "submitLabel": "Submit Event Booking",
+    "successMessage": "Event Booking Request Submitted.\n\nThank you for choosing Fotographiya. Here is what happens next:\n\n1. You will receive a confirmation email within 24 hours\n2. 25% advance booking is required to confirm\n3. Our team will contact you to discuss all details\n4. We will create a customized plan for your event\n\nFor urgent queries:\n📞 Call: +91 8824127624\n💬 WhatsApp: https://wa.me/918824127624",
     "options": [
-      { "id": "menu", "label": "Return to Main Menu" }
-    ]
-  },
-
-  "premium_plans": {
-    "type": "details",
-    "title": "Premium Plans",
-    "message": "Premium Photography Plans\n\nPremium Plan Includes:\n- Full-day coverage (12+ hours)\n- 800+ edited photos\n- 2 cinematographers\n- 60-minute documentary\n- 5-minute cinematic film\n- Premium leather album (2 copies)\n- Drone coverage\n- Behind-the-scenes film\n\nPrice: Starting from ₹85,000\n\nContact us for premium availability!",
-    "options": [
-      { "id": "book_consultation", "label": "Book a Consultation" },
-      { "id": "download_terms", "label": "Download Detailed Terms" },
-      { "id": "menu", "label": "Return to Main Menu" }
-    ]
-  },
-
-  "book_consultation": {
-    "type": "details",
-    "title": "Book a Consultation",
-    "message": "Book Your Consultation\n\nPlease select your preferred method:\n\nWhatsApp: https://wa.me/918824127624\nPhone: +91 8824127624\nIn-Person: Visit our studio\nEmail: consultation@fotographiya.com\n\nConsultation duration: 45-60 minutes\n\nWe'll discuss your vision, budget, and create a custom plan!",
-    "options": [
-      { "id": "menu", "label": "Return to Main Menu" }
-    ]
-  },
-
-  "download_terms": {
-    "type": "text",
-    "title": "Download Detailed Terms",
-    "message": "Download Our Terms & Conditions\n\nComplete Policy Document:\nhttps://www.fotographiya.com/terms-and-conditions.pdf\n\nPhotography Terms:\nhttps://www.fotographiya.com/photography-terms.pdf\n\nVideography Terms:\nhttps://www.fotographiya.com/videography-terms.pdf\n\nCancellation Policy:\nhttps://www.fotographiya.com/cancellation-policy.pdf\n\nAll terms are transparent and fair. Feel free to ask questions!",
-    "options": [
-      { "id": "menu", "label": "Return to Main Menu" }
-    ]
-  },
-
-  "customize_package": {
-    "type": "text",
-    "title": "Customize Your Package",
-    "message": "Talk to Our Team About Customizing!\n\nWe understand every wedding is unique. Tell us what you need:\n\nIn the chat box below, please share:\n- Your vision and requirements\n- Special requests\n- Preferred style\n- Any specific shots you want\n\nOr email us: customize@fotographiya.com\nWhatsApp: https://wa.me/918824127624\n\nWe'll create a package that's perfect for you!",
-    "options": [
-      { "id": "menu", "label": "Return to Main Menu" }
-    ]
-  },
-
-  "book_date": {
-    "type": "text",
-    "title": "Book This Package for My Date",
-    "message": "Let's Book Your Date!\n\nPlease provide the following details in the chat box below:\n\nEvent Date:\nLocation:\nExpected Guests:\nContact Number:\nEmail Address:\n\nWe'll send you a confirmation and payment link within 24 hours.\n\n₹5,000 advance booking required (adjustable in final payment).",
-    "options": [
-      { "id": "menu", "label": "Return to Main Menu" }
-    ]
-  },
-
-  "call_back": {
-    "type": "text",
-    "title": "Request a Call Back",
-    "message": "We'll Call You Back!\n\nPlease enter your phone number in the chat box below:\n\nExample: 9876543210\n\nWe'll call you back within 30 minutes during business hours.\n\nOur team will assist you with:\n- Package details\n- Availability check\n- Custom quotes\n- Any questions you have",
-    "options": [
-      { "id": "menu", "label": "Return to Main Menu" }
+      { "id": "menu", "label": "Back to Main Menu", "icon": "arrow_back" },
+      { "id": "contact_us", "label": "Contact Us", "icon": "contact_mail" }
     ]
   }
 }

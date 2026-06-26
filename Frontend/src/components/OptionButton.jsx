@@ -1,20 +1,26 @@
 import React from 'react';
 
-const OptionButton = ({ option, onClick }) => {
+const OptionButton = ({ option, onClick, isDisabled = false }) => {
   const handleClick = () => {
-    if (onClick && option.id) {
-      onClick(option.id);
+    if (isDisabled) return;
+    if (onClick) {
+      onClick(option);
     }
   };
 
+  // Check if it's a call button
+  const isCallButton = option.action && option.action.startsWith('tel:');
+  const isWhatsAppButton = option.action && option.action.startsWith('https://wa.me/');
+
   return (
     <button 
-      className="option-btn"
+      className={`option-btn ${isCallButton ? 'call-btn' : ''} ${isWhatsAppButton ? 'whatsapp-btn' : ''} ${isDisabled ? 'option-disabled' : ''}`}
       onClick={handleClick}
+      disabled={isDisabled}
     >
       <div className="option-content">
         <span className="material-icons option-icon">
-          {option.icon || 'arrow_forward'}
+          {isCallButton ? 'phone' : isWhatsAppButton ? 'whatsapp' : (option.icon || 'arrow_forward')}
         </span>
         <div className="option-text">
           <span className="option-label">{option.label || 'Option'}</span>
@@ -22,7 +28,9 @@ const OptionButton = ({ option, onClick }) => {
             <span className="option-description">{option.description}</span>
           )}
         </div>
-        <span className="material-icons option-arrow">chevron_right</span>
+        <span className="material-icons option-arrow">
+          {isCallButton ? 'call' : isWhatsAppButton ? 'chat' : 'chevron_right'}
+        </span>
       </div>
     </button>
   );

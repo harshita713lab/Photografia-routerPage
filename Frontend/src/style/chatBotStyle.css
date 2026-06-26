@@ -978,3 +978,297 @@ body {
 @media (prefers-color-scheme: dark) {
   /* Add dark mode styles if needed */
 }
+/* ============================================
+   CALL & WHATSAPP BUTTONS
+   ============================================ */
+.option-btn.call-btn {
+  border-color: #4CAF50;
+  background: #E8F5E9;
+}
+
+.option-btn.call-btn:hover {
+  background: #C8E6C9;
+  border-color: #388E3C;
+}
+
+.option-btn.whatsapp-btn {
+  border-color: #25D366;
+  background: #E8F5E9;
+}
+
+.option-btn.whatsapp-btn:hover {
+  background: #C8E6C9;
+  border-color: #128C7E;
+}
+
+/* Clickable links in messages */
+.message-link {
+  color: #0066cc;
+  text-decoration: underline;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.message-link:hover {
+  color: #004499;
+}
+
+.message-link[href^="tel:"] {
+  color: #4CAF50;
+  font-weight: 700;
+  font-size: 16px;
+}
+/* ============================================
+   FORM STYLES
+   ============================================ */
+.chat-form {
+  margin-top: 12px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.form-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #000000;
+}
+
+.form-input,
+.form-select,
+.form-textarea {
+  padding: 10px 12px;
+  border: 2px solid #E0E0E0;
+  border-radius: 10px;
+  font-size: 14px;
+  font-family: 'Inter', sans-serif;
+  background: #FFFFFF;
+  color: #000000;
+  transition: border-color 0.3s ease;
+  width: 100%;
+}
+
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus {
+  outline: none;
+  border-color: #000000;
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
+}
+
+.form-input::placeholder,
+.form-textarea::placeholder {
+  color: #999999;
+}
+
+.form-select {
+  appearance: auto;
+  cursor: pointer;
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 60px;
+}
+
+.form-submit-btn {
+  padding: 12px 20px;
+  background: #000000;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Inter', sans-serif;
+  margin-top: 4px;
+}
+
+.form-submit-btn:hover {
+  background: #1a1a1a;
+  transform: scale(1.02);
+}
+
+.form-submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Mobile responsive */
+@media (max-width: 480px) {
+  .form-input,
+  .form-select,
+  .form-textarea {
+    padding: 8px 10px;
+    font-size: 13px;
+  }
+  
+  .form-label {
+    font-size: 12px;
+  }
+  
+  .form-submit-btn {
+    padding: 10px 16px;
+    font-size: 14px;
+  }
+}
+/* ============================================
+   SUCCESS MESSAGE STYLES
+   ============================================ */
+.success-message {
+  background: #E8F5E9 !important;
+  border-color: #4CAF50 !important;
+  border-left: 4px solid #4CAF50 !important;
+}
+
+.success-message .message-title {
+  color: #2E7D32 !important;
+}
+
+.success-message .message-title-icon {
+  color: #4CAF50 !important;
+}
+
+.success-message .message-text {
+  color: #1B5E20 !important;
+}
+
+/* Form success animation */
+@keyframes successPop {
+  0% {
+    transform: scale(0.95);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(1.02);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.message.bot-message:last-child .message-bubble.success-message {
+  animation: successPop 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Form button disabled state improvement */
+.form-submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+  background: #666 !important;
+}
+
+/* Form field focus state */
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus {
+  outline: none;
+  border-color: #000000;
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Required field indicator */
+.form-label.required::after {
+  content: ' *';
+  color: #D32F2F;
+  font-weight: 700;
+}
+/* ============================================
+   DISABLED OPTIONS
+   ============================================ */
+.option-btn.option-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+  transform: none !important;
+  background: #f5f5f5 !important;
+  border-color: #ddd !important;
+  box-shadow: none !important;
+}
+
+.option-btn.option-disabled .option-label {
+  color: #999 !important;
+}
+
+.option-btn.option-disabled .option-description {
+  color: #bbb !important;
+}
+
+.option-btn.option-disabled .option-icon,
+.option-btn.option-disabled .option-arrow {
+  color: #ccc !important;
+}
+
+.option-btn.option-disabled:hover {
+  transform: none !important;
+  background: #f5f5f5 !important;
+  border-color: #ddd !important;
+  box-shadow: none !important;
+}
+
+.option-btn.option-disabled .option-arrow {
+  transform: none !important;
+}
+
+/* Loading spinner for clicked option */
+.option-btn.loading {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.option-btn.loading .option-label::after {
+  content: '...';
+  animation: dots 1.5s steps(4, end) infinite;
+}
+
+@keyframes dots {
+  0% { content: ''; }
+  25% { content: '.'; }
+  50% { content: '..'; }
+  75% { content: '...'; }
+  100% { content: ''; }
+}
+
+/* Fade animation when options become disabled */
+.option-btn.option-disabled {
+  transition: all 0.3s ease;
+  animation: fadeOut 0.3s ease;
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0.5;
+    transform: scale(0.98);
+  }
+}
+
+/* New options appear with animation */
+.option-grid .option-btn:not(.option-disabled) {
+  animation: slideInOption 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes slideInOption {
+  0% {
+    opacity: 0;
+    transform: translateY(15px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}

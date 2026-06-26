@@ -24,7 +24,11 @@ if (!fs.existsSync('logs')) {
 // CORS - FIXED
 // ============================================
 app.use(cors({
-  origin: ['http://localhost:5173', 'http://127.0.0.1:5173'],
+  origin: [
+    'http://localhost:5173', 
+    'http://127.0.0.1:5173',
+    'http://192.168.1.28:5173'   // ← ADD THIS LINE FOR PHONE ACCESS!
+  ],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']

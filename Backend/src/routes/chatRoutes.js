@@ -5,7 +5,9 @@ const aiService = require('../services/aiService');
 
 router.post('/message', chatController.sendMessage);
 
-// Reload config without restarting server
+// ✅ NEW: Form submission route
+router.post('/form', chatController.handleFormSubmission);
+
 router.post('/reload-config', (req, res) => {
   try {
     const config = aiService.reloadConfig();
