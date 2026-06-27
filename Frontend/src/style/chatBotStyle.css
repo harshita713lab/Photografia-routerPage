@@ -4,7 +4,7 @@
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
 
 /* ============================================
-   FONT IMPORTS
+   FONT IMPORTS - Using Local Fonts
    ============================================ */
 @font-face {
   font-family: 'Inter';
@@ -91,7 +91,7 @@ body {
 }
 
 /* ============================================
-   CHAT TOGGLE BUTTON
+   CHAT TOGGLE BUTTON - Updated for Logo
    ============================================ */
 .chat-toggle-btn {
   position: fixed;
@@ -100,7 +100,7 @@ body {
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  background: #000000;
+  background: black;
   border: 2px solid #000000;
   cursor: pointer;
   display: flex;
@@ -110,21 +110,23 @@ body {
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
   z-index: 999;
   padding: 0;
+  overflow: hidden;
 }
 
 .chat-toggle-btn:hover {
   transform: scale(1.08);
   box-shadow: 0 6px 30px rgba(0, 0, 0, 0.35);
-  background: #1a1a1a;
 }
 
 .chat-toggle-btn:active {
   transform: scale(0.95);
 }
 
-.chat-toggle-btn .material-icons {
-  color: #FFFFFF;
-  font-size: 30px;
+.chat-toggle-btn img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
 }
 
 /* ============================================
@@ -151,7 +153,7 @@ body {
 }
 
 /* ============================================
-   CHAT HEADER
+   CHAT HEADER - Updated for Logo
    ============================================ */
 .chat-header {
   padding: 18px 24px;
@@ -159,7 +161,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #FFFFFF;
+  background: white;
   flex-shrink: 0;
   min-height: 72px;
 }
@@ -174,16 +176,20 @@ body {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: #000000;
+  background: black;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  overflow: hidden;
+  border: 2px solid #000000;
 }
 
-.header-icon-circle .material-icons {
-  color: #FFFFFF;
-  font-size: 22px;
+.header-icon-circle img {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  object-fit: cover;
 }
 
 .chat-header h3 {
@@ -482,98 +488,6 @@ body {
 }
 
 /* ============================================
-   CHAT INPUT AREA
-   ============================================ */
-.chat-input {
-  padding: 16px 20px;
-  border-top: 2px solid #000000;
-  display: flex;
-  gap: 12px;
-  background: #FFFFFF;
-  flex-shrink: 0;
-  align-items: center;
-}
-
-.chat-input-wrapper {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  background: #F5F5F5;
-  border: 2px solid #E0E0E0;
-  border-radius: 12px;
-  transition: all 0.3s ease;
-  padding: 0 14px;
-}
-
-.chat-input-wrapper:focus-within {
-  border-color: #000000;
-  background: #FFFFFF;
-  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
-}
-
-.chat-input-wrapper .material-icons {
-  color: #999999;
-  font-size: 20px;
-  margin-right: 8px;
-}
-
-.chat-input input {
-  flex: 1;
-  padding: 10px 0;
-  border: none;
-  background: transparent;
-  font-size: 14px;
-  font-weight: 400;
-  outline: none;
-  color: #000000;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-}
-
-.chat-input input::placeholder {
-  color: #999999;
-  font-weight: 400;
-}
-
-.chat-input input:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.chat-input .send-btn {
-  padding: 10px 16px;
-  background: #000000;
-  color: #FFFFFF;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: all 0.25s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 44px;
-  min-height: 44px;
-}
-
-.chat-input .send-btn:hover:not(:disabled) {
-  background: #1a1a1a;
-  transform: scale(1.05);
-}
-
-.chat-input .send-btn:active:not(:disabled) {
-  transform: scale(0.95);
-}
-
-.chat-input .send-btn:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-}
-
-.chat-input .send-btn .material-icons {
-  color: #FFFFFF;
-  font-size: 22px;
-}
-
-/* ============================================
    CHAT ACTIONS / BOOKING BUTTONS
    ============================================ */
 .message-actions {
@@ -670,8 +584,9 @@ body {
     height: 54px;
   }
   
-  .chat-toggle-btn .material-icons {
-    font-size: 26px;
+  .chat-toggle-btn img {
+    width: 36px;
+    height: 36px;
   }
   
   .chat-header {
@@ -684,8 +599,9 @@ body {
     height: 36px;
   }
   
-  .header-icon-circle .material-icons {
-    font-size: 20px;
+  .header-icon-circle img {
+    width: 30px;
+    height: 30px;
   }
   
   .chat-header h3 {
@@ -694,10 +610,6 @@ body {
   
   .chat-messages {
     padding: 16px 18px;
-  }
-  
-  .chat-input {
-    padding: 12px 16px;
   }
   
   .message-bubble {
@@ -749,8 +661,9 @@ body {
     height: 50px;
   }
   
-  .chat-toggle-btn .material-icons {
-    font-size: 24px;
+  .chat-toggle-btn img {
+    width: 32px;
+    height: 32px;
   }
   
   .chat-window {
@@ -768,8 +681,9 @@ body {
     height: 32px;
   }
   
-  .header-icon-circle .material-icons {
-    font-size: 18px;
+  .header-icon-circle img {
+    width: 26px;
+    height: 26px;
   }
   
   .chat-header h3 {
@@ -796,34 +710,6 @@ body {
   .chat-messages {
     padding: 14px 14px;
     gap: 8px;
-  }
-  
-  .chat-input {
-    padding: 10px 14px;
-    gap: 8px;
-  }
-  
-  .chat-input-wrapper {
-    padding: 0 12px;
-  }
-  
-  .chat-input-wrapper .material-icons {
-    font-size: 18px;
-  }
-  
-  .chat-input input {
-    padding: 8px 0;
-    font-size: 13px;
-  }
-  
-  .chat-input .send-btn {
-    padding: 8px 14px;
-    min-width: 38px;
-    min-height: 38px;
-  }
-  
-  .chat-input .send-btn .material-icons {
-    font-size: 20px;
   }
   
   .message-bubble {
@@ -973,12 +859,6 @@ body {
 }
 
 /* ============================================
-   DARK MODE SUPPORT (Optional)
-   ============================================ */
-@media (prefers-color-scheme: dark) {
-  /* Add dark mode styles if needed */
-}
-/* ============================================
    CALL & WHATSAPP BUTTONS
    ============================================ */
 .option-btn.call-btn {
@@ -1018,6 +898,7 @@ body {
   font-weight: 700;
   font-size: 16px;
 }
+
 /* ============================================
    FORM STYLES
    ============================================ */
@@ -1103,7 +984,7 @@ body {
   transform: none;
 }
 
-/* Mobile responsive */
+/* Mobile responsive for forms */
 @media (max-width: 480px) {
   .form-input,
   .form-select,
@@ -1121,6 +1002,7 @@ body {
     font-size: 14px;
   }
 }
+
 /* ============================================
    SUCCESS MESSAGE STYLES
    ============================================ */
@@ -1184,6 +1066,7 @@ body {
   color: #D32F2F;
   font-weight: 700;
 }
+
 /* ============================================
    DISABLED OPTIONS
    ============================================ */

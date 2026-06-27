@@ -6,11 +6,9 @@ import '../style/chatBotStyle.css';
 const Chatbot = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([]);
-  const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [conversationId, setConversationId] = useState(null);
 
-  // ✅ ONLY LOCALHOST - NO IP
   const API_URL = 'http://localhost:5000';
 
   useEffect(() => {
@@ -22,7 +20,8 @@ const Chatbot = () => {
       options: [
         { id: 'services', label: 'Our Services', description: 'Learn about our photography services' },
         { id: 'pricing', label: 'Pricing & Packages', description: 'Check our pricing plans' },
-        { id: 'schedule_consultation', label: 'Schedule a Consultation', description: 'Book a meeting with us' }
+        { id: 'about_us', label: 'About Us', description: 'Know more about Fotographiya' },
+        { id: 'contact_us', label: 'Contact Us', description: 'Get in touch with us' }
       ]
     };
     setMessages([defaultMenu]);
@@ -113,7 +112,6 @@ const Chatbot = () => {
       setMessages(prev => [...prev, errorMessage]);
     } finally {
       setIsLoading(false);
-      setInputValue('');
     }
   };
 
@@ -212,9 +210,6 @@ const Chatbot = () => {
         onClose={toggleChat}
         messages={messages}
         isLoading={isLoading}
-        inputValue={inputValue}
-        onInputChange={setInputValue}
-        onSendMessage={() => handleSendMessage(inputValue)}
         onOptionSelect={handleOptionSelect}
         onSubmitForm={handleFormSubmit}
       />

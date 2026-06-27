@@ -1,7 +1,6 @@
 import React from 'react';
 import ChatHeader from './ChatHeader';
 import ChatMessages from './ChatMessages';
-import ChatInput from './ChatInput';
 
 const ChatWindow = ({ 
   isOpen, 
@@ -22,12 +21,6 @@ const ChatWindow = ({
         isLoading={isLoading}
         onOptionSelect={onOptionSelect}
         onSubmitForm={onSubmitForm}  // ← PASS THIS
-      />
-      <ChatInput 
-        value={inputValue}
-        onChange={onInputChange}
-        onSend={onSendMessage}
-        isLoading={isLoading}
       />
     </div>
   );
