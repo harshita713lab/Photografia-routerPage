@@ -1,5 +1,6 @@
 import React from 'react';
-import ChatIcon from './ChatIcon';
+// ❌ Remove: import ChatIcon from './ChatIcon';
+import logo from '../assets/image/logo.jpeg';  // ✅ Add logo import
 
 const ChatToggle = ({ onClick, isOpen }) => {
   return (
@@ -8,7 +9,17 @@ const ChatToggle = ({ onClick, isOpen }) => {
       onClick={onClick}
       aria-label={isOpen ? 'Close Chat' : 'Open Chat'}
     >
-      <ChatIcon size={28} color="#FFFFFF" />
+      {/* ✅ Replace ChatIcon with Logo Image */}
+      <img 
+        src={logo} 
+        alt="Fotographiya" 
+        style={{
+          width: '36px',
+          height: '36px',
+          borderRadius: '50%',
+          objectFit: 'cover'
+        }}
+      />
     </button>
   );
 };

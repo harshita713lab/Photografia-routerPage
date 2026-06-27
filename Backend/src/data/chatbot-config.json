@@ -236,7 +236,6 @@
     "options": [
       { "id": "who_we_are", "label": "Who We Are", "icon": "info" },
       { "id": "services_provided", "label": "Services We Provide", "icon": "list" },
-      { "id": "payment_options", "label": "Payment Options", "icon": "payments" },
       { "id": "booking_policy", "label": "Booking Policy", "icon": "policy" },
       { "id": "menu", "label": "Back to Main Menu", "icon": "arrow_back" },
       { "id": "contact_us", "label": "Contact Us", "icon": "contact_mail" }
@@ -258,17 +257,6 @@
     "type": "details",
     "title": "Services We Provide",
     "message": "Our Photography Services:\n\n📸 Traditional Photography\n🎯 Candid Photography\n🎬 Cinematography\n🚁 Drone Shoots\n📷 Photobooth\n📺 Live Screening\n\nAll services available for weddings, events, and special occasions.\n\nWe cover:\n✓ Wedding & Engagement\n✓ Pre-Wedding Shoots\n✓ Maternity & Baby Shoots\n✓ Mehndi & Sangeet\n✓ Parties & Celebrations\n✓ Corporate Events",
-    "options": [
-      { "id": "about_us", "label": "Back to About Us", "icon": "arrow_back" },
-      { "id": "menu", "label": "Back to Main Menu", "icon": "arrow_back" },
-      { "id": "contact_us", "label": "Contact Us", "icon": "contact_mail" }
-    ]
-  },
-
-  "payment_options": {
-    "type": "details",
-    "title": "Payment Options",
-    "message": "We accept the following payment methods:\n\n💳 Debit/Credit Cards\n🏦 Net Banking\n💰 Cash\n📝 Cheque/DD\n📱 Mobile Wallets\n🔄 UPI\n\nAll payments are secure and transparent.",
     "options": [
       { "id": "about_us", "label": "Back to About Us", "icon": "arrow_back" },
       { "id": "menu", "label": "Back to Main Menu", "icon": "arrow_back" },

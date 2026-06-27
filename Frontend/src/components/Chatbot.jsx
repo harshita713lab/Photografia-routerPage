@@ -10,7 +10,8 @@ const Chatbot = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [conversationId, setConversationId] = useState(null);
 
-  const API_URL = import.meta.env.VITE_API_URL || 'http://192.168.1.28:5000';
+  // ✅ ONLY LOCALHOST - NO IP
+  const API_URL = 'http://localhost:5000';
 
   useEffect(() => {
     const defaultMenu = {
@@ -45,7 +46,6 @@ const Chatbot = () => {
 
   const toggleChat = () => setIsOpen(!isOpen);
 
-  // Helper function to get menu message
   const getMenuMessage = () => ({
     id: Date.now() + 100,
     text: 'Here is the main menu again. How can I help you?',
@@ -54,8 +54,8 @@ const Chatbot = () => {
     options: [
       { id: 'services', label: 'Our Services', description: 'Learn about our photography services' },
       { id: 'pricing', label: 'Pricing & Packages', description: 'Check our pricing plans' },
-      { id: 'schedule_consultation', label: 'Schedule a Consultation', description: 'Book a meeting with us' },
-      { id: 'call_now', label: 'Call Now', description: 'Speak with us directly' }
+      { id: 'about_us', label: 'About Us', description: 'Know more about Fotographiya' },
+      { id: 'contact_us', label: 'Contact Us', description: 'Get in touch with us' }
     ]
   });
 
@@ -158,7 +158,6 @@ const Chatbot = () => {
     if (optionId === 'whatsapp' || optionId === 'whatsapp_action') {
       window.open('https://wa.me/918824127624', '_blank');
       
-      // ✅ Show "Back to Menu" option after WhatsApp opens
       setTimeout(() => {
         const menuMessage = {
           id: Date.now() + 2,
@@ -179,7 +178,6 @@ const Chatbot = () => {
     if (optionId === 'call_action') {
       window.location.href = 'tel:+918824127624';
       
-      // ✅ Show "Back to Menu" after call
       setTimeout(() => {
         const menuMessage = {
           id: Date.now() + 2,
