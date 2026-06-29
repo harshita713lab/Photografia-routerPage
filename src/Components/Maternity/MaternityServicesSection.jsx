@@ -1,47 +1,47 @@
-// src/Components/Roka/RokaServicesSection.jsx
+// src/Components/Maternity/MaternityServicesSection.jsx
 import React from 'react';
-import "../../Styles/roka/Roka.css";
+import '../../Styles/maternity/Maternity.css';
 
-const RokaServicesSection = () => {
+const MaternityServicesSection = () => {
   const services = [
     { 
       id: 1, 
-      title: "Roka Photography", 
-      description: "Professional photography covering every ritual of your Roka ceremony from tilak to feast." 
+      title: "Maternity Photography", 
+      description: "Professional photography celebrating the beauty of pregnancy." 
     },
     { 
       id: 2, 
-      title: "Cinematic Videography", 
-      description: "High-quality cinematic videos capturing all the emotions and special moments of your Roka." 
+      title: "Studio Sessions", 
+      description: "Intimate studio photography with professional lighting and backdrops." 
     },
     { 
       id: 3, 
-      title: "Premium Albums", 
-      description: "Beautifully designed premium leather albums and canvas prints for your memories." 
+      title: "Outdoor Shoots", 
+      description: "Beautiful outdoor locations for natural and artistic maternity portraits." 
     },
     { 
       id: 4, 
-      title: "Traditional Coverage", 
-      description: "Complete coverage of all traditional rituals including tilak, ring exchange, and blessings." 
+      title: "Partner & Family", 
+      description: "Include your partner and children in the maternity session." 
     },
     { 
       id: 5, 
-      title: "Candid Photography", 
-      description: "Natural and candid shots capturing real emotions and genuine moments." 
+      title: "Newborn Prep", 
+      description: "Preparation and styling for your newborn photography session." 
     },
     { 
       id: 6, 
-      title: "Same Day Edit", 
-      description: "Quick turnaround with same-day highlight reels for your social media sharing." 
+      title: "Photo Albums", 
+      description: "Premium printed albums and digital frames for your memories." 
     }
   ];
 
   return (
-    <div className="roka-services-section scroll-fade-up">
+    <div className="maternity-services-section scroll-fade-up">
       <div className="section-header">
-        <h2 className="section-title scroll-fade-up delay-1">Our Roka Services</h2>
+        <h2 className="section-title scroll-fade-up delay-1">Our Maternity Services</h2>
         <div className="section-line scroll-fade-up delay-2"></div>
-        <p className="section-subtitle scroll-fade-up delay-3">Professional photography services for your special day</p>
+        <p className="section-subtitle scroll-fade-up delay-3">Professional photography for expecting mothers</p>
       </div>
       <div className="services-grid stagger-children" style={{ gridTemplateColumns: 'repeat(3, 1fr)' }}>
         {services.map((service) => (
@@ -62,7 +62,7 @@ const RokaServicesSection = () => {
                 fontWeight: 'bold'
               }}
             >
-              ✓
+              👶
             </div>
             <h3 className="service-title">{service.title}</h3>
             <p className="service-description">{service.description}</p>
@@ -73,4 +73,4 @@ const RokaServicesSection = () => {
   );
 };
 
-export default RokaServicesSection;
+export default MaternityServicesSection;

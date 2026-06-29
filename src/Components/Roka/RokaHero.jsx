@@ -1,29 +1,27 @@
-// src/components/roka/RokaHero.jsx
+// src/Components/Roka/RokaHero.jsx
 import React from 'react';
-import styles from '../../Styles/roka/RokaHero.module.css';
+import "../../Styles/roka/Roka.css";
 
 const RokaHero = () => {
   return (
-    <div className={styles.hero}>
-      <div className={styles.heroBackground}>
+    <div className="roka-hero">
+      <div className="hero-background">
         <img
           src="https://images.pexels.com/photos/2253870/pexels-photo-2253870.jpeg?auto=compress&cs=tinysrgb&w=1600"
           alt="Roka Ceremony"
-          className={styles.heroImage}
+          className="hero-image"
         />
       </div>
-      <div className={styles.overlay}></div>
-      <div className={styles.heroContent}>
-        <div className={styles.heroTextContainer}>
-          <div className={styles.heroBadge}>SACRED BEGINNINGS</div>
-          
-          <h1 className={styles.heroTitle}>
-            <span className={`${styles.titleLine} hero-title-anim`}>Roka</span>
-            <span className={`${styles.titleHighlight} hero-title-anim-delay`}>Ceremony</span>
+      <div className="hero-overlay"></div>
+      <div className="hero-content">
+        <div className="hero-text-container">
+          <div className="hero-badge">SACRED BEGINNINGS</div>
+          <h1 className="hero-title">
+            <span className="title-line">Roka</span>
+            <span className="title-highlight">Ceremony</span>
           </h1>
-          
-          <div className={styles.heroDivider}></div>
-          <p className={styles.heroSubtitle}>
+          <div className="hero-divider"></div>
+          <p className="hero-subtitle">
             Where two hearts meet and two families become one.
           </p>
         </div>

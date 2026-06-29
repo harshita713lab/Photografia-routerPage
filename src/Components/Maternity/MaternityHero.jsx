@@ -1,51 +1,47 @@
-// src/components/maternity/MaternityHero.jsx
-import React from 'react';
-import styles from '../../Styles/maternity/Maternity.module.css';
-
-// ===== VIDEO IMPORT =====
+// src/Components/Maternity/MaternityHero.jsx
+import React, { useRef, useEffect } from 'react';
+import '../../Styles/maternity/Maternity.css';
+// ✅ Local video import
 import heroVideo from '../../assets/maternity/video/Video1.mp4';
 
 const MaternityHero = () => {
+  const videoRef = useRef(null);
+
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.play().catch(e => console.log('Autoplay prevented:', e));
+    }
+  }, []);
+
   return (
-    <div className={styles.maternityHero}>
-      {/* ===== VIDEO BACKGROUND ===== */}
-      <div className={styles.heroBackground}>
+    <div className="maternity-hero">
+      <div className="hero-background">
         <video
-          className={styles.heroVideo}
+          ref={videoRef}
           src={heroVideo}
+          className="hero-video"
           autoPlay
           loop
           muted
           playsInline
         />
       </div>
-      <div className={styles.overlay}></div>
-
-      {/* ===== CENTER - TITLE ===== */}
-      <div className={styles.heroContent}>
-        <div className={styles.contentWrapper}>
-          
-          {/* Decorative M */}
-          <div className={`${styles.decorativeLetter} fade-in-down delay-1`}>M</div>
-          
-          <div className={`${styles.heroBadge} fade-in-up delay-1`}>MATERNITY</div>
-          
-          <h1 className={`${styles.heroTitle} title-reveal`}>
-            <span className={styles.titleWord} style={{ animationDelay: '0.2s' }}>Maternity</span>
-            <span className={styles.titleWord} style={{ animationDelay: '0.5s' }}>Photography</span>
-          </h1>
-          
-          <div className={`${styles.heroDivider} fade-in delay-3`}></div>
-          
-          <p className={`${styles.heroSubtitle} fade-in-up delay-4`}>
-            Capturing the beauty, love, and glow of motherhood
-          </p>
-          
-          <p className={`${styles.heroDescription} fade-in-up delay-5`}>
-            Every pregnancy is a unique journey. Let us tell your story through 
-            stunning photographs that you'll cherish forever.
-          </p>
-          
+      <div className="hero-overlay"></div>
+      
+      <div className="hero-content">
+        {/* CENTER - Title only */}
+        <div className="hero-center">
+          <div className="hero-text-container">
+            <div className="hero-badge">CELEBRATING MOTHERHOOD</div>
+            <h1 className="hero-title">
+              <span className="title-line">Maternity</span>
+              <span className="title-highlight">Photography</span>
+            </h1>
+            <div className="hero-divider"></div>
+            <p className="hero-subtitle">
+              Capturing the beauty and grace of motherhood.
+            </p>
+          </div>
         </div>
       </div>
     </div>

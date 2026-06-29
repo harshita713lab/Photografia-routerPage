@@ -1,8 +1,7 @@
-// src/components/maternity/MaternityGallery.jsx
+// src/Components/Maternity/MaternityGallery.jsx
 import React from 'react';
-import styles from '../../Styles/maternity/Maternity.module.css';
-
-// ===== ASSETS SE IMPORT =====
+import '../../Styles/maternity/Maternity.css';
+// ✅ Local image imports
 import img1 from '../../assets/maternity/images/maternity1.jpg';
 import img2 from '../../assets/maternity/images/maternity2.jpg';
 import img3 from '../../assets/maternity/images/maternity3.jpg';
@@ -13,49 +12,39 @@ import img7 from '../../assets/maternity/images/maternity7.jpg';
 import img8 from '../../assets/maternity/images/maternity8.jpg';
 
 const MaternityGallery = ({ onImageClick }) => {
-  const galleryImages = [
-    // LANDSCAPE (width 2x, height 1x)
-    { id: 1, src: img1, alt: "Maternity Landscape 1", orientation: "landscape" },
-    { id: 4, src: img4, alt: "Maternity Landscape 2", orientation: "landscape" },
-    { id: 7, src: img7, alt: "Maternity Landscape 3", orientation: "landscape" },
-    
-    // PORTRAIT (height 2x, width 1x)
-    { id: 2, src: img2, alt: "Maternity Portrait 1", orientation: "portrait" },
-    { id: 5, src: img5, alt: "Maternity Portrait 2", orientation: "portrait" },
-    { id: 8, src: img8, alt: "Maternity Portrait 3", orientation: "portrait" },
-    
-    // SQUARE (1x1)
-    { id: 3, src: img3, alt: "Maternity Square 1", orientation: "square" },
-    { id: 6, src: img6, alt: "Maternity Square 2", orientation: "square" },
+  const images = [
+    { id: 1, src: img1, alt: "Maternity 1", orientation: "landscape" },
+    { id: 2, src: img2, alt: "Maternity 2", orientation: "portrait" },
+    { id: 3, src: img3, alt: "Maternity 3", orientation: "square" },
+    { id: 4, src: img4, alt: "Maternity 4", orientation: "landscape" },
+    { id: 5, src: img5, alt: "Maternity 5", orientation: "portrait" },
+    { id: 6, src: img6, alt: "Maternity 6", orientation: "square" },
+    { id: 7, src: img7, alt: "Maternity 7", orientation: "landscape" },
+    { id: 8, src: img8, alt: "Maternity 8", orientation: "portrait" },
   ];
 
-  const getOrientationClass = (orientation) => {
-    switch(orientation) {
-      case 'landscape': return styles.galleryLandscape;
-      case 'portrait': return styles.galleryPortrait;
-      default: return styles.gallerySquare;
-    }
-  };
-
   return (
-    <div className={`${styles.gallerySection} scroll-reveal`}>
-      <div className={styles.sectionHeader}>
-        <h2 className={`${styles.sectionTitle} fade-in-delay-1`}>Maternity Gallery</h2>
-        <div className={`${styles.sectionLine} fade-in-delay-2`}></div>
-        <p className={`${styles.sectionSubtitle} fade-in-delay-3`}>
-          A glimpse into the beautiful journey of motherhood
-        </p>
+    <div className="maternity-gallery scroll-fade-up">
+      <div className="gallery-header">
+        <h2 className="gallery-title scroll-fade-up delay-1">Our Work</h2>
+        <div className="gallery-line scroll-fade-up delay-2"></div>
+        <p className="gallery-subtitle scroll-fade-up delay-3">A glimpse into beautiful maternity sessions</p>
       </div>
-      <div className={`${styles.galleryGrid} stagger-children`}>
-        {galleryImages.map((img) => (
-          <div 
-            key={img.id} 
-            className={`${styles.galleryItem} ${getOrientationClass(img.orientation)}`}
-            onClick={() => onImageClick && onImageClick(img.src)}
-          >
-            <img src={img.src} alt={img.alt} loading="lazy" />
-          </div>
-        ))}
+      <div className="gallery-grid stagger-children">
+        {images.map((img) => {
+          let sizeClass = 'gallery-square';
+          if (img.orientation === 'landscape') sizeClass = 'gallery-landscape';
+          else if (img.orientation === 'portrait') sizeClass = 'gallery-portrait';
+          return (
+            <div 
+              key={img.id} 
+              className={`gallery-item ${sizeClass}`} 
+              onClick={() => onImageClick && onImageClick(img.src)}
+            >
+              <img src={img.src} alt={img.alt} loading="lazy" />
+            </div>
+          );
+        })}
       </div>
     </div>
   );

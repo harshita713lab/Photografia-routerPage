@@ -1,64 +1,74 @@
-// src/components/birthday/BirthdayServices.jsx
+// src/Components/Birthday/BirthdayServices.jsx
 import React from 'react';
-import styles from '../../Styles/birthday/Birthday.module.css';
+import "../../Styles/birthday/Birthday.css";
+// ✅ Local image imports
+import serviceImage1 from '../../assets/birthday/image/birthday3.jpg';
+import serviceImage2 from '../../assets/birthday/image/birthday4.jpg';
 
-const BirthdayServices = () => {
-  const services = [
+const BirthdayServices = ({ onImageClick }) => {
+  const sections = [
     {
       id: 1,
-      title: "Birthday Photography",
-      description: "Professional photography covering every moment of your birthday celebration from start to finish."
+      image: serviceImage1,
+      badge: "BIRTHDAY PHOTOGRAPHY",
+      title: "Capturing the Joy of",
+      highlightText: "Your Special Day",
+      paragraphs: [
+        "Birthday photography is about capturing the joy, laughter, and love that fills the air on your special day.",
+        "From the first slice of cake to the last dance, we freeze those moments forever.",
+        "Our photography tells the story of your celebration with authenticity and emotion."
+      ]
     },
     {
       id: 2,
-      title: "Cinematic Videography",
-      description: "High-quality cinematic videos capturing all the emotions and special moments of your birthday."
-    },
-    {
-      id: 3,
-      title: "Premium Albums",
-      description: "Beautifully designed premium leather albums and canvas prints for your memories."
-    },
-    {
-      id: 4,
-      title: "Candid Photography",
-      description: "Natural and candid shots capturing real emotions, laughter, and genuine moments."
-    },
-    {
-      id: 5,
-      title: "Same Day Edit",
-      description: "Quick turnaround with same-day highlight reels for your social media sharing."
-    },
-    {
-      id: 6,
-      title: "Group & Family Portraits",
-      description: "Beautiful group photos with family and friends to cherish forever."
+      image: serviceImage2,
+      badge: "MILESTONE CELEBRATIONS",
+      title: "Making Every Moment",
+      highlightText: "Unforgettable",
+      paragraphs: [
+        "Whether it's a child's first birthday or a milestone celebration, we capture the essence of your special day.",
+        "Our photography tells the story of your celebration with authenticity and emotion.",
+        "We preserve the smiles, laughter, and love that make your birthday truly memorable."
+      ]
     }
   ];
 
   return (
-    <div className={`${styles.servicesSection} scroll-reveal`}>
-      <div className={styles.servicesContainer}>
-        
-        {/* LEFT SIDE - TITLE */}
-        <div className={`${styles.servicesLeft} fade-in-delay-1`}>
-          <h2 className={styles.servicesMainTitle}>Our Services<br />For Birthday</h2>
-          <div className={styles.servicesMainLine}></div>
-          <p className={styles.servicesMainSubtitle}>
-            Professional photography services for your special day
-          </p>
-        </div>
-
-        {/* RIGHT SIDE - SERVICES LIST */}
-        <div className={`${styles.servicesRight} stagger-children`}>
-          {services.map((service) => (
-            <div key={service.id} className={styles.serviceItem}>
-              <h3 className={styles.serviceItemTitle}>{service.title}</h3>
-              <p className={styles.serviceItemDesc}>{service.description}</p>
+    <div className="birthday-services">
+      <div className="alt-container">
+        {sections.map((section, index) => {
+          const isLeft = index % 2 === 0;
+          return (
+            <div key={section.id} className="alt-section">
+              <div className={`alt-inner ${isLeft ? 'alt-inner-left' : 'alt-inner-right'}`}>
+                <div className={`alt-image-col ${isLeft ? 'scroll-slide-left' : 'scroll-slide-right'}`}>
+                  <div className="alt-image-wrap">
+                    <img
+                      src={section.image}
+                      alt={section.title}
+                      className="alt-image"
+                      onClick={() => onImageClick && onImageClick(section.image)}
+                    />
+                  </div>
+                </div>
+                <div className={`alt-content-col ${isLeft ? 'scroll-slide-right' : 'scroll-slide-left'}`}>
+                  <div className="alt-content-wrap">
+                    <div className="alt-badge">{section.badge}</div>
+                    <h2 className="alt-title">
+                      {section.title}
+                      <br />
+                      <span className="alt-title-highlight">{section.highlightText}</span>
+                    </h2>
+                    <div className="alt-divider"></div>
+                    {section.paragraphs.map((para, idx) => (
+                      <p key={idx} className="alt-description">{para}</p>
+                    ))}
+                  </div>
+                </div>
+              </div>
             </div>
-          ))}
-        </div>
-
+          );
+        })}
       </div>
     </div>
   );

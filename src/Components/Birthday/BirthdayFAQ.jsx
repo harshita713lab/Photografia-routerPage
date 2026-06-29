@@ -1,89 +1,70 @@
-// src/components/birthday/BirthdayFAQ.jsx
+// src/Components/Birthday/BirthdayFAQ.jsx
 import React, { useState } from 'react';
-import styles from '../../Styles/birthday/Birthday.module.css';
+import '../../Styles/birthday/Birthday.css';
+// ✅ Local image import
+import faqImage from '../../assets/birthday/image/birthday5.jpg';
 
 const BirthdayFAQ = () => {
   const [openId, setOpenId] = useState(null);
 
   const faqs = [
-    {
-      id: 1,
-      question: "How long does a birthday photoshoot take?",
-      answer: "A typical birthday photoshoot takes 1-2 hours, depending on the package you choose. We ensure we capture every special moment without rushing."
+    { 
+      id: 1, 
+      question: "How long does a birthday photoshoot take?", 
+      answer: "Typically 2-3 hours depending on the type of session and location." 
     },
-    {
-      id: 2,
-      question: "When will I receive my birthday photos?",
-      answer: "You'll receive a sneak peek within 24 hours after the shoot. The full gallery is delivered within 7-10 business days, beautifully edited and ready to share."
+    { 
+      id: 2, 
+      question: "When will I receive my photos?", 
+      answer: "You'll receive a sneak peek within 24 hours. Full gallery is delivered within 5-7 business days." 
     },
-    {
-      id: 3,
-      question: "Do you cover outdoor birthday celebrations?",
-      answer: "Yes! We cover both indoor and outdoor birthday celebrations at any location of your choice. Whether it's a garden party, beach celebration, or a venue, we are there to capture every moment."
+    { 
+      id: 3, 
+      question: "Do you cover outdoor birthday parties?", 
+      answer: "Yes! We cover both indoor and outdoor birthday celebrations at any location." 
     },
-    {
-      id: 4,
-      question: "Can we book a last-minute birthday photoshoot?",
-      answer: "Yes, subject to availability. We recommend contacting us at least 48 hours in advance to ensure we can accommodate your request and provide the best experience."
+    { 
+      id: 4, 
+      question: "Can we book for a last-minute birthday?", 
+      answer: "Yes, subject to availability. Contact us at least 24 hours in advance." 
     },
-    {
-      id: 5,
-      question: "Do you provide printed albums and canvas prints?",
-      answer: "Yes, we offer premium leather albums, canvas prints, digital frames, and customized photo books as add-ons to preserve your memories in the most beautiful way."
-    },
-    {
-      id: 6,
-      question: "What makes your photography different?",
-      answer: "We specialize in capturing authentic emotions, candid moments, and the unique joy of your celebration. Our storytelling approach, attention to detail, and professional editing ensure you get gallery-worthy images that you'll treasure forever."
+    { 
+      id: 5, 
+      question: "Do you provide printed albums?", 
+      answer: "Yes, we offer premium photo albums, canvas prints, and digital frames as add-ons." 
     }
   ];
 
-  const toggle = (id) => {
-    setOpenId(openId === id ? null : id);
-  };
-
   return (
-    <div className={`${styles.faqSection} scroll-reveal`}>
-      <div className={styles.faqContainer}>
-        
-        {/* LEFT SIDE - FAQ */}
-        <div className={styles.faqLeft}>
-          <div className={styles.sectionHeader}>
-            <h2 className={`${styles.sectionTitle} fade-in-delay-1`}>Frequently Asked Questions</h2>
-            <div className={`${styles.sectionLine} fade-in-delay-2`}></div>
-            <p className={`${styles.sectionSubtitle} fade-in-delay-3`}>
-              Everything you need to know about our photography services
-            </p>
+    <div className="birthday-faq scroll-fade-up">
+      <div className="faq-container">
+        <div className="faq-left scroll-slide-left">
+          <div className="faq-header">
+            <h2 className="faq-title">Frequently Asked Questions</h2>
+            <div className="faq-line"></div>
+            <p className="faq-subtitle">Everything you need to know</p>
           </div>
-
-          <div className={`${styles.faqWrapper} stagger-children`}>
+          <div className="faq-wrapper stagger-children">
             {faqs.map((faq) => (
-              <div 
-                key={faq.id} 
-                className={`${styles.faqItem} ${openId === faq.id ? styles.open : ''}`}
-                onClick={() => toggle(faq.id)}
-              >
-                <div className={styles.faqQuestion}>
+              <div key={faq.id} className={`faq-item ${openId === faq.id ? 'open' : ''}`}>
+                <div className="faq-question" onClick={() => setOpenId(openId === faq.id ? null : faq.id)}>
                   <span>{faq.question}</span>
-                  <span className={styles.faqIcon}>{openId === faq.id ? '−' : '+'}</span>
+                  <span className="faq-icon">{openId === faq.id ? '−' : '+'}</span>
                 </div>
-                <div className={`${styles.faqAnswer} ${openId === faq.id ? styles.open : ''}`}>
+                <div className={`faq-answer ${openId === faq.id ? 'open' : ''}`}>
                   <p>{faq.answer}</p>
                 </div>
               </div>
             ))}
           </div>
         </div>
-
-        {/* RIGHT SIDE - IMAGE */}
-        <div className={`${styles.faqRight} fade-in-delay-2`}>
+        <div className="faq-right scroll-slide-right">
           <img 
-            src="https://i.pinimg.com/1200x/c3/0b/19/c30b1963446e9408951bd08d66078a49.jpg"
-            alt="Birthday Photography"
-            className={styles.faqImage}
+            src={faqImage}
+            alt="Birthday Celebration"
+            className="faq-image"
           />
         </div>
-
       </div>
     </div>
   );

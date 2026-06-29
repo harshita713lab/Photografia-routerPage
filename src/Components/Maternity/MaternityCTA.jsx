@@ -1,24 +1,21 @@
-// src/components/maternity/MaternityCTA.jsx
+// src/Components/Maternity/MaternityCTA.jsx
 import React from 'react';
-import styles from '../../Styles/maternity/Maternity.module.css';
+import '../../Styles/maternity/Maternity.css';
 
 const MaternityCTA = ({ onButtonClick }) => {
   return (
-    <div className={`${styles.maternityCtaSection} scroll-reveal`}>
-      <div className={styles.maternityCtaContainer}>
-        <h2 className={`${styles.maternityCtaTitle} fade-in-delay-1`}>
-          Celebrate Your<br />
-          <span className={styles.maternityCtaTitleHighlight}>Maternity Journey</span>
-        </h2>
-        <div className={`${styles.maternityCtaDivider} fade-in-delay-2`}></div>
-        <p className={`${styles.maternityCtaText} fade-in-delay-3`}>
-          Professional photography capturing the beauty, love, and glow of your pregnancy journey.
+    <div className="maternity-cta scroll-fade-up">
+      <div className="cta-wrapper">
+        <h3 className="cta-title scroll-fade-up delay-1">CELEBRATE YOUR JOURNEY</h3>
+        <div className="cta-divider scroll-fade-up delay-2"></div>
+        <p className="cta-text scroll-fade-up delay-3">
+          Professional photography capturing the beauty, grace, and love of motherhood.
         </p>
         <button 
-          className={`${styles.maternityCtaButton} fade-in-delay-4`} 
+          className="cta-button scroll-zoom delay-4 hover-scale" 
           onClick={onButtonClick}
         >
-          Book Your Session
+          BOOK YOUR SESSION
         </button>
       </div>
     </div>

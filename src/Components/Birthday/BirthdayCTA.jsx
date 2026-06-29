@@ -1,24 +1,21 @@
-// src/components/birthday/BirthdayCTA.jsx
+// src/Components/Birthday/BirthdayCTA.jsx
 import React from 'react';
-import styles from '../../Styles/birthday/Birthday.module.css';
+import '../../Styles/birthday/Birthday.css';
 
 const BirthdayCTA = ({ onButtonClick }) => {
   return (
-    <div className={`${styles.ctaSection} scroll-reveal`}>
-      <div className={styles.ctaContainer}>
-        <h2 className={`${styles.ctaTitle} fade-in-delay-1`}>
-          Capture Your <br />
-          <span className={styles.ctaTitleHighlight}>Birthday Moments</span>
-        </h2>
-        <div className={`${styles.ctaDivider} fade-in-delay-2`}></div>
-        <p className={`${styles.ctaText} fade-in-delay-3`}>
-          Professional photography capturing every smile, every laugh, and every unforgettable moment of your special day.
+    <div className="birthday-cta scroll-fade-up">
+      <div className="cta-wrapper">
+        <h3 className="cta-title scroll-fade-up delay-1">CELEBRATE YOUR SPECIAL DAY</h3>
+        <div className="cta-divider scroll-fade-up delay-2"></div>
+        <p className="cta-text scroll-fade-up delay-3">
+          Professional photography capturing every smile, every laugh, and every beautiful moment.
         </p>
         <button 
-          className={`${styles.ctaButton} fade-in-delay-4`} 
+          className="cta-button scroll-zoom delay-4 hover-scale" 
           onClick={onButtonClick}
         >
-          Book Your Session
+          BOOK YOUR SESSION
         </button>
       </div>
     </div>

@@ -1,0 +1,896 @@
+/* src/Styles/roka/Roka.css */
+
+/* ================================================================
+   ROKA.CSS - Complete Styles for Roka Page
+   ================================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=Inter:wght@100;200;300;400;500;600;700&family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+/* ================================================================
+   KEYFRAMES
+   ================================================================ */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(40px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-40px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-60px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(60px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes zoomIn {
+  from { opacity: 0; transform: scale(0.85); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes heroZoom {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.05); }
+}
+
+@keyframes slideUpReveal {
+  0% { opacity: 0; transform: translateY(50px) scale(0.95); letter-spacing: 10px; }
+  60% { opacity: 1; transform: translateY(-5px) scale(1.02); }
+  100% { opacity: 1; transform: translateY(0) scale(1); letter-spacing: 6px; }
+}
+
+/* ================================================================
+   SCROLL ANIMATIONS
+   ================================================================ */
+.scroll-fade-up {
+  opacity: 0;
+  animation: fadeInUp 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation-timeline: view();
+  animation-range: entry 0% entry 80%;
+}
+
+.scroll-slide-left {
+  opacity: 0;
+  animation: slideInLeft 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation-timeline: view();
+  animation-range: entry 0% entry 80%;
+}
+
+.scroll-slide-right {
+  opacity: 0;
+  animation: slideInRight 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation-timeline: view();
+  animation-range: entry 0% entry 80%;
+}
+
+.scroll-zoom {
+  opacity: 0;
+  animation: zoomIn 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation-timeline: view();
+  animation-range: entry 0% entry 80%;
+}
+
+.delay-1 { animation-delay: 0.1s; }
+.delay-2 { animation-delay: 0.2s; }
+.delay-3 { animation-delay: 0.3s; }
+.delay-4 { animation-delay: 0.4s; }
+.delay-5 { animation-delay: 0.5s; }
+
+.hover-scale {
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+.hover-scale:hover {
+  transform: translateY(-5px) scale(1.03);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.stagger-children > * {
+  opacity: 0;
+  animation: fadeInUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation-timeline: view();
+  animation-range: entry 0% entry 80%;
+}
+.stagger-children > *:nth-child(1) { animation-delay: 0.05s; }
+.stagger-children > *:nth-child(2) { animation-delay: 0.1s; }
+.stagger-children > *:nth-child(3) { animation-delay: 0.15s; }
+.stagger-children > *:nth-child(4) { animation-delay: 0.2s; }
+.stagger-children > *:nth-child(5) { animation-delay: 0.25s; }
+.stagger-children > *:nth-child(6) { animation-delay: 0.3s; }
+.stagger-children > *:nth-child(7) { animation-delay: 0.35s; }
+.stagger-children > *:nth-child(8) { animation-delay: 0.4s; }
+
+/* ================================================================
+   ROKA HERO
+   ================================================================ */
+.roka-hero {
+  position: relative;
+  height: 100vh;
+  min-height: 700px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+.roka-hero .hero-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+.roka-hero .hero-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  animation: heroZoom 10s ease-in-out infinite alternate;
+}
+.roka-hero .hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 1;
+}
+.roka-hero .hero-content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  text-align: center;
+}
+.roka-hero .hero-text-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+.roka-hero .hero-badge {
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  letter-spacing: 8px;
+  color: #FFFFFF;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  font-weight: 500;
+  opacity: 0;
+  animation: fadeInUp 0.9s ease 0.2s forwards;
+}
+.roka-hero .hero-title {
+  font-size: 88px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  line-height: 1.05;
+}
+.roka-hero .title-line {
+  display: block;
+  font-family: 'Playfair Display', serif;
+  font-size: 80px;
+  letter-spacing: 6px;
+  color: #FFFFFF;
+  margin-bottom: 10px;
+  opacity: 0;
+  animation: slideUpReveal 1s cubic-bezier(0.22, 1, 0.36, 1) 0.2s forwards;
+}
+.roka-hero .title-highlight {
+  display: inline-block;
+  font-family: 'Playfair Display', serif;
+  font-size: 96px;
+  letter-spacing: 3px;
+  color: #FFFFFF;
+  border-bottom: 3px solid #FFFFFF;
+  padding-bottom: 5px;
+  opacity: 0;
+  animation: slideUpReveal 1s cubic-bezier(0.22, 1, 0.36, 1) 0.6s forwards;
+}
+.roka-hero .hero-divider {
+  width: 80px;
+  height: 3px;
+  background-color: #FFFFFF;
+  margin: 25px auto;
+  opacity: 0;
+  animation: fadeIn 1s ease 0.8s forwards;
+}
+.roka-hero .hero-subtitle {
+  font-size: 18px;
+  font-family: 'Inter', sans-serif;
+  color: #E0E0E0;
+  opacity: 0;
+  animation: fadeInUp 1s ease 1s forwards;
+}
+
+/* ================================================================
+   ROKA INTRO
+   ================================================================ */
+.roka-intro {
+  background-color: #000000;
+  padding: 80px 0;
+  width: 100%;
+}
+.roka-intro .intro-container {
+  display: flex;
+  max-width: 1400px;
+  margin: 0 auto;
+  gap: 60px;
+  padding: 0 40px;
+}
+.roka-intro .intro-image-column { flex: 1; }
+.roka-intro .intro-image-wrapper {
+  overflow: hidden;
+  border-radius: 24px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+.roka-intro .intro-image-wrapper:hover { transform: scale(1.02); }
+.roka-intro .intro-image {
+  width: 100%;
+  aspect-ratio: 4/5;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+.roka-intro .intro-image-wrapper:hover .intro-image { transform: scale(1.03); }
+.roka-intro .intro-content-column {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+.roka-intro .intro-content-wrapper { max-width: 600px; }
+.roka-intro .intro-badge {
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  letter-spacing: 5px;
+  color: #888888;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+}
+.roka-intro .intro-title {
+  font-size: 42px;
+  font-weight: 600;
+  color: #FFFFFF;
+  font-family: 'Playfair Display', serif;
+  margin-bottom: 20px;
+  line-height: 1.2;
+}
+.roka-intro .intro-title-highlight {
+  border-bottom: 3px solid #FFFFFF;
+  display: inline-block;
+  padding-bottom: 5px;
+}
+.roka-intro .intro-divider {
+  width: 60px;
+  height: 2px;
+  background-color: #FFFFFF;
+  margin: 20px 0 25px;
+}
+.roka-intro .intro-description {
+  font-size: 15px;
+  line-height: 1.7;
+  color: #CCCCCC;
+  font-family: 'Inter', sans-serif;
+  margin-bottom: 18px;
+}
+
+/* ================================================================
+   ROKA SERVICES (ALTERNATING)
+   ================================================================ */
+.roka-services {
+  background-color: #000000;
+  padding: 0;
+  border-top: 1px solid #333333;
+  border-bottom: 1px solid #333333;
+}
+.roka-services .alt-container { width: 100%; background-color: #000000; }
+.roka-services .alt-section { width: 100%; padding: 80px 0; }
+.roka-services .alt-inner {
+  display: flex;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  gap: 60px;
+  padding: 0 40px;
+}
+.roka-services .alt-inner-left { flex-direction: row; }
+.roka-services .alt-inner-right { flex-direction: row-reverse; }
+.roka-services .alt-image-col { flex: 1; }
+.roka-services .alt-image-wrap {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 24px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+.roka-services .alt-image-wrap:hover { transform: scale(1.02); }
+.roka-services .alt-image {
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 4/5;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+.roka-services .alt-image-wrap:hover .alt-image { transform: scale(1.03); }
+.roka-services .alt-content-col {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+.roka-services .alt-content-wrap { width: 100%; max-width: 600px; }
+.roka-services .alt-badge {
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  letter-spacing: 5px;
+  margin-bottom: 15px;
+  text-transform: uppercase;
+  font-weight: 500;
+  color: #888888;
+}
+.roka-services .alt-title {
+  font-size: 42px;
+  font-weight: 600;
+  color: #FFFFFF;
+  margin-bottom: 20px;
+  font-family: 'Playfair Display', serif;
+  line-height: 1.2;
+}
+.roka-services .alt-title-highlight {
+  border-bottom: 3px solid #FFFFFF;
+  display: inline-block;
+  padding-bottom: 5px;
+}
+.roka-services .alt-divider {
+  width: 60px;
+  height: 2px;
+  background-color: #FFFFFF;
+  margin: 20px 0 25px;
+}
+.roka-services .alt-description {
+  font-size: 15px;
+  line-height: 1.7;
+  color: #CCCCCC;
+  font-family: 'Inter', sans-serif;
+  margin-bottom: 18px;
+}
+
+/* ================================================================
+   ROKA SERVICES SECTION (CARDS)
+   ================================================================ */
+.roka-services-section {
+  background-color: #000000;
+  padding: 60px 0;
+  border-top: 1px solid #333333;
+  border-bottom: 1px solid #333333;
+}
+.roka-services-section .section-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+.roka-services-section .section-title {
+  font-size: 30px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  color: #FFFFFF;
+  margin-bottom: 12px;
+  font-family: 'Playfair Display', serif;
+}
+.roka-services-section .section-line {
+  width: 50px;
+  height: 2px;
+  background-color: #FFFFFF;
+  margin: 0 auto 16px auto;
+}
+.roka-services-section .section-subtitle {
+  font-size: 13px;
+  color: #AAAAAA;
+  font-family: 'Inter', sans-serif;
+  letter-spacing: 1px;
+}
+.roka-services-section .services-grid {
+  display: grid;
+  gap: 16px;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+.roka-services-section .service-card {
+  text-align: center;
+  padding: 18px 14px;
+  background-color: #000000;
+  border: 1px solid #333333;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+.roka-services-section .service-card:hover {
+  background-color: #1a1a1a;
+  border-color: #FFFFFF;
+  transform: translateY(-4px);
+}
+.roka-services-section .service-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  font-family: 'Playfair Display', serif;
+  color: #FFFFFF;
+}
+.roka-services-section .service-description {
+  font-size: 12px;
+  line-height: 1.4;
+  font-family: 'Inter', sans-serif;
+  color: #AAAAAA;
+  margin: 0;
+}
+.roka-services-section .service-icon {
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 14px auto;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+/* ================================================================
+   ROKA GALLERY
+   ================================================================ */
+.roka-gallery {
+  background-color: #000000;
+  padding: 80px 0;
+  border-top: 1px solid #333333;
+  border-bottom: 1px solid #333333;
+}
+.roka-gallery .gallery-header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+.roka-gallery .gallery-title {
+  font-size: 42px;
+  font-weight: 600;
+  letter-spacing: 4px;
+  color: #FFFFFF;
+  margin-bottom: 15px;
+  font-family: 'Playfair Display', serif;
+}
+.roka-gallery .gallery-line {
+  width: 70px;
+  height: 3px;
+  background-color: #FFFFFF;
+  margin: 0 auto 20px auto;
+}
+.roka-gallery .gallery-subtitle {
+  font-size: 16px;
+  color: #AAAAAA;
+  font-family: 'Inter', sans-serif;
+  letter-spacing: 1px;
+}
+.roka-gallery .gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 20px;
+  grid-auto-flow: dense;
+}
+.roka-gallery .gallery-item {
+  overflow: hidden;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.4s ease;
+}
+.roka-gallery .gallery-item:hover {
+  transform: scale(1.04) rotate(-1deg);
+  box-shadow: 0 10px 35px rgba(255, 255, 255, 0.1);
+}
+.roka-gallery .gallery-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.5s ease;
+}
+.roka-gallery .gallery-item:hover img { transform: scale(1.08); }
+.roka-gallery .gallery-landscape {
+  grid-column: span 2;
+  grid-row: span 1;
+  aspect-ratio: 2 / 1;
+}
+.roka-gallery .gallery-portrait {
+  grid-column: span 1;
+  grid-row: span 2;
+  aspect-ratio: 1 / 2;
+}
+.roka-gallery .gallery-square {
+  grid-column: span 1;
+  grid-row: span 1;
+  aspect-ratio: 1 / 1;
+}
+
+/* ================================================================
+   ROKA FAQ
+   ================================================================ */
+.roka-faq {
+  background-color: #000000;
+  padding: 60px 0;
+  border-top: 1px solid #333333;
+  border-bottom: 1px solid #333333;
+}
+.roka-faq .faq-container {
+  display: flex;
+  align-items: stretch;
+  gap: 40px;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 40px;
+}
+.roka-faq .faq-left { flex: 2; min-width: 0; display: flex; flex-direction: column; }
+.roka-faq .faq-right { flex: 1; max-width: 350px; min-width: 200px; display: flex; align-items: stretch; }
+.roka-faq .faq-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  border: 1px solid #333333;
+  transition: transform 0.3s ease;
+}
+.roka-faq .faq-image:hover { transform: scale(1.02); }
+.roka-faq .faq-header {
+  text-align: left;
+  margin-bottom: 30px;
+}
+.roka-faq .faq-title {
+  font-size: 32px;
+  font-weight: 400;
+  letter-spacing: 3px;
+  color: #FFFFFF;
+  margin-bottom: 12px;
+  font-family: 'Playfair Display', serif;
+}
+.roka-faq .faq-line {
+  width: 50px;
+  height: 2px;
+  background-color: #FFFFFF;
+  margin: 0 0 16px 0;
+}
+.roka-faq .faq-subtitle {
+  font-size: 14px;
+  color: #AAAAAA;
+  font-family: 'Inter', sans-serif;
+  letter-spacing: 1px;
+}
+.roka-faq .faq-wrapper { max-width: 100%; margin: 0; }
+.roka-faq .faq-item {
+  margin-bottom: 12px;
+  background-color: #111111;
+  border: 1px solid #333333;
+  border-radius: 12px;
+  overflow: hidden;
+}
+.roka-faq .faq-item.open { border-color: #FFFFFF; }
+.roka-faq .faq-question {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+  color: #FFFFFF;
+  font-family: 'Playfair Display', serif;
+  transition: background-color 0.3s;
+}
+.roka-faq .faq-question:hover { background-color: #1a1a1a; }
+.roka-faq .faq-icon {
+  font-size: 22px;
+  font-weight: bold;
+  color: #FFFFFF;
+  flex-shrink: 0;
+  margin-left: 15px;
+}
+.roka-faq .faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+  padding: 0 20px;
+}
+.roka-faq .faq-answer.open {
+  max-height: 200px;
+  padding: 0 20px 16px 20px;
+}
+.roka-faq .faq-answer p {
+  font-size: 14px;
+  color: #CCCCCC;
+  line-height: 1.6;
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+}
+
+/* ================================================================
+   ROKA CTA
+   ================================================================ */
+.roka-cta {
+  background-color: #000000;
+  padding: 80px 0;
+  border-top: 1px solid #333333;
+  border-bottom: 1px solid #333333;
+}
+.roka-cta .cta-wrapper {
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+.roka-cta .cta-title {
+  font-size: 36px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  color: #FFFFFF;
+  margin-bottom: 16px;
+  font-family: 'Playfair Display', serif;
+}
+.roka-cta .cta-divider {
+  width: 70px;
+  height: 2px;
+  background-color: #FFFFFF;
+  margin: 0 auto 22px auto;
+}
+.roka-cta .cta-text {
+  font-size: 16px;
+  color: #CCCCCC;
+  margin-bottom: 35px;
+  max-width: 550px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.6;
+  font-family: 'Inter', sans-serif;
+}
+.roka-cta .cta-button {
+  background-color: #FFFFFF;
+  border: none;
+  color: #000000;
+  padding: 14px 45px;
+  font-size: 13px;
+  letter-spacing: 3px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  border-radius: 40px;
+}
+.roka-cta .cta-button:hover {
+  background-color: #333333;
+  color: #FFFFFF;
+  transform: translateY(-3px);
+}
+
+/* ================================================================
+   ROKA OTHER WORK
+   ================================================================ */
+.roka-other-work {
+  background-color: #000000;
+  padding: 60px 0;
+  border-top: 1px solid #333333;
+  border-bottom: 1px solid #333333;
+}
+.roka-other-work .other-work-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+.roka-other-work .other-work-title {
+  font-size: 32px;
+  font-weight: 400;
+  letter-spacing: 3px;
+  color: #FFFFFF;
+  margin-bottom: 12px;
+  font-family: 'Playfair Display', serif;
+}
+.roka-other-work .other-work-line {
+  width: 60px;
+  height: 2px;
+  background-color: #FFFFFF;
+  margin: 0 auto;
+}
+.roka-other-work .other-work-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 14px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+.roka-other-work .other-work-btn {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border: 2px solid #333333;
+  border-radius: 12px;
+  cursor: pointer;
+  overflow: hidden;
+  min-width: 110px;
+  max-width: 150px;
+  height: 75px;
+  padding: 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  position: relative;
+  flex: 1;
+  transition: all 0.3s ease;
+}
+.roka-other-work .other-work-btn:hover {
+  transform: translateY(-4px) scale(1.03);
+  border-color: #FFFFFF;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+}
+.roka-other-work .other-work-btn-title {
+  color: #FFFFFF;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  font-family: 'Inter', sans-serif;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  transition: all 0.3s ease;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+  background: rgba(0, 0, 0, 0.3);
+  padding: 0 8px;
+  text-align: center;
+  white-space: normal;
+  word-wrap: break-word;
+  line-height: 1.2;
+}
+.roka-other-work .other-work-btn:hover .other-work-btn-title {
+  letter-spacing: 2px;
+  background: rgba(0, 0, 0, 0.15);
+}
+
+/* ================================================================
+   RESPONSIVE
+   ================================================================ */
+@media (max-width: 1200px) {
+  .roka-hero .hero-title { font-size: 68px; }
+  .roka-hero .title-line { font-size: 60px; }
+  .roka-hero .title-highlight { font-size: 72px; }
+}
+
+@media (max-width: 992px) {
+  .roka-hero .hero-title { font-size: 56px; }
+  .roka-hero .title-line { font-size: 50px; }
+  .roka-hero .title-highlight { font-size: 60px; }
+  .roka-hero .hero-badge { font-size: 12px; letter-spacing: 6px; }
+  
+  .roka-intro .intro-container { flex-direction: column; text-align: center; gap: 40px; padding: 0 30px; }
+  .roka-intro .intro-content-wrapper { max-width: 100%; }
+  .roka-intro .intro-divider { margin: 20px auto 25px; }
+  .roka-intro .intro-title { font-size: 32px; }
+  
+  .roka-services .alt-inner { flex-direction: column; gap: 40px; padding: 0 30px; }
+  .roka-services .alt-content-wrap { max-width: 100%; text-align: center; }
+  .roka-services .alt-divider { margin: 20px auto 25px; }
+  .roka-services .alt-title { font-size: 32px; }
+  
+  .roka-services-section .services-grid { grid-template-columns: repeat(2, 1fr); }
+  .roka-gallery .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+  .roka-faq .faq-container { gap: 30px; padding: 0 30px; }
+  .roka-faq .faq-right { max-width: 280px; min-width: 150px; }
+}
+
+@media (max-width: 768px) {
+  .roka-hero { padding: 80px 0; height: auto; min-height: 100vh; }
+  .roka-hero .hero-title { font-size: 48px; }
+  .roka-hero .title-line { font-size: 42px; letter-spacing: 4px; }
+  .roka-hero .title-highlight { font-size: 52px; }
+  .roka-hero .hero-badge { font-size: 11px; letter-spacing: 5px; }
+  .roka-hero .hero-subtitle { font-size: 15px; }
+  .roka-hero .hero-divider { width: 60px; }
+  
+  .roka-intro { padding: 50px 0; }
+  .roka-intro .intro-container { padding: 0 20px; gap: 30px; }
+  .roka-intro .intro-title { font-size: 28px; }
+  .roka-intro .intro-badge { font-size: 10px; letter-spacing: 4px; }
+  .roka-intro .intro-description { font-size: 14px; }
+  .roka-intro .intro-divider { width: 50px; }
+  
+  .roka-services .alt-section { padding: 50px 0; }
+  .roka-services .alt-inner { padding: 0 20px; gap: 30px; }
+  .roka-services .alt-title { font-size: 28px; }
+  .roka-services .alt-badge { font-size: 10px; letter-spacing: 4px; }
+  .roka-services .alt-description { font-size: 14px; }
+  .roka-services .alt-divider { width: 50px; }
+  
+  .roka-services-section { padding: 40px 0; }
+  .roka-services-section .services-grid { grid-template-columns: 1fr; gap: 12px; padding: 0 16px; }
+  .roka-services-section .section-title { font-size: 24px; }
+  .roka-services-section .section-subtitle { font-size: 12px; }
+  .roka-services-section .section-line { width: 40px; }
+  .roka-services-section .service-card { padding: 16px 14px; }
+  .roka-services-section .service-title { font-size: 15px; }
+  .roka-services-section .service-description { font-size: 12px; }
+  
+  .roka-gallery { padding: 50px 0; }
+  .roka-gallery .gallery-grid { grid-template-columns: 1fr; }
+  .roka-gallery .gallery-landscape,
+  .roka-gallery .gallery-portrait,
+  .roka-gallery .gallery-square { grid-column: span 1; grid-row: span 1; aspect-ratio: 1 / 1; }
+  .roka-gallery .gallery-title { font-size: 32px; letter-spacing: 3px; }
+  .roka-gallery .gallery-line { width: 50px; }
+  .roka-gallery .gallery-subtitle { font-size: 14px; }
+  
+  .roka-faq { padding: 40px 0; }
+  .roka-faq .faq-container { flex-direction: column; gap: 30px; padding: 0 20px; }
+  .roka-faq .faq-right { max-width: 100%; min-width: unset; height: 250px; order: -1; }
+  .roka-faq .faq-image { height: 100%; object-fit: cover; }
+  .roka-faq .faq-title { font-size: 26px; }
+  .roka-faq .faq-question { font-size: 14px; padding: 14px 16px; }
+  .roka-faq .faq-answer.open { padding: 0 16px 14px 16px; }
+  .roka-faq .faq-answer p { font-size: 13px; }
+  
+  .roka-cta { padding: 60px 0; }
+  .roka-cta .cta-title { font-size: 28px; }
+  .roka-cta .cta-text { font-size: 14px; }
+  .roka-cta .cta-button { padding: 12px 35px; font-size: 12px; }
+  
+  .roka-other-work { padding: 40px 0; }
+  .roka-other-work .other-work-title { font-size: 28px; }
+  .roka-other-work .other-work-btn { min-width: calc(33.33% - 12px); flex: 0 0 calc(33.33% - 12px); max-width: none; height: 65px; }
+  .roka-other-work .other-work-btn-title { font-size: 10px; line-height: 1.1; padding: 0 4px; }
+}
+
+@media (max-width: 576px) {
+  .roka-hero .hero-title { font-size: 38px; }
+  .roka-hero .title-line { font-size: 32px; }
+  .roka-hero .title-highlight { font-size: 38px; }
+  .roka-hero .hero-badge { font-size: 10px; letter-spacing: 4px; }
+  
+  .roka-intro .intro-title { font-size: 24px; }
+  .roka-intro .intro-badge { font-size: 9px; letter-spacing: 3px; }
+  .roka-intro .intro-description { font-size: 13px; }
+  .roka-intro .intro-divider { width: 40px; }
+  
+  .roka-services .alt-title { font-size: 24px; }
+  .roka-services .alt-badge { font-size: 9px; letter-spacing: 3px; }
+  .roka-services .alt-description { font-size: 13px; }
+  .roka-services .alt-divider { width: 40px; }
+  
+  .roka-services-section .section-title { font-size: 20px; }
+  .roka-services-section .section-subtitle { font-size: 11px; }
+  .roka-services-section .section-line { width: 35px; }
+  .roka-services-section .service-card { padding: 14px 12px; }
+  .roka-services-section .service-title { font-size: 14px; }
+  .roka-services-section .service-description { font-size: 11px; }
+  
+  .roka-gallery .gallery-title { font-size: 28px; }
+  .roka-gallery .gallery-subtitle { font-size: 12px; }
+  
+  .roka-faq .faq-title { font-size: 22px; }
+  .roka-faq .faq-question { font-size: 13px; padding: 12px 14px; }
+  .roka-faq .faq-icon { font-size: 18px; }
+  .roka-faq .faq-right { height: 180px; }
+  
+  .roka-cta .cta-title { font-size: 24px; }
+  .roka-cta .cta-text { font-size: 13px; }
+  .roka-cta .cta-button { padding: 10px 28px; font-size: 11px; letter-spacing: 2px; }
+  .roka-cta .cta-divider { width: 40px; }
+  
+  .roka-other-work .other-work-title { font-size: 24px; }
+  .roka-other-work .other-work-btn { min-width: calc(50% - 10px); flex: 0 0 calc(50% - 10px); height: 60px; }
+  .roka-other-work .other-work-btn-title { font-size: 10px; }
+}
+
+@media (max-width: 380px) {
+  .roka-other-work .other-work-btn { min-width: 100%; flex: 0 0 100%; height: 55px; }
+  .roka-other-work .other-work-btn-title { font-size: 11px; }
+}

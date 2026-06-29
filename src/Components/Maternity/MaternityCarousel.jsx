@@ -1,118 +1,61 @@
-// src/components/maternity/MaternityCarousel.jsx
-import React, { useEffect, useRef, useState } from 'react';
-import styles from '../../Styles/maternity/Maternity.module.css';
-
-// ===== ASSETS SE IMPORT =====
-import img1 from '../../assets/maternity/images/maternity1.jpg';
-import img2 from '../../assets/maternity/images/maternity2.jpg';
-import img3 from '../../assets/maternity/images/maternity3.jpg';
-import img4 from '../../assets/maternity/images/maternity4.jpg';
-import img5 from '../../assets/maternity/images/maternity5.jpg';
-import img6 from '../../assets/maternity/images/maternity6.jpg';
-import img7 from '../../assets/maternity/images/maternity7.jpg';
-import img8 from '../../assets/maternity/images/maternity8.jpg';
+// src/Components/Maternity/MaternityCarousel.jsx
+import React, { useState } from 'react';
+import '../../Styles/maternity/Maternity.css';
+// ✅ Local image imports
+import slide1 from '../../assets/maternity/images/maternity1.jpg';
+import slide2 from '../../assets/maternity/images/maternity2.jpg';
+import slide3 from '../../assets/maternity/images/maternity3.jpg';
+import slide4 from '../../assets/maternity/images/maternity4.jpg';
 
 const MaternityCarousel = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isHovered, setIsHovered] = useState(false);
-  const intervalRef = useRef(null);
 
-  const images = [
-    { id: 1, src: img1, alt: "Maternity 1" },
-    { id: 2, src: img2, alt: "Maternity 2" },
-    { id: 3, src: img3, alt: "Maternity 3" },
-    { id: 4, src: img4, alt: "Maternity 4" },
-    { id: 5, src: img5, alt: "Maternity 5" },
-    { id: 6, src: img6, alt: "Maternity 6" },
-    { id: 7, src: img7, alt: "Maternity 7" },
-    { id: 8, src: img8, alt: "Maternity 8" },
+  const slides = [
+    { id: 1, src: slide1, alt: "Slide 1" },
+    { id: 2, src: slide2, alt: "Slide 2" },
+    { id: 3, src: slide3, alt: "Slide 3" },
+    { id: 4, src: slide4, alt: "Slide 4" },
   ];
 
-  const totalSlides = images.length;
-
-  useEffect(() => {
-    startAutoSlide();
-    return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-      }
-    };
-  }, []);
-
-  const startAutoSlide = () => {
-    if (intervalRef.current) {
-      clearInterval(intervalRef.current);
-    }
-    intervalRef.current = setInterval(() => {
-      if (!isHovered) {
-        setCurrentIndex((prevIndex) => (prevIndex + 1) % totalSlides);
-      }
-    }, 3000);
-  };
-
-  const goToSlide = (index) => {
-    setCurrentIndex(index);
-    startAutoSlide();
+  const prevSlide = () => {
+    setCurrentIndex((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
   };
 
   const nextSlide = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % totalSlides);
-    startAutoSlide();
-  };
-
-  const prevSlide = () => {
-    setCurrentIndex((prevIndex) => (prevIndex - 1 + totalSlides) % totalSlides);
-    startAutoSlide();
+    setCurrentIndex((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
   };
 
   return (
-    <div 
-      className={`${styles.maternityCarouselSection} scroll-reveal`}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
-      <div className={styles.maternityCarouselContainer}>
-        
-        <div className={styles.sectionHeader}>
-          <h2 className={`${styles.sectionTitle} fade-in-delay-1`}>Maternity Moments</h2>
-          <div className={`${styles.sectionLine} fade-in-delay-2`}></div>
-          <p className={`${styles.sectionSubtitle} fade-in-delay-3`}>
-            A glimpse into the beautiful journey of motherhood
-          </p>
-        </div>
-
-        <div className={styles.maternityCarouselWrapper}>
+    <div className="maternity-carousel scroll-fade-up">
+      <div className="carousel-header">
+        <h2 className="carousel-title scroll-fade-up delay-1">Maternity Moments</h2>
+        <div className="carousel-line scroll-fade-up delay-2"></div>
+        <p className="carousel-subtitle scroll-fade-up delay-3">A collection of beautiful maternity sessions</p>
+      </div>
+      <div className="carousel-container">
+        <div className="carousel-wrapper">
           <div 
-            className={styles.maternityCarouselTrack}
+            className="carousel-track"
             style={{ transform: `translateX(-${currentIndex * 100}%)` }}
           >
-            {images.map((img) => (
-              <div key={img.id} className={styles.maternityCarouselItem}>
-                <img src={img.src} alt={img.alt} />
+            {slides.map((slide) => (
+              <div key={slide.id} className="carousel-slide">
+                <img src={slide.src} alt={slide.alt} />
               </div>
             ))}
           </div>
         </div>
-
-        {/* Navigation Buttons */}
-        <button className={`${styles.maternityCarouselBtn} ${styles.maternityCarouselBtnPrev}`} onClick={prevSlide}>
-          ❮
-        </button>
-        <button className={`${styles.maternityCarouselBtn} ${styles.maternityCarouselBtnNext}`} onClick={nextSlide}>
-          ❯
-        </button>
-
-        {/* Dots */}
-        <div className={styles.maternityCarouselDots}>
-          {images.map((_, index) => (
-            <span
-              key={index}
-              className={`${styles.maternityDot} ${index === currentIndex ? styles.maternityDotActive : ''}`}
-              onClick={() => goToSlide(index)}
-            />
-          ))}
-        </div>
-
+        <button className="carousel-btn carousel-btn-prev" onClick={prevSlide}>‹</button>
+        <button className="carousel-btn carousel-btn-next" onClick={nextSlide}>›</button>
+      </div>
+      <div className="carousel-dots">
+        {slides.map((_, index) => (
+          <div 
+            key={index}
+            className={`carousel-dot ${index === currentIndex ? 'carousel-dot-active' : ''}`}
+            onClick={() => setCurrentIndex(index)}
+          />
+        ))}
       </div>
     </div>
   );

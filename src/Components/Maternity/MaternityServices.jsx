@@ -1,66 +1,74 @@
-// src/components/maternity/MaternityServices.jsx
+// src/Components/Maternity/MaternityServices.jsx
 import React from 'react';
-import styles from '../../Styles/maternity/Maternity.module.css';
+import '../../Styles/maternity/Maternity.css';
+// ✅ Local image imports
+import serviceImage1 from '../../assets/maternity/images/maternity2.jpg';
+import serviceImage2 from '../../assets/maternity/images/maternity3.jpg';
 
-const MaternityServices = () => {
-  const services = [
+const MaternityServices = ({ onImageClick }) => {
+  const sections = [
     {
       id: 1,
-      title: "Maternity Photography",
-      description: "Professional photography capturing the beauty and glow of your pregnancy journey."
+      image: serviceImage1,
+      badge: "MATERNITY PHOTOGRAPHY",
+      title: "Capturing the Beauty of",
+      highlightText: "Motherhood",
+      paragraphs: [
+        "Maternity photography is a beautiful way to celebrate the journey of pregnancy and the miracle of new life.",
+        "We capture the glow, the love, and the anticipation that comes with expecting a baby.",
+        "Our photographs become cherished memories that families treasure for generations."
+      ]
     },
     {
       id: 2,
-      title: "Outdoor Sessions",
-      description: "Beautiful outdoor maternity shoots in scenic locations with natural lighting."
-    },
-    {
-      id: 3,
-      title: "Studio Photography",
-      description: "Elegant studio sessions with professional lighting and backdrops."
-    },
-    {
-      id: 4,
-      title: "Candid Moments",
-      description: "Natural and candid shots capturing real emotions and genuine connections."
-    },
-    {
-      id: 5,
-      title: "Family Portraits",
-      description: "Beautiful family portraits with your partner and children."
-    },
-    {
-      id: 6,
-      title: "Premium Albums",
-      description: "Beautifully designed premium albums to preserve your memories forever."
+      image: serviceImage2,
+      badge: "PREGNANCY SESSIONS",
+      title: "Every Moment is",
+      highlightText: "Precious",
+      paragraphs: [
+        "From intimate studio sessions to outdoor shoots, we create timeless images that celebrate the beauty and strength of every expecting mother.",
+        "We document the love, the connection, and the pure joy of this special time.",
+        "Let us help you preserve these precious moments forever."
+      ]
     }
   ];
 
   return (
-    <div className={`${styles.maternityServicesSection} scroll-reveal`}>
-      <div className={styles.maternityServicesContainer}>
-        
-        {/* LEFT - Title */}
-        <div className={`${styles.maternityServicesLeft} fade-in-delay-1`}>
-          <h2 className={styles.maternityServicesMainTitle}>
-            Our Maternity<br />Services
-          </h2>
-          <div className={styles.maternityServicesLine}></div>
-          <p className={styles.maternityServicesSubtitle}>
-            Professional photography services for your special journey
-          </p>
-        </div>
-
-        {/* RIGHT - Services List */}
-        <div className={`${styles.maternityServicesRight} stagger-children`}>
-          {services.map((service) => (
-            <div key={service.id} className={styles.maternityServiceItem}>
-              <h3 className={styles.maternityServiceTitle}>{service.title}</h3>
-              <p className={styles.maternityServiceDesc}>{service.description}</p>
+    <div className="maternity-services">
+      <div className="alt-container">
+        {sections.map((section, index) => {
+          const isLeft = index % 2 === 0;
+          return (
+            <div key={section.id} className="alt-section">
+              <div className={`alt-inner ${isLeft ? 'alt-inner-left' : 'alt-inner-right'}`}>
+                <div className={`alt-image-col ${isLeft ? 'scroll-slide-left' : 'scroll-slide-right'}`}>
+                  <div className="alt-image-wrap">
+                    <img
+                      src={section.image}
+                      alt={section.title}
+                      className="alt-image"
+                      onClick={() => onImageClick && onImageClick(section.image)}
+                    />
+                  </div>
+                </div>
+                <div className={`alt-content-col ${isLeft ? 'scroll-slide-right' : 'scroll-slide-left'}`}>
+                  <div className="alt-content-wrap">
+                    <div className="alt-badge">{section.badge}</div>
+                    <h2 className="alt-title">
+                      {section.title}
+                      <br />
+                      <span className="alt-title-highlight">{section.highlightText}</span>
+                    </h2>
+                    <div className="alt-divider"></div>
+                    {section.paragraphs.map((para, idx) => (
+                      <p key={idx} className="alt-description">{para}</p>
+                    ))}
+                  </div>
+                </div>
+              </div>
             </div>
-          ))}
-        </div>
-
+          );
+        })}
       </div>
     </div>
   );

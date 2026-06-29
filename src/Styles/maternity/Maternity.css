@@ -1,0 +1,1568 @@
+/* src/Styles/maternity/Maternity.css */
+
+/* ================================================================
+   MATERNITY.CSS - Complete Professional Styles
+   Smooth Animations | Dark Theme | Premium Look
+   ================================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+/* ================================================================
+   1. CSS VARIABLES
+   ================================================================ */
+:root {
+  --primary: #FFFFFF;
+  --secondary: #AAAAAA;
+  --dark: #000000;
+  --dark-card: #111111;
+  --dark-border: #333333;
+  --dark-hover: #1a1a1a;
+  --gold: #C9A96E;
+  --gold-light: #E8D5A3;
+  --transition-smooth: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --transition-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --shadow-soft: 0 8px 32px rgba(0, 0, 0, 0.4);
+  --shadow-glow: 0 0 60px rgba(255, 255, 255, 0.05);
+}
+
+/* ================================================================
+   2. KEYFRAMES - PROFESSIONAL ANIMATIONS
+   ================================================================ */
+
+/* Fade In Up - Smooth */
+@keyframes fadeInUp {
+  0% { opacity: 0; transform: translateY(50px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* Fade In Down */
+@keyframes fadeInDown {
+  0% { opacity: 0; transform: translateY(-50px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* Fade In */
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+/* Slide In Left */
+@keyframes slideInLeft {
+  0% { opacity: 0; transform: translateX(-80px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+
+/* Slide In Right */
+@keyframes slideInRight {
+  0% { opacity: 0; transform: translateX(80px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+
+/* Zoom In - Professional */
+@keyframes zoomIn {
+  0% { opacity: 0; transform: scale(0.92); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+/* Zoom In with Glow */
+@keyframes zoomInGlow {
+  0% { opacity: 0; transform: scale(0.85); filter: blur(8px); }
+  50% { opacity: 0.5; transform: scale(1.02); filter: blur(2px); }
+  100% { opacity: 1; transform: scale(1); filter: blur(0); }
+}
+
+/* Hero Zoom - Slow & Smooth */
+@keyframes heroZoom {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.08); }
+}
+
+/* Title Reveal - Word by Word */
+@keyframes titleReveal {
+  0% { opacity: 0; transform: translateY(40px) scale(0.95); filter: blur(6px); letter-spacing: 12px; }
+  60% { opacity: 1; transform: translateY(-5px) scale(1.02); filter: blur(0); letter-spacing: 6px; }
+  100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); letter-spacing: 4px; }
+}
+
+/* Slide Up Reveal - Professional */
+@keyframes slideUpReveal {
+  0% { opacity: 0; transform: translateY(60px) scale(0.95); letter-spacing: 10px; }
+  60% { opacity: 1; transform: translateY(-8px) scale(1.02); letter-spacing: 4px; }
+  100% { opacity: 1; transform: translateY(0) scale(1); letter-spacing: 3px; }
+}
+
+/* Text Glow */
+@keyframes textGlow {
+  0% { text-shadow: 0 0 20px rgba(255, 255, 255, 0.1); }
+  50% { text-shadow: 0 0 40px rgba(255, 255, 255, 0.2), 0 0 80px rgba(255, 255, 255, 0.05); }
+  100% { text-shadow: 0 0 20px rgba(255, 255, 255, 0.1); }
+}
+
+/* Pulsing Dot - For Carousel */
+@keyframes pulse {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.3); opacity: 0.7; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* Float Animation */
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+
+/* Border Glow */
+@keyframes borderGlow {
+  0% { border-color: #333333; }
+  50% { border-color: #FFFFFF; box-shadow: 0 0 30px rgba(255, 255, 255, 0.1); }
+  100% { border-color: #333333; }
+}
+
+/* ================================================================
+   3. SCROLL ANIMATION CLASSES
+   ================================================================ */
+
+/* Scroll Fade Up */
+.scroll-fade-up {
+  opacity: 0;
+  animation: fadeInUp 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  animation-timeline: view();
+  animation-range: entry 0% entry 80%;
+}
+
+/* Scroll Slide Left */
+.scroll-slide-left {
+  opacity: 0;
+  animation: slideInLeft 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  animation-timeline: view();
+  animation-range: entry 0% entry 80%;
+}
+
+/* Scroll Slide Right */
+.scroll-slide-right {
+  opacity: 0;
+  animation: slideInRight 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  animation-timeline: view();
+  animation-range: entry 0% entry 80%;
+}
+
+/* Scroll Zoom */
+.scroll-zoom {
+  opacity: 0;
+  animation: zoomIn 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  animation-timeline: view();
+  animation-range: entry 0% entry 80%;
+}
+
+/* Scroll Zoom Glow - Premium */
+.scroll-zoom-glow {
+  opacity: 0;
+  animation: zoomInGlow 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  animation-timeline: view();
+  animation-range: entry 0% entry 80%;
+}
+
+/* ================================================================
+   4. DELAY CLASSES
+   ================================================================ */
+.delay-1 { animation-delay: 0.1s; }
+.delay-2 { animation-delay: 0.2s; }
+.delay-3 { animation-delay: 0.3s; }
+.delay-4 { animation-delay: 0.4s; }
+.delay-5 { animation-delay: 0.5s; }
+.delay-6 { animation-delay: 0.6s; }
+.delay-7 { animation-delay: 0.7s; }
+.delay-8 { animation-delay: 0.8s; }
+.delay-9 { animation-delay: 0.9s; }
+.delay-10 { animation-delay: 1.0s; }
+
+/* ================================================================
+   5. HOVER EFFECTS - PROFESSIONAL
+   ================================================================ */
+
+/* Scale on Hover */
+.hover-scale {
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), 
+              box-shadow 0.4s ease, 
+              border-color 0.4s ease;
+}
+.hover-scale:hover {
+  transform: translateY(-8px) scale(1.03);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+}
+
+/* Glow on Hover */
+.hover-glow {
+  transition: all 0.4s ease;
+}
+.hover-glow:hover {
+  box-shadow: 0 0 40px rgba(255, 255, 255, 0.08);
+  border-color: #FFFFFF;
+}
+
+/* Image Zoom on Hover */
+.hover-image-zoom {
+  overflow: hidden;
+  cursor: pointer;
+}
+.hover-image-zoom img {
+  transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.hover-image-zoom:hover img {
+  transform: scale(1.06);
+}
+
+/* Stagger Children - Professional */
+.stagger-children > * {
+  opacity: 0;
+  animation: fadeInUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  animation-timeline: view();
+  animation-range: entry 0% entry 80%;
+}
+.stagger-children > *:nth-child(1) { animation-delay: 0.05s; }
+.stagger-children > *:nth-child(2) { animation-delay: 0.10s; }
+.stagger-children > *:nth-child(3) { animation-delay: 0.15s; }
+.stagger-children > *:nth-child(4) { animation-delay: 0.20s; }
+.stagger-children > *:nth-child(5) { animation-delay: 0.25s; }
+.stagger-children > *:nth-child(6) { animation-delay: 0.30s; }
+.stagger-children > *:nth-child(7) { animation-delay: 0.35s; }
+.stagger-children > *:nth-child(8) { animation-delay: 0.40s; }
+.stagger-children > *:nth-child(9) { animation-delay: 0.45s; }
+.stagger-children > *:nth-child(10) { animation-delay: 0.50s; }
+.stagger-children > *:nth-child(11) { animation-delay: 0.55s; }
+.stagger-children > *:nth-child(12) { animation-delay: 0.60s; }
+
+/* ================================================================
+   6. MATERNITY HERO - VIDEO BACKGROUND
+   ================================================================ */
+.maternity-hero {
+  position: relative;
+  height: 100vh;
+  min-height: 700px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.maternity-hero .hero-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+.maternity-hero .hero-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  animation: heroZoom 12s ease-in-out infinite alternate;
+}
+
+.maternity-hero .hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, 
+    rgba(0, 0, 0, 0.7) 0%, 
+    rgba(0, 0, 0, 0.4) 50%, 
+    rgba(0, 0, 0, 0.7) 100%
+  );
+  z-index: 1;
+}
+
+.maternity-hero .hero-content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 20px;
+}
+
+.maternity-hero .hero-center {
+  max-width: 900px;
+  width: 100%;
+  text-align: center;
+}
+
+.maternity-hero .hero-text-container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* Hero Badge */
+.maternity-hero .hero-badge {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  letter-spacing: 12px;
+  color: #FFFFFF;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  font-weight: 300;
+  opacity: 0;
+  animation: fadeInUp 1.2s ease 0.2s forwards;
+}
+
+/* Hero Title */
+.maternity-hero .hero-title {
+  font-size: 82px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  line-height: 1.05;
+}
+
+.maternity-hero .title-line {
+  display: block;
+  font-family: 'Playfair Display', serif;
+  font-size: 74px;
+  letter-spacing: 8px;
+  color: #FFFFFF;
+  margin-bottom: 8px;
+  opacity: 0;
+  animation: titleReveal 1.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s forwards;
+}
+
+.maternity-hero .title-highlight {
+  display: inline-block;
+  font-family: 'Playfair Display', serif;
+  font-size: 70px;
+  letter-spacing: 5px;
+  color: #FFFFFF;
+  border-bottom: 4px solid #C9A96E;
+  padding-bottom: 8px;
+  opacity: 0;
+  animation: titleReveal 1.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.6s forwards;
+}
+
+.maternity-hero .hero-divider {
+  width: 80px;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, #C9A96E, transparent);
+  margin: 30px auto 25px auto;
+  opacity: 0;
+  animation: fadeIn 1.2s ease 0.9s forwards;
+}
+
+.maternity-hero .hero-subtitle {
+  font-size: 20px;
+  font-family: 'Inter', sans-serif;
+  color: #E0E0E0;
+  font-weight: 300;
+  letter-spacing: 3px;
+  opacity: 0;
+  animation: fadeInUp 1.2s ease 1.1s forwards;
+  animation: textGlow 3s ease-in-out infinite 1.5s;
+}
+
+/* ================================================================
+   7. MATERNITY INTRO
+   ================================================================ */
+.maternity-intro {
+  background-color: var(--dark);
+  padding: 100px 0;
+  width: 100%;
+  position: relative;
+}
+
+.maternity-intro::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #333333, transparent);
+}
+
+.maternity-intro .intro-container {
+  display: flex;
+  max-width: 1400px;
+  margin: 0 auto;
+  gap: 70px;
+  padding: 0 40px;
+  align-items: center;
+}
+
+.maternity-intro .intro-image-column {
+  flex: 1;
+}
+
+.maternity-intro .intro-image-wrapper {
+  overflow: hidden;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), 
+              box-shadow 0.6s ease;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.maternity-intro .intro-image-wrapper:hover {
+  transform: scale(1.02);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+}
+
+.maternity-intro .intro-image {
+  width: 100%;
+  aspect-ratio: 4/5;
+  object-fit: cover;
+  transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.maternity-intro .intro-image-wrapper:hover .intro-image {
+  transform: scale(1.05);
+}
+
+.maternity-intro .intro-content-column {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.maternity-intro .intro-content-wrapper {
+  max-width: 580px;
+}
+
+.maternity-intro .intro-badge {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px;
+  letter-spacing: 6px;
+  color: #888888;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+.maternity-intro .intro-title {
+  font-size: 44px;
+  font-weight: 600;
+  color: #FFFFFF;
+  font-family: 'Playfair Display', serif;
+  margin-bottom: 20px;
+  line-height: 1.15;
+}
+
+.maternity-intro .intro-title-highlight {
+  border-bottom: 4px solid #C9A96E;
+  display: inline-block;
+  padding-bottom: 6px;
+}
+
+.maternity-intro .intro-divider {
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, #C9A96E, transparent);
+  margin: 20px 0 25px;
+}
+
+.maternity-intro .intro-description {
+  font-size: 16px;
+  line-height: 1.8;
+  color: #CCCCCC;
+  font-family: 'Inter', sans-serif;
+  margin-bottom: 18px;
+  font-weight: 300;
+}
+
+.maternity-intro .intro-description:last-child {
+  margin-bottom: 0;
+}
+
+/* ================================================================
+   8. MATERNITY SERVICES (ALTERNATING)
+   ================================================================ */
+.maternity-services {
+  background-color: var(--dark);
+  padding: 0;
+  border-top: 1px solid var(--dark-border);
+  border-bottom: 1px solid var(--dark-border);
+}
+
+.maternity-services .alt-container {
+  width: 100%;
+  background-color: var(--dark);
+}
+
+.maternity-services .alt-section {
+  width: 100%;
+  padding: 100px 0;
+  position: relative;
+}
+
+.maternity-services .alt-section:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 10%;
+  width: 80%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #333333, transparent);
+}
+
+.maternity-services .alt-inner {
+  display: flex;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  gap: 70px;
+  padding: 0 40px;
+  align-items: center;
+}
+
+.maternity-services .alt-inner-left {
+  flex-direction: row;
+}
+
+.maternity-services .alt-inner-right {
+  flex-direction: row-reverse;
+}
+
+.maternity-services .alt-image-col {
+  flex: 1;
+}
+
+.maternity-services .alt-image-wrap {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
+              box-shadow 0.6s ease;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+}
+
+.maternity-services .alt-image-wrap:hover {
+  transform: scale(1.02);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+}
+
+.maternity-services .alt-image {
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 4/5;
+  object-fit: cover;
+  transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.maternity-services .alt-image-wrap:hover .alt-image {
+  transform: scale(1.05);
+}
+
+.maternity-services .alt-content-col {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.maternity-services .alt-content-wrap {
+  width: 100%;
+  max-width: 580px;
+}
+
+.maternity-services .alt-badge {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px;
+  letter-spacing: 6px;
+  margin-bottom: 18px;
+  text-transform: uppercase;
+  font-weight: 500;
+  color: #888888;
+}
+
+.maternity-services .alt-title {
+  font-size: 44px;
+  font-weight: 600;
+  color: #FFFFFF;
+  margin-bottom: 20px;
+  font-family: 'Playfair Display', serif;
+  line-height: 1.15;
+}
+
+.maternity-services .alt-title-highlight {
+  border-bottom: 4px solid #C9A96E;
+  display: inline-block;
+  padding-bottom: 6px;
+}
+
+.maternity-services .alt-divider {
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, #C9A96E, transparent);
+  margin: 20px 0 25px;
+}
+
+.maternity-services .alt-description {
+  font-size: 16px;
+  line-height: 1.8;
+  color: #CCCCCC;
+  font-family: 'Inter', sans-serif;
+  margin-bottom: 16px;
+  font-weight: 300;
+}
+
+.maternity-services .alt-description:last-child {
+  margin-bottom: 0;
+}
+
+/* ================================================================
+   9. MATERNITY SERVICES SECTION (CARDS)
+   ================================================================ */
+.maternity-services-section {
+  background-color: var(--dark);
+  padding: 80px 0;
+  border-top: 1px solid var(--dark-border);
+  border-bottom: 1px solid var(--dark-border);
+}
+
+.maternity-services-section .section-header {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.maternity-services-section .section-title {
+  font-size: 38px;
+  font-weight: 600;
+  letter-spacing: 4px;
+  color: #FFFFFF;
+  margin-bottom: 16px;
+  font-family: 'Playfair Display', serif;
+}
+
+.maternity-services-section .section-line {
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, #C9A96E, transparent);
+  margin: 0 auto 20px auto;
+}
+
+.maternity-services-section .section-subtitle {
+  font-size: 14px;
+  color: #AAAAAA;
+  font-family: 'Inter', sans-serif;
+  letter-spacing: 2px;
+  font-weight: 300;
+}
+
+.maternity-services-section .services-grid {
+  display: grid;
+  gap: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.maternity-services-section .service-card {
+  text-align: center;
+  padding: 30px 24px;
+  background-color: var(--dark-card);
+  border: 1px solid var(--dark-border);
+  border-radius: 16px;
+  transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.maternity-services-section .service-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, #C9A96E, #FFFFFF, #C9A96E);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.6s ease;
+}
+
+.maternity-services-section .service-card:hover::before {
+  transform: scaleX(1);
+}
+
+.maternity-services-section .service-card:hover {
+  background-color: var(--dark-hover);
+  border-color: #FFFFFF;
+  transform: translateY(-8px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.maternity-services-section .service-icon {
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px auto;
+  font-weight: bold;
+  transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  background: linear-gradient(135deg, #FFFFFF, #E0E0E0);
+  color: #000000;
+}
+
+.maternity-services-section .service-card:hover .service-icon {
+  transform: scale(1.1) rotate(-5deg);
+  box-shadow: 0 8px 30px rgba(255, 255, 255, 0.15);
+}
+
+.maternity-services-section .service-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  font-family: 'Playfair Display', serif;
+  color: #FFFFFF;
+  transition: color 0.3s ease;
+}
+
+.maternity-services-section .service-card:hover .service-title {
+  color: #C9A96E;
+}
+
+.maternity-services-section .service-description {
+  font-size: 13px;
+  line-height: 1.6;
+  font-family: 'Inter', sans-serif;
+  color: #AAAAAA;
+  margin: 0;
+  font-weight: 300;
+}
+
+/* ================================================================
+   10. MATERNITY GALLERY
+   ================================================================ */
+.maternity-gallery {
+  background-color: var(--dark);
+  padding: 100px 0;
+  border-top: 1px solid var(--dark-border);
+  border-bottom: 1px solid var(--dark-border);
+}
+
+.maternity-gallery .gallery-header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.maternity-gallery .gallery-title {
+  font-size: 42px;
+  font-weight: 600;
+  letter-spacing: 5px;
+  color: #FFFFFF;
+  margin-bottom: 16px;
+  font-family: 'Playfair Display', serif;
+}
+
+.maternity-gallery .gallery-line {
+  width: 70px;
+  height: 3px;
+  background: linear-gradient(90deg, #C9A96E, transparent);
+  margin: 0 auto 20px auto;
+}
+
+.maternity-gallery .gallery-subtitle {
+  font-size: 16px;
+  color: #AAAAAA;
+  font-family: 'Inter', sans-serif;
+  letter-spacing: 2px;
+  font-weight: 300;
+}
+
+.maternity-gallery .gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 20px;
+  grid-auto-flow: dense;
+}
+
+.maternity-gallery .gallery-item {
+  overflow: hidden;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+}
+
+.maternity-gallery .gallery-item:hover {
+  transform: scale(1.04) rotate(-1deg);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  z-index: 10;
+}
+
+.maternity-gallery .gallery-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.maternity-gallery .gallery-item:hover img {
+  transform: scale(1.08);
+}
+
+.maternity-gallery .gallery-landscape {
+  grid-column: span 2;
+  grid-row: span 1;
+  aspect-ratio: 2 / 1;
+}
+
+.maternity-gallery .gallery-portrait {
+  grid-column: span 1;
+  grid-row: span 2;
+  aspect-ratio: 1 / 2;
+}
+
+.maternity-gallery .gallery-square {
+  grid-column: span 1;
+  grid-row: span 1;
+  aspect-ratio: 1 / 1;
+}
+
+/* ================================================================
+   11. MATERNITY CAROUSEL
+   ================================================================ */
+.maternity-carousel {
+  background-color: var(--dark);
+  padding: 80px 0;
+  border-top: 1px solid var(--dark-border);
+  border-bottom: 1px solid var(--dark-border);
+}
+
+.maternity-carousel .carousel-header {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.maternity-carousel .carousel-title {
+  font-size: 38px;
+  font-weight: 600;
+  letter-spacing: 4px;
+  color: #FFFFFF;
+  margin-bottom: 16px;
+  font-family: 'Playfair Display', serif;
+}
+
+.maternity-carousel .carousel-line {
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, #C9A96E, transparent);
+  margin: 0 auto 20px auto;
+}
+
+.maternity-carousel .carousel-subtitle {
+  font-size: 15px;
+  color: #AAAAAA;
+  font-family: 'Inter', sans-serif;
+  letter-spacing: 2px;
+  font-weight: 300;
+}
+
+.maternity-carousel .carousel-container {
+  position: relative;
+  max-width: 1100px;
+  margin: 0 auto;
+  overflow: hidden;
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+}
+
+.maternity-carousel .carousel-wrapper {
+  overflow: hidden;
+}
+
+.maternity-carousel .carousel-track {
+  display: flex;
+  transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.maternity-carousel .carousel-slide {
+  min-width: 100%;
+  aspect-ratio: 16/9;
+  overflow: hidden;
+}
+
+.maternity-carousel .carousel-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+}
+
+.maternity-carousel .carousel-slide:hover img {
+  transform: scale(1.03);
+}
+
+.maternity-carousel .carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  color: #FFFFFF;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  z-index: 10;
+  opacity: 0.7;
+}
+
+.maternity-carousel .carousel-btn:hover {
+  background: rgba(255, 255, 255, 0.25);
+  border-color: #FFFFFF;
+  opacity: 1;
+  transform: translateY(-50%) scale(1.1);
+}
+
+.maternity-carousel .carousel-btn-prev {
+  left: 20px;
+}
+
+.maternity-carousel .carousel-btn-next {
+  right: 20px;
+}
+
+.maternity-carousel .carousel-dots {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 30px;
+}
+
+.maternity-carousel .carousel-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #333333;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  border: 2px solid transparent;
+}
+
+.maternity-carousel .carousel-dot:hover {
+  background: #666666;
+  transform: scale(1.2);
+}
+
+.maternity-carousel .carousel-dot-active {
+  background: #C9A96E;
+  border-color: #C9A96E;
+  transform: scale(1.3);
+  box-shadow: 0 0 20px rgba(201, 169, 110, 0.3);
+}
+
+/* ================================================================
+   12. MATERNITY FAQ
+   ================================================================ */
+.maternity-faq {
+  background-color: var(--dark);
+  padding: 80px 0;
+  border-top: 1px solid var(--dark-border);
+  border-bottom: 1px solid var(--dark-border);
+}
+
+.maternity-faq .faq-container {
+  display: flex;
+  align-items: stretch;
+  gap: 50px;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+.maternity-faq .faq-left {
+  flex: 2;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.maternity-faq .faq-right {
+  flex: 1;
+  max-width: 380px;
+  min-width: 200px;
+  display: flex;
+  align-items: stretch;
+}
+
+.maternity-faq .faq-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--dark-border);
+  transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
+              box-shadow 0.6s ease;
+}
+
+.maternity-faq .faq-image:hover {
+  transform: scale(1.02);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+}
+
+.maternity-faq .faq-header {
+  text-align: left;
+  margin-bottom: 35px;
+}
+
+.maternity-faq .faq-title {
+  font-size: 34px;
+  font-weight: 400;
+  letter-spacing: 4px;
+  color: #FFFFFF;
+  margin-bottom: 14px;
+  font-family: 'Playfair Display', serif;
+}
+
+.maternity-faq .faq-line {
+  width: 50px;
+  height: 3px;
+  background: linear-gradient(90deg, #C9A96E, transparent);
+  margin: 0 0 18px 0;
+}
+
+.maternity-faq .faq-subtitle {
+  font-size: 14px;
+  color: #AAAAAA;
+  font-family: 'Inter', sans-serif;
+  letter-spacing: 2px;
+  font-weight: 300;
+}
+
+.maternity-faq .faq-wrapper {
+  max-width: 100%;
+  margin: 0;
+}
+
+.maternity-faq .faq-item {
+  margin-bottom: 14px;
+  background-color: var(--dark-card);
+  border: 1px solid var(--dark-border);
+  border-radius: 14px;
+  overflow: hidden;
+  transition: all 0.4s ease;
+}
+
+.maternity-faq .faq-item:hover {
+  border-color: #555555;
+}
+
+.maternity-faq .faq-item.open {
+  border-color: #C9A96E;
+  box-shadow: 0 8px 30px rgba(201, 169, 110, 0.05);
+}
+
+.maternity-faq .faq-question {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 24px;
+  cursor: pointer;
+  font-size: 17px;
+  font-weight: 500;
+  color: #FFFFFF;
+  font-family: 'Playfair Display', serif;
+  transition: background-color 0.3s ease;
+}
+
+.maternity-faq .faq-question:hover {
+  background-color: #1a1a1a;
+}
+
+.maternity-faq .faq-icon {
+  font-size: 24px;
+  font-weight: bold;
+  color: #C9A96E;
+  flex-shrink: 0;
+  margin-left: 15px;
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.maternity-faq .faq-item.open .faq-icon {
+  transform: rotate(180deg);
+}
+
+.maternity-faq .faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              padding 0.4s ease;
+  padding: 0 24px;
+}
+
+.maternity-faq .faq-answer.open {
+  max-height: 300px;
+  padding: 0 24px 22px 24px;
+}
+
+.maternity-faq .faq-answer p {
+  font-size: 15px;
+  color: #CCCCCC;
+  line-height: 1.7;
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+  font-weight: 300;
+}
+
+/* ================================================================
+   13. MATERNITY CTA
+   ================================================================ */
+.maternity-cta {
+  background-color: var(--dark);
+  padding: 100px 0;
+  border-top: 1px solid var(--dark-border);
+  border-bottom: 1px solid var(--dark-border);
+  position: relative;
+  overflow: hidden;
+}
+
+.maternity-cta::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(201, 169, 110, 0.03), transparent 70%);
+  animation: float 20s ease-in-out infinite;
+}
+
+.maternity-cta .cta-wrapper {
+  text-align: center;
+  max-width: 850px;
+  margin: 0 auto;
+  padding: 0 20px;
+  position: relative;
+  z-index: 1;
+}
+
+.maternity-cta .cta-title {
+  font-size: 42px;
+  font-weight: 600;
+  letter-spacing: 4px;
+  color: #FFFFFF;
+  margin-bottom: 18px;
+  font-family: 'Playfair Display', serif;
+}
+
+.maternity-cta .cta-divider {
+  width: 70px;
+  height: 3px;
+  background: linear-gradient(90deg, #C9A96E, transparent);
+  margin: 0 auto 24px auto;
+}
+
+.maternity-cta .cta-text {
+  font-size: 17px;
+  color: #CCCCCC;
+  margin-bottom: 40px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.7;
+  font-family: 'Inter', sans-serif;
+  font-weight: 300;
+  letter-spacing: 1px;
+}
+
+.maternity-cta .cta-button {
+  background: linear-gradient(135deg, #FFFFFF, #E8E8E8);
+  border: none;
+  color: #000000;
+  padding: 18px 55px;
+  font-size: 14px;
+  letter-spacing: 4px;
+  cursor: pointer;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  border-radius: 50px;
+  transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 8px 30px rgba(255, 255, 255, 0.1);
+}
+
+.maternity-cta .cta-button:hover {
+  background: linear-gradient(135deg, #C9A96E, #B8954E);
+  color: #FFFFFF;
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 20px 60px rgba(201, 169, 110, 0.3);
+}
+
+/* ================================================================
+   14. MATERNITY OTHER WORK
+   ================================================================ */
+.maternity-other-work {
+  background-color: var(--dark);
+  padding: 70px 0;
+  border-top: 1px solid var(--dark-border);
+  border-bottom: 1px solid var(--dark-border);
+}
+
+.maternity-other-work .other-work-header {
+  text-align: center;
+  margin-bottom: 45px;
+}
+
+.maternity-other-work .other-work-title {
+  font-size: 34px;
+  font-weight: 400;
+  letter-spacing: 4px;
+  color: #FFFFFF;
+  margin-bottom: 14px;
+  font-family: 'Playfair Display', serif;
+}
+
+.maternity-other-work .other-work-line {
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, #C9A96E, transparent);
+  margin: 0 auto;
+}
+
+.maternity-other-work .other-work-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.maternity-other-work .other-work-btn {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border: 2px solid var(--dark-border);
+  border-radius: 14px;
+  cursor: pointer;
+  overflow: hidden;
+  min-width: 120px;
+  max-width: 160px;
+  height: 80px;
+  padding: 0;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+  position: relative;
+  flex: 1;
+  transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.maternity-other-work .other-work-btn::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.2));
+  transition: opacity 0.4s ease;
+}
+
+.maternity-other-work .other-work-btn:hover {
+  transform: translateY(-6px) scale(1.03);
+  border-color: #C9A96E;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+}
+
+.maternity-other-work .other-work-btn:hover::after {
+  opacity: 0.3;
+}
+
+.maternity-other-work .other-work-btn-title {
+  color: #FFFFFF;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  font-family: 'Montserrat', sans-serif;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  transition: all 0.4s ease;
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.9);
+  padding: 0 10px;
+  text-align: center;
+  white-space: normal;
+  word-wrap: break-word;
+  line-height: 1.2;
+  position: relative;
+  z-index: 1;
+}
+
+.maternity-other-work .other-work-btn:hover .other-work-btn-title {
+  letter-spacing: 3px;
+  color: #C9A96E;
+}
+
+/* ================================================================
+   15. LIGHTBOX
+   ================================================================ */
+.maternity-lightbox {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.95);
+  backdrop-filter: blur(20px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  animation: fadeIn 0.4s ease forwards;
+}
+
+.maternity-lightbox-content {
+  position: relative;
+  max-width: 90%;
+  max-height: 90%;
+}
+
+.maternity-lightbox-image {
+  max-width: 100%;
+  max-height: 90vh;
+  object-fit: contain;
+  animation: zoomIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  box-shadow: 0 30px 100px rgba(0, 0, 0, 0.6);
+}
+
+.maternity-lightbox-close {
+  position: absolute;
+  top: -50px;
+  right: -50px;
+  background: none;
+  border: none;
+  color: #FFFFFF;
+  font-size: 44px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  opacity: 0.7;
+}
+
+.maternity-lightbox-close:hover {
+  opacity: 1;
+  transform: rotate(90deg);
+}
+
+/* ================================================================
+   16. RESPONSIVE
+   ================================================================ */
+
+/* Tablet Large */
+@media (max-width: 1200px) {
+  .maternity-hero .hero-title { font-size: 64px; }
+  .maternity-hero .title-line { font-size: 58px; }
+  .maternity-hero .title-highlight { font-size: 54px; }
+  
+  .maternity-services .alt-inner { padding: 0 30px; }
+  .maternity-faq .faq-container { padding: 0 30px; }
+}
+
+/* Tablet */
+@media (max-width: 992px) {
+  .maternity-hero .hero-title { font-size: 52px; }
+  .maternity-hero .title-line { font-size: 46px; }
+  .maternity-hero .title-highlight { font-size: 42px; }
+  .maternity-hero .hero-badge { font-size: 12px; letter-spacing: 8px; }
+  .maternity-hero .hero-subtitle { font-size: 17px; }
+  
+  .maternity-intro { padding: 70px 0; }
+  .maternity-intro .intro-container { flex-direction: column; text-align: center; gap: 40px; padding: 0 30px; }
+  .maternity-intro .intro-content-wrapper { max-width: 100%; }
+  .maternity-intro .intro-divider { margin: 20px auto 25px; }
+  .maternity-intro .intro-title { font-size: 34px; }
+  .maternity-intro .intro-badge { font-size: 11px; letter-spacing: 5px; }
+  .maternity-intro .intro-description { font-size: 15px; }
+  
+  .maternity-services .alt-section { padding: 70px 0; }
+  .maternity-services .alt-inner { flex-direction: column; gap: 40px; padding: 0 30px; }
+  .maternity-services .alt-content-wrap { max-width: 100%; text-align: center; }
+  .maternity-services .alt-divider { margin: 20px auto 25px; }
+  .maternity-services .alt-title { font-size: 34px; }
+  .maternity-services .alt-badge { font-size: 11px; letter-spacing: 5px; text-align: center; }
+  .maternity-services .alt-description { font-size: 15px; text-align: center; }
+  
+  .maternity-services-section { padding: 60px 0; }
+  .maternity-services-section .services-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .maternity-services-section .section-title { font-size: 30px; }
+  
+  .maternity-gallery { padding: 70px 0; }
+  .maternity-gallery .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+  .maternity-gallery .gallery-title { font-size: 34px; }
+  
+  .maternity-carousel { padding: 60px 0; }
+  .maternity-carousel .carousel-title { font-size: 30px; }
+  .maternity-carousel .carousel-btn { width: 44px; height: 44px; font-size: 20px; }
+  
+  .maternity-faq { padding: 60px 0; }
+  .maternity-faq .faq-container { gap: 30px; padding: 0 30px; flex-direction: column; }
+  .maternity-faq .faq-right { max-width: 100%; min-width: unset; height: 280px; order: -1; }
+  .maternity-faq .faq-image { height: 100%; object-fit: cover; }
+  .maternity-faq .faq-title { font-size: 28px; }
+  
+  .maternity-cta { padding: 70px 0; }
+  .maternity-cta .cta-title { font-size: 34px; }
+  .maternity-cta .cta-button { padding: 16px 45px; font-size: 13px; }
+  
+  .maternity-other-work { padding: 50px 0; }
+  .maternity-other-work .other-work-title { font-size: 28px; }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .maternity-hero {
+    padding: 80px 0;
+    height: auto;
+    min-height: 100vh;
+  }
+  
+  .maternity-hero .hero-title { font-size: 42px; }
+  .maternity-hero .title-line { font-size: 36px; letter-spacing: 4px; }
+  .maternity-hero .title-highlight { font-size: 32px; }
+  .maternity-hero .hero-badge { font-size: 10px; letter-spacing: 6px; }
+  .maternity-hero .hero-subtitle { font-size: 15px; }
+  .maternity-hero .hero-divider { width: 50px; margin: 20px auto; }
+  
+  .maternity-intro { padding: 50px 0; }
+  .maternity-intro .intro-container { padding: 0 20px; gap: 30px; }
+  .maternity-intro .intro-title { font-size: 28px; }
+  .maternity-intro .intro-badge { font-size: 10px; letter-spacing: 4px; }
+  .maternity-intro .intro-description { font-size: 14px; }
+  .maternity-intro .intro-divider { width: 40px; }
+  
+  .maternity-services .alt-section { padding: 50px 0; }
+  .maternity-services .alt-inner { padding: 0 20px; gap: 30px; }
+  .maternity-services .alt-title { font-size: 28px; }
+  .maternity-services .alt-badge { font-size: 10px; letter-spacing: 4px; }
+  .maternity-services .alt-description { font-size: 14px; }
+  .maternity-services .alt-divider { width: 40px; }
+  
+  .maternity-services-section { padding: 40px 0; }
+  .maternity-services-section .services-grid { grid-template-columns: 1fr; gap: 14px; padding: 0 16px; }
+  .maternity-services-section .section-title { font-size: 24px; }
+  .maternity-services-section .section-subtitle { font-size: 12px; }
+  .maternity-services-section .section-line { width: 40px; }
+  .maternity-services-section .service-card { padding: 20px 16px; }
+  .maternity-services-section .service-title { font-size: 16px; }
+  .maternity-services-section .service-description { font-size: 12px; }
+  
+  .maternity-gallery { padding: 50px 0; }
+  .maternity-gallery .gallery-grid { grid-template-columns: 1fr; }
+  .maternity-gallery .gallery-landscape,
+  .maternity-gallery .gallery-portrait,
+  .maternity-gallery .gallery-square { grid-column: span 1; grid-row: span 1; aspect-ratio: 1 / 1; }
+  .maternity-gallery .gallery-title { font-size: 28px; letter-spacing: 3px; }
+  .maternity-gallery .gallery-line { width: 40px; }
+  .maternity-gallery .gallery-subtitle { font-size: 14px; }
+  
+  .maternity-carousel { padding: 40px 0; }
+  .maternity-carousel .carousel-title { font-size: 24px; }
+  .maternity-carousel .carousel-btn { width: 36px; height: 36px; font-size: 16px; }
+  .maternity-carousel .carousel-btn-prev { left: 12px; }
+  .maternity-carousel .carousel-btn-next { right: 12px; }
+  .maternity-carousel .carousel-dot { width: 10px; height: 10px; }
+  .maternity-carousel .carousel-subtitle { font-size: 13px; }
+  
+  .maternity-faq { padding: 40px 0; }
+  .maternity-faq .faq-container { padding: 0 16px; gap: 25px; }
+  .maternity-faq .faq-right { height: 220px; }
+  .maternity-faq .faq-title { font-size: 24px; }
+  .maternity-faq .faq-question { font-size: 15px; padding: 14px 18px; }
+  .maternity-faq .faq-answer.open { padding: 0 18px 16px 18px; }
+  .maternity-faq .faq-answer p { font-size: 14px; }
+  
+  .maternity-cta { padding: 50px 0; }
+  .maternity-cta .cta-title { font-size: 28px; letter-spacing: 3px; }
+  .maternity-cta .cta-text { font-size: 15px; }
+  .maternity-cta .cta-button { padding: 14px 35px; font-size: 12px; letter-spacing: 3px; }
+  
+  .maternity-other-work { padding: 40px 0; }
+  .maternity-other-work .other-work-title { font-size: 24px; }
+  .maternity-other-work .other-work-btn { min-width: calc(33.33% - 12px); flex: 0 0 calc(33.33% - 12px); max-width: none; height: 65px; }
+  .maternity-other-work .other-work-btn-title { font-size: 10px; line-height: 1.1; padding: 0 4px; }
+  
+  .maternity-lightbox-close { top: -40px; right: 0; font-size: 36px; }
+}
+
+/* Small Mobile */
+@media (max-width: 576px) {
+  .maternity-hero .hero-title { font-size: 34px; }
+  .maternity-hero .title-line { font-size: 28px; }
+  .maternity-hero .title-highlight { font-size: 26px; }
+  .maternity-hero .hero-badge { font-size: 9px; letter-spacing: 5px; }
+  .maternity-hero .hero-subtitle { font-size: 13px; }
+  .maternity-hero .hero-divider { width: 35px; margin: 15px auto; }
+  
+  .maternity-intro .intro-title { font-size: 24px; }
+  .maternity-intro .intro-badge { font-size: 9px; letter-spacing: 3px; }
+  .maternity-intro .intro-description { font-size: 13px; }
+  .maternity-intro .intro-divider { width: 35px; }
+  
+  .maternity-services .alt-title { font-size: 24px; }
+  .maternity-services .alt-badge { font-size: 9px; letter-spacing: 3px; }
+  .maternity-services .alt-description { font-size: 13px; }
+  .maternity-services .alt-divider { width: 35px; }
+  
+  .maternity-services-section .section-title { font-size: 20px; }
+  .maternity-services-section .section-subtitle { font-size: 11px; }
+  .maternity-services-section .section-line { width: 35px; }
+  .maternity-services-section .service-card { padding: 16px 14px; }
+  .maternity-services-section .service-title { font-size: 15px; }
+  .maternity-services-section .service-description { font-size: 11px; }
+  
+  .maternity-gallery .gallery-title { font-size: 24px; }
+  .maternity-gallery .gallery-subtitle { font-size: 12px; }
+  
+  .maternity-carousel .carousel-title { font-size: 22px; }
+  .maternity-carousel .carousel-btn { width: 30px; height: 30px; font-size: 14px; }
+  .maternity-carousel .carousel-btn-prev { left: 8px; }
+  .maternity-carousel .carousel-btn-next { right: 8px; }
+  .maternity-carousel .carousel-dot { width: 8px; height: 8px; gap: 8px; }
+  
+  .maternity-faq .faq-right { height: 180px; }
+  .maternity-faq .faq-title { font-size: 22px; }
+  .maternity-faq .faq-question { font-size: 14px; padding: 12px 16px; }
+  .maternity-faq .faq-icon { font-size: 20px; }
+  .maternity-faq .faq-answer.open { padding: 0 16px 14px 16px; }
+  .maternity-faq .faq-answer p { font-size: 13px; }
+  
+  .maternity-cta .cta-title { font-size: 24px; letter-spacing: 2px; }
+  .maternity-cta .cta-text { font-size: 14px; }
+  .maternity-cta .cta-button { padding: 12px 28px; font-size: 11px; letter-spacing: 2px; }
+  .maternity-cta .cta-divider { width: 40px; }
+  
+  .maternity-other-work .other-work-title { font-size: 22px; }
+  .maternity-other-work .other-work-btn { min-width: calc(50% - 10px); flex: 0 0 calc(50% - 10px); height: 60px; }
+  .maternity-other-work .other-work-btn-title { font-size: 9px; }
+  
+  .maternity-lightbox-close { top: -30px; font-size: 30px; }
+}
+
+/* Extra Small */
+@media (max-width: 380px) {
+  .maternity-hero .hero-title { font-size: 28px; }
+  .maternity-hero .title-line { font-size: 24px; }
+  .maternity-hero .title-highlight { font-size: 22px; }
+  .maternity-hero .hero-badge { font-size: 8px; letter-spacing: 4px; }
+  
+  .maternity-other-work .other-work-btn { min-width: 100%; flex: 0 0 100%; height: 55px; }
+  .maternity-other-work .other-work-btn-title { font-size: 10px; }
+}
