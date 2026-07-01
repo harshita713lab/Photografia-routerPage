@@ -35,7 +35,7 @@ const ChatInput = ({ onSendMessage, isLoading }) => {
           disabled={!input || !input.trim() || isLoading}
           className="send-btn"
         >
-          <i className={`fas ${isLoading ? 'fa-spinner fa-spin' : 'fa-paper-plane'}`}></i>
+          ➤
         </button>
       </div>
     </form>
