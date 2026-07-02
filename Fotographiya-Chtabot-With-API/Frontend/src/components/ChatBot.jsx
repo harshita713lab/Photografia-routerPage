@@ -9,7 +9,7 @@ const ChatBot = () => {
   const [messages, setMessages] = useState([
     {
       id: 1,
-      text: `Hello! I'm Fotographiya Assistant. How can I help you today? 📸`,
+      text: `Welcome to Fotographiya! I'm your photography assistant. How can I help you today?`,
       sender: 'bot',
       timestamp: new Date()
     }
@@ -134,7 +134,7 @@ const ChatBot = () => {
                 <span className="assistant-label">Assistant</span>
               </div>
               <div className="status-row">
-                <span className="online-dot">●</span>
+                <span className="online-dot"></span>
                 <span className="online-text">Online</span>
               </div>
             </div>

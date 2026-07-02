@@ -8,17 +8,14 @@ class AIService {
     this.apiUrl = process.env.GROQ_API_URL || 'https://api.groq.com/openai/v1/chat/completions';
     this.model = process.env.AI_MODEL || 'llama-3.3-70b-versatile';
     
-    // Website URL
     this.websiteUrl = 'https://www.fotographiya.com';
     
     console.log('========================================');
-    console.log('🤖 Fotographiya AI Service Initialized');
-    console.log(`🌐 Website: ${this.websiteUrl}`);
-    console.log(`📍 Location: ${companyData.company.location}`);
+    console.log('Fotographiya AI Service Initialized');
+    console.log(`Website: ${this.websiteUrl}`);
     console.log('========================================');
   }
 
-  // ========== KEYWORD MATCHING ==========
   getKeywordResponse(message) {
     const msg = message.toLowerCase().trim();
     
@@ -66,7 +63,7 @@ class AIService {
       if (msg === key || msg.includes(key)) {
         const responseKey = value;
         if (companyData.keywordResponses[responseKey]) {
-          console.log(`🔑 Keyword matched: "${msg}" → "${responseKey}"`);
+          console.log(`Keyword matched: "${msg}" → "${responseKey}"`);
           return companyData.keywordResponses[responseKey];
         }
       }
@@ -75,7 +72,12 @@ class AIService {
     return null;
   }
 
-  // ========== OFF-TOPIC DETECTION ==========
+  isGreeting(message) {
+    const greetings = ['hello', 'hi', 'hey', 'good morning', 'good afternoon', 'good evening'];
+    const msg = message.toLowerCase().trim();
+    return greetings.includes(msg);
+  }
+
   isOffTopic(message) {
     const fotographiyaKeywords = [
       'fotographiya', 'photographiya', 'foto',
@@ -96,14 +98,13 @@ class AIService {
       'location', 'address', 'where', 'contact', 'phone',
       'whatsapp', 'email', 'website', 'package', 'price',
       'photos', 'album', 'gallery', 'turnaround', 'delivery',
-      'choose', 'select', 'recommend', 'trust'
+      'choose', 'select', 'recommend', 'trust', 'hello', 'hi', 'hey'
     ];
     
     const msg = message.toLowerCase().trim();
     return !fotographiyaKeywords.some(keyword => msg.includes(keyword));
   }
 
-  // ========== NAME DETECTION ==========
   isNameIntroduction(message) {
     const patterns = [
       /my name is (\w+)/i,
@@ -128,16 +129,13 @@ class AIService {
     return null;
   }
 
-  // ========== GENERATE RESPONSE ==========
-
   async generateResponse(messages, options = {}) {
     try {
       const userMessage = messages[messages.length - 1]?.content || '';
       
-      // ========== CHECK: KEYWORD MATCH ==========
       const keywordResponse = this.getKeywordResponse(userMessage);
       if (keywordResponse) {
-        console.log('✅ Keyword response found, returning directly');
+        console.log('Keyword response found');
         return {
           success: true,
           content: keywordResponse,
@@ -146,9 +144,18 @@ class AIService {
         };
       }
 
-      // ========== CHECK: OFF-TOPIC ==========
+      if (this.isGreeting(userMessage)) {
+        console.log('Greeting detected');
+        return {
+          success: true,
+          content: "Hello! I am Fotographiya Assistant. How can I help you today?",
+          usage: { total_tokens: 0 },
+          model: 'greeting-response'
+        };
+      }
+
       if (this.isOffTopic(userMessage)) {
-        console.log('🚫 Off-topic question blocked');
+        console.log('Off-topic question blocked');
         return {
           success: true,
           content: `I can only help with questions about Fotographiya and our photography services.
@@ -162,28 +169,26 @@ Please ask about:
 - Our photographers
 - Photo delivery and turnaround
 
-Feel free to ask anything about Fotographiya! 📸`,
+Feel free to ask anything about Fotographiya.`,
           usage: { total_tokens: 0 },
           model: 'off-topic-filter'
         };
       }
 
-      // ========== CHECK: NAME INTRODUCTION ==========
       if (this.isNameIntroduction(userMessage)) {
         const name = this.extractName(userMessage);
         if (name) {
-          console.log(`👤 Name detected: ${name}`);
+          console.log(`Name detected: ${name}`);
           return {
             success: true,
-            content: `Nice to meet you, ${name}! I am Fotographiya Assistant. How can I help you today? 📸`,
+            content: `Nice to meet you, ${name}! I am Fotographiya Assistant. How can I help you today?`,
             usage: { total_tokens: 0 },
             model: 'name-response'
           };
         }
       }
 
-      // ========== ALL OTHER QUESTIONS GO TO AI ==========
-      console.log('📤 AI Generating response...');
+      console.log('AI Generating response...');
       
       const response = await axios.post(
         this.apiUrl,
@@ -205,7 +210,7 @@ Feel free to ask anything about Fotographiya! 📸`,
         }
       );
 
-      console.log('✅ AI Response received!');
+      console.log('AI Response received!');
       return {
         success: true,
         content: response.data.choices[0].message.content,
@@ -213,11 +218,11 @@ Feel free to ask anything about Fotographiya! 📸`,
         model: response.data.model
       };
     } catch (error) {
-      console.error('\n❌ AI Service Error:', error.message);
+      console.error('AI Service Error:', error.message);
       
       if (error.response) {
-        console.error(`📋 Status: ${error.response.status}`);
-        console.error(`📋 Data:`, JSON.stringify(error.response.data, null, 2));
+        console.error(`Status: ${error.response.status}`);
+        console.error(`Data:`, JSON.stringify(error.response.data, null, 2));
       }
       
       if (error.response?.status === 401) {
@@ -247,40 +252,33 @@ Feel free to ask anything about Fotographiya! 📸`,
   getSystemPrompt() {
     return `You are Fotographiya's official AI photography assistant.
 
-📌 SOURCES TO USE FOR ANSWERS (IN ORDER):
+SOURCES TO USE FOR ANSWERS:
 
-1. **FOTOGRAPHIA WEBSITE**: ${this.websiteUrl}
-   - Home, About Us, Portfolio, Contact Us
-   - Services: Wedding, Pre Wedding, Destination Wedding, Anniversary
-   - Corporate, Academy, Get Your Photo
+1. FOTOGRAPHIA WEBSITE: ${this.websiteUrl}
+2. COMPANY DATA: ${JSON.stringify(companyData, null, 2)}
 
-2. **COMPANY DATA** (If not on website):
-${JSON.stringify(companyData, null, 2)}
+RULES:
 
-📝 RULES:
+1. WEBSITE FIRST: Always use website content first
+2. THEN COMPANY DATA: Use company data if not on website
+3. AI GENERATES: If no data found, AI generates response
 
-1. **WEBSITE FIRST**: Always check the Fotographiya website first for answers
-2. **THEN COMPANY DATA**: If not on website, use the company data
-3. **AI GENERATES**: If no data found, AI generates a professional response
-4. **KEYWORD RESPONSES**: Direct keyword matches get instant responses
-
-5. **RESPONSE GUIDELINES**:
+4. RESPONSE GUIDELINES:
    - Be warm, friendly, and professional
    - Keep responses SHORT and ACCURATE
-   - Use emojis: 📸 ✨ 💫 🤵 🎯 💰 📍
    - Use **bold** for important information
    - Use bullet points for lists
-   - Include website link when appropriate: ${this.websiteUrl}
+   - DO NOT use emojis
 
-6. **YOUR NAME**: "I am Fotographiya Assistant! I'm here to help you."
+5. GREETINGS: ONLY respond with "Hello! I am Fotographiya Assistant. How can I help you today?" when user says "hello", "hi", or "hey"
 
-7. **GREETINGS**: "Hello! I am Fotographiya Assistant. How can I help you today? 📸"
+6. YOUR NAME: "I am Fotographiya Assistant! I'm here to help you."
 
-8. **USER NAME**: Remember their name and use it in responses
+7. USER NAME: Remember their name and use it in responses
 
-9. **OFF-TOPIC**: Politely say you only answer Fotographiya-related questions
+8. OFF-TOPIC: Politely say you only answer Fotographiya-related questions
 
-IMPORTANT: Always be helpful, professional, and accurate. If unsure, say: "Please visit our website for more details: ${this.websiteUrl}"`;
+IMPORTANT: Always be helpful, professional, and accurate. DO NOT use emojis.`;
   }
 }
 
