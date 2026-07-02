@@ -78,9 +78,54 @@ Fotographiya AI Chatbot is a full-stack conversational AI application designed t
 ----------------------------------
 ## 🔄 Flow Diagram
 ### Complete Chat Flow
+```mermaid
+
+
+flowchart TD
+    A[User Interaction] --> B[User Clicks Chat Toggle]
+    B --> C[Chat Window Opens]
+    C --> D[User Types Message & Sends]
+    D --> E[Frontend Sends POST Request]
+    E --> F[Backend Processing]
+    
+    F --> G{Keyword Match?}
+    G -->|Yes| H[Instant Keyword Response]
+    G -->|No| I{Off-Topic Detected?}
+    I -->|Yes| J[Redirect to Services]
+    I -->|No| K{Name Detected?}
+    K -->|Yes| L[Personalized Response]
+    K -->|No| M[Groq AI API Generation]
+    
+    H --> N[Backend Returns Response]
+    J --> N
+    L --> N
+    M --> N
+    
+    N --> O[Frontend Updates UI]
+    O --> P[User Reads Response]
+    P --> Q{Continue Chat?}
+    Q -->|Yes| D
+    Q -->|No| R[User Closes Chat]
+    
+    classDef user fill:#f9f,stroke:#333,stroke-width:2px
+    classDef process fill:#bbf,stroke:#333,stroke-width:2px
+    classDef ai fill:#f96,stroke:#333,stroke-width:2px
+    classDef response fill:#9f9,stroke:#333,stroke-width:2px
+    
+    class A,B,D,P,R user
+    class F,G,I,K,Q process
+    class M ai
+    class H,J,L,N,O response
+
+
+```
+### Keyword Response Flow
+
+
+```mermaid
+
 
 flowchart LR
-```
     A[User Asks About] --> B{Question Type}
     
     B -->|Location/Address| C[📍 Studio Location Response]
@@ -107,33 +152,10 @@ flowchart LR
 
 ```
 
-### Keyword Response Flow
-
-
-flowchart LR
-    A[User Asks About] --> B{Question Type}
-    
-    B -->|Location/Address| C[📍 Studio Location Response]
-    B -->|Packages/Pricing| D[📦 Package Details Response]
-    B -->|Services/Offer| E[📸 Services List Response]
-    B -->|Contact/Phone| F[📞 Contact Info Response]
-    B -->|Photos/Album| G[📸 Photo Delivery Response]
-    B -->|Why Choose| H[🌟 Why Choose Response]
-    
-    C --> I[Instant Response]
-    D --> I
-    E --> I
-    F --> I
-    G --> I
-    H --> I
-    
-    style A fill:#f9f,stroke:#333,stroke-width:2px
-    style I fill:#9f9,stroke:#333,stroke-width:2px
-
-
-
-
 ### System Architecture
+```mermaid
+
+
 flowchart TB
     subgraph Client["Client (Browser)"]
         React[React App]
@@ -165,6 +187,11 @@ flowchart TB
     style Client fill:#e1f5fe,stroke:#333,stroke-width:2px
     style Backend fill:#f3e5f5,stroke:#333,stroke-width:2px
     style External fill:#e8f5e9,stroke:#333,stroke-width:2px
+
+
+
+
+  ```
 --------------------------------
 ## 🛠️ Tech Stack
 ### Frontend
@@ -430,7 +457,8 @@ curl -X POST http://localhost:5000/api/chat/message \
 ---------------------------------------
 ## 🧠 AI Response Logic
 ### Priority Order
-````
+````mermaid
+
 flowchart LR
     A[User Message] --> B[1. Keyword Matching]
     B -->|Fastest| C[Instant Response]
@@ -443,6 +471,7 @@ flowchart LR
     
     style B fill:#f9f,stroke:#333,stroke-width:2px
     style H fill:#f96,stroke:#333,stroke-width:2px
+    
 ````
 | Category | Keywords | Response |
 |----------|----------|----------|
