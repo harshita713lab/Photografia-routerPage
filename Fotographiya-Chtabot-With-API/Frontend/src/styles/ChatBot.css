@@ -61,7 +61,6 @@
   height: 32px;
   object-fit: cover;
   border-radius: 50%;
-  filter: grayscale(100%);
 }
 
 .chat-toggle-btn::after {
@@ -118,7 +117,7 @@
 }
 
 /* ==============================
-   CHAT HEADER - CLEAN & PROFESSIONAL
+   CHAT HEADER
    ============================== */
 .chat-header {
   display: flex;
@@ -143,7 +142,6 @@
   border-radius: 50%;
   object-fit: cover;
   border: 2px solid #ffffff;
-  filter: grayscale(100%);
 }
 
 .header-text {
@@ -162,20 +160,13 @@
   font-size: 18px;
   font-weight: 700;
   color: #ffffff;
-  font-family: 'Playfair Display', 'Inter', serif;
   letter-spacing: 1px;
-  background: linear-gradient(135deg, #ffffff 0%, #d4d4d4 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
 }
 
 .assistant-label {
   font-size: 13px;
   font-weight: 400;
   color: #aaaaaa;
-  font-family: 'Inter', sans-serif;
-  -webkit-text-fill-color: #aaaaaa;
 }
 
 .status-row {
@@ -187,15 +178,12 @@
 .online-dot {
   font-size: 10px;
   color: #4CAF50;
-  -webkit-text-fill-color: #4CAF50;
 }
 
 .online-text {
   font-size: 12px;
   font-weight: 400;
   color: #4CAF50;
-  font-family: 'Inter', sans-serif;
-  -webkit-text-fill-color: #4CAF50;
 }
 
 /* ==============================
@@ -229,7 +217,6 @@
   width: 18px;
   height: 18px;
   fill: #ffffff;
-  transition: fill 0.2s;
 }
 
 .whatsapp-btn:hover {
@@ -271,6 +258,7 @@
 .chat-body {
   flex: 1;
   overflow-y: auto;
+  overflow-x: hidden;
   padding: 16px 20px;
   background: #f8f9fa;
   display: flex;
@@ -329,7 +317,6 @@
   border-radius: 50%;
   object-fit: cover;
   border: 2px solid #333333;
-  filter: grayscale(100%);
 }
 
 .user-avatar {
@@ -351,7 +338,8 @@
   display: flex;
   flex-direction: column;
   gap: 3px;
-  max-width: 78%;
+  max-width: 85%;
+  min-width: 0;
 }
 
 .message-bubble {
@@ -359,11 +347,14 @@
   border-radius: 14px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
   word-wrap: break-word;
+  overflow-wrap: break-word;
+  max-width: 100%;
+  border: 1px solid #e0e0e0;
 }
 
 .bot-bubble {
   background: #ffffff;
-  border: 1px solid #eaeaea;
+  border: 1px solid #e0e0e0;
   border-bottom-left-radius: 4px;
   color: #1a1a1a;
 }
@@ -371,6 +362,7 @@
 .user-bubble {
   background: #000000;
   color: #ffffff;
+  border: 1px solid #333333;
   border-bottom-right-radius: 4px;
 }
 
@@ -379,7 +371,10 @@
   line-height: 1.6;
   margin: 0;
   white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  max-width: 100%;
 }
 
 .message-text strong {
@@ -457,7 +452,7 @@
   background: #f3f4f6;
   border-radius: 24px;
   padding: 4px 4px 4px 18px;
-  border: 1px solid #e0e0e0;
+  border: 1px solid #d0d0d0;
   transition: border-color 0.2s;
 }
 
@@ -521,6 +516,101 @@
 }
 
 /* ==============================
+   INLINE LINKS (Clickable text links)
+   ============================== */
+.chat-inline-link {
+  color: #1a73e8;
+  text-decoration: underline;
+  font-weight: 500;
+  word-break: break-word;
+  transition: color 0.2s;
+}
+
+.chat-inline-link:hover {
+  color: #0d47a1;
+}
+
+.user-bubble .chat-inline-link {
+  color: #90caf9;
+}
+
+.user-bubble .chat-inline-link:hover {
+  color: #ffffff;
+}
+
+/* ==============================
+   LINKS - PROFESSIONAL GRID LAYOUT
+   ============================== */
+
+.message-text .link-container {
+  display: grid;
+  gap: 6px;
+  margin-top: 8px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* ===== DEFAULT: 2 COLUMNS ===== */
+.message-text .link-container {
+  grid-template-columns: 1fr 1fr;
+}
+
+/* ===== 1 LINK: FULL WIDTH ===== */
+.message-text .link-container:has(a:only-child) {
+  grid-template-columns: 1fr;
+}
+
+/* ===== 3 LINKS: 1st FULL, 2nd & 3rd SIDE BY SIDE ===== */
+.message-text .link-container:has(a:nth-child(3):last-child) {
+  grid-template-columns: 1fr 1fr;
+}
+
+.message-text .link-container:has(a:nth-child(3):last-child) a:first-child {
+  grid-column: 1 / -1;
+}
+
+/* ===== LINK STYLING ===== */
+.message-text a.chat-inline-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 14px;
+  background: #ffffff;
+  color: #1a1a1a !important;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.3;
+  text-align: center;
+  transition: all 0.25s ease;
+  box-sizing: border-box;
+  min-height: 40px;
+  word-break: break-word;
+  width: 100%;
+}
+
+.message-text a.chat-inline-link:hover {
+  border-color: #000000;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  transform: translateY(-1px);
+  background: #fafafa;
+}
+
+/* ===== USER MESSAGE LINKS ===== */
+.user-bubble .message-text .link-container a.chat-inline-link {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: #ffffff !important;
+}
+
+.user-bubble .message-text .link-container a.chat-inline-link:hover {
+  border-color: #ffffff;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* ==============================
    RESPONSIVE
    ============================== */
 @media (max-width: 768px) {
@@ -561,6 +651,16 @@
 
   .chat-input-container {
     padding: 10px 14px 14px;
+  }
+
+  .message-text .link-container {
+    gap: 4px;
+  }
+
+  .message-text a.chat-inline-link {
+    min-height: 34px;
+    padding: 8px 10px;
+    font-size: 12px;
   }
 }
 
@@ -630,7 +730,7 @@
   }
 
   .message-content {
-    max-width: 85%;
+    max-width: 90%;
   }
 
   .message-bubble {
@@ -683,5 +783,16 @@
     width: 30px;
     height: 30px;
     font-size: 16px;
+  }
+
+  .message-text .link-container {
+    gap: 4px;
+  }
+
+  .message-text a.chat-inline-link {
+    font-size: 11px;
+    padding: 6px 8px;
+    min-height: 30px;
+    border-radius: 6px;
   }
 }
