@@ -491,9 +491,6 @@ All AI responses are grounded in the `companyData.js` file:
     tagline: 'Preserving the special moments forever',
     location: 'Kota, Rajasthan',
     website: 'https://www.fotographiya.com',
-    whatsapp: '918824127624',
-    phone: '+918824127624',
-    email: 'info@fotographiya.com'
   },
   services: {
     occasions: ['Wedding', 'Pre-wedding', 'Mehndi', 'Sangeet', ...],
@@ -605,7 +602,7 @@ Example: Add appointment booking:
 
 keywordResponses: {
 
-  booking: "📅 **Book Your Session**\n\nTo book a photography session:\n1. Visit our website\n2. Call us at +918824127624\n3. Or message us on WhatsApp"
+  booking: "📅 **Book Your Session**\n\nTo book a photography session:\n1. Visit our website\n2. Call us at +91xxxxxxxxxx\n3. Or message us on WhatsApp"
 
 }
 ```

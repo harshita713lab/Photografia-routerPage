@@ -19,8 +19,8 @@ const ChatBot = () => {
   const messagesEndRef = useRef(null)
 
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api'
-  const WHATSAPP_NUMBER = '918824127624'
-  const PHONE_NUMBER = '+918824127624'
+  const WHATSAPP_NUMBER = '+919001110144'
+  const PHONE_NUMBER = '+919001110144'
 
   const toggleChat = () => {
     setIsOpen(!isOpen)

@@ -516,30 +516,7 @@
 }
 
 /* ==============================
-   INLINE LINKS (Clickable text links)
-   ============================== */
-.chat-inline-link {
-  color: #1a73e8;
-  text-decoration: underline;
-  font-weight: 500;
-  word-break: break-word;
-  transition: color 0.2s;
-}
-
-.chat-inline-link:hover {
-  color: #0d47a1;
-}
-
-.user-bubble .chat-inline-link {
-  color: #90caf9;
-}
-
-.user-bubble .chat-inline-link:hover {
-  color: #ffffff;
-}
-
-/* ==============================
-   LINKS - PROFESSIONAL GRID LAYOUT
+   LINKS - BUTTON STYLE WITH GRADIENT BORDER
    ============================== */
 
 .message-text .link-container {
@@ -569,50 +546,119 @@
   grid-column: 1 / -1;
 }
 
-/* ===== LINK STYLING ===== */
+/* ===== LINK STYLING - BUTTON STYLE WITH GRADIENT BORDER ===== */
 .message-text a.chat-inline-link {
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 8px;
   padding: 10px 14px;
   background: #ffffff;
   color: #1a1a1a !important;
-  border: 1px solid #e0e0e0;
   border-radius: 8px;
   text-decoration: none;
   font-size: 13px;
   font-weight: 500;
   line-height: 1.3;
   text-align: center;
-  transition: all 0.25s ease;
+  transition: all 0.3s ease;
   box-sizing: border-box;
   min-height: 40px;
   word-break: break-word;
   width: 100%;
+  position: relative;
+  background-clip: padding-box;
+  border: 0.2px solid rgb(223, 222, 222);
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
+/* ===== GRADIENT BORDER ===== */
+.message-text a.chat-inline-link::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #d0d0d0, #f0f0f0, #d0d0d0);
+  z-index: -1;
+  transition: all 0.4s ease;
+}
+
+.message-text a.chat-inline-link::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #ffffff;
+  border-radius: 7px;
+  z-index: -1;
+}
+
+/* ===== HOVER - SHINY GRADIENT BORDER WITH BUTTON EFFECT ===== */
 .message-text a.chat-inline-link:hover {
-  border-color: #000000;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
-  transform: translateY(-1px);
-  background: #fafafa;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(8, 8, 8, 0.08);
 }
 
-/* ===== USER MESSAGE LINKS ===== */
+.message-text a.chat-inline-link:hover::before {
+  background: linear-gradient(135deg, #343435, #414241, #0b0209);
+}
+
+.message-text a.chat-inline-link:active {
+  transform: translateY(0px);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+/* ===== ICON STYLING ===== */
+.message-text a.chat-inline-link i {
+  font-size: 16px;
+  width: 20px;
+  text-align: center;
+  color: #555555;
+  transition: color 0.3s ease;
+}
+
+.message-text a.chat-inline-link:hover i {
+  color: #000000;
+}
+
+/* ========================================
+   USER MESSAGE LINKS (Dark Mode)
+   ======================================== */
 .user-bubble .message-text .link-container a.chat-inline-link {
-  background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(255, 255, 255, 0.2);
+  background: transparent;
   color: #ffffff !important;
+  box-shadow: 0 1px 3px rgba(255, 255, 255, 0.04);
 }
 
-.user-bubble .message-text .link-container a.chat-inline-link:hover {
-  border-color: #ffffff;
-  background: rgba(255, 255, 255, 0.12);
+.user-bubble .message-text .link-container a.chat-inline-link::after {
+  background: rgba(255, 255, 255, 0.06);
 }
 
-/* ==============================
+.user-bubble .message-text .link-container a.chat-inline-link::before {
+  background: linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.05), rgba(255,255,255,0.15));
+}
+
+.user-bubble .message-text .link-container a.chat-inline-link i {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.user-bubble .message-text .link-container a.chat-inline-link:hover::before {
+  background: linear-gradient(135deg, #ffffff, #aaaaaa, #ffffff);
+}
+
+.user-bubble .message-text .link-container a.chat-inline-link:hover i {
+  color: #ffffff;
+}
+
+/* ========================================
    RESPONSIVE
-   ============================== */
+   ======================================== */
 @media (max-width: 768px) {
   .chat-window {
     width: 100vw;
@@ -661,6 +707,24 @@
     min-height: 34px;
     padding: 8px 10px;
     font-size: 12px;
+    border-width: 1.5px;
+  }
+  
+  .message-text a.chat-inline-link::before {
+    top: -1.5px;
+    left: -1.5px;
+    right: -1.5px;
+    bottom: -1.5px;
+    border-radius: 8px;
+  }
+  
+  .message-text a.chat-inline-link::after {
+    border-radius: 6px;
+  }
+  
+  .message-text a.chat-inline-link i {
+    font-size: 14px;
+    width: 18px;
   }
 }
 
@@ -794,5 +858,23 @@
     padding: 6px 8px;
     min-height: 30px;
     border-radius: 6px;
+    border-width: 1.5px;
+  }
+  
+  .message-text a.chat-inline-link::before {
+    top: -1.5px;
+    left: -1.5px;
+    right: -1.5px;
+    bottom: -1.5px;
+    border-radius: 7px;
+  }
+  
+  .message-text a.chat-inline-link::after {
+    border-radius: 5px;
+  }
+  
+  .message-text a.chat-inline-link i {
+    font-size: 12px;
+    width: 16px;
   }
 }

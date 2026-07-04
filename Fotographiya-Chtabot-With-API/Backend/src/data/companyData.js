@@ -231,7 +231,7 @@ const companyData = {
     facebook: ['facebook', 'fb'],
     youtube: ['youtube', 'yt', 'video'],
     linkedin: ['linkedin', 'linked in'],
-    reddit: ['reddit'],
+    reddit: ['reddit', 'radit' , 'rdit'],
     medium: ['medium', 'blog'],
     pexels: ['pexels', 'stock photo', 'free photo'],
     social: ['social media', 'social links', 'all social', 'all social media'],
