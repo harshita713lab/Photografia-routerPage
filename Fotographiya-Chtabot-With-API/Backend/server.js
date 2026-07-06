@@ -24,7 +24,7 @@ const providers = [
     name: 'Gemini',
     key: process.env.GEMINI_API_KEY,
     endpoint: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent',
-    model: 'gemini-1.5-flash',
+    model: 'gemini-2.5-flash',
     type: 'gemini'
   },
   {
@@ -38,7 +38,7 @@ const providers = [
     name: 'Cerebras',
     key: process.env.CEREBRAS_API_KEY,
     endpoint: 'https://api.cerebras.ai/v1/chat/completions',
-    model: 'llama3.1-70b',  // ✅ Fixed
+    model: 'zai-glm-4.7',  // ✅ Fixed
     type: 'openai'
   }
 ];
