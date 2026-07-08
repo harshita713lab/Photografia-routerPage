@@ -17,7 +17,11 @@ const companyData = {
     mission: 'To transform wedding photography through the combination of professional photography, technology, and AI, delivering memorable experiences with fast, premium-quality services.',
     vision: 'To become one of India\'s most technology-driven wedding photography companies by continuously improving customer experience through innovation, automation, and high-quality visual storytelling.',
     tagline: 'Integrating technology in the art of wedding photography',
-    businessHours: 'Our team will respond as soon as possible during business hours. For urgent inquiries, please contact us via phone or WhatsApp.'
+    businessHours: 'Our team will respond as soon as possible during business hours. For urgent inquiries, please contact us via phone or WhatsApp.',
+    
+    // ✅ ADDED: Service Area Information
+    serviceArea: 'India Only (No International Services)',
+    destinationPolicy: 'Destination weddings available only within India. We do not provide services outside India.'
   },
 
   // ===== TEAM =====
@@ -129,7 +133,7 @@ Because when systems improve, respect improves. And when respect improves, India
     afterSalesSupport: `Dedicated support even after delivery. Revisions, archive management, album updates — we stay connected beyond the event. We use our custom-made CRM software so we can keep you updated.`
   },
 
-  // ===== SERVICES =====
+  // ===== SERVICES (ONLY ONE - WITH DESTINATION) =====
   services: {
     wedding: {
       name: 'Wedding Photography',
@@ -309,6 +313,56 @@ Availability depends on:
 • Client requirements
 • Additional equipment`
     },
+
+    // ✅ DESTINATION WEDDING - INDIA ONLY
+    destination: {
+      name: 'Destination Wedding Photography (India Only)',
+      description: `Professional destination wedding photography services **available only within India**.
+
+📍 **Coverage Areas:**
+• Rajasthan - Jaipur, Udaipur, Jodhpur, Jaisalmer
+• Goa - Beach & Resort weddings
+• Kerala - Backdrop & Temple weddings
+• Himachal Pradesh - Mountain & Lake weddings
+• Uttarakhand - Rishikesh, Nainital
+• South India - Tamil Nadu, Karnataka
+• North East India - Assam, Meghalaya
+• All other Indian states
+
+❌ **NOT Available:**
+• International destinations
+• Any country outside Indian territory
+
+📌 **Important:** We DO NOT provide destination wedding services outside India.
+
+**Inclusions:**
+• 2-3 days full event coverage
+• Pre-wedding shoot at destination
+• Cinematic wedding film
+• 300+ professionally edited photos
+• Drone aerial shots (where permitted)
+• Luxury wedding album
+• Travel & accommodation for team
+
+**Booking Requirements:**
+• Minimum 2 months advance notice
+• Travel charges apply separately
+• Accommodation charges apply separately`,
+      
+      coverage: [
+        'Rajasthan - Jaipur, Udaipur, Jodhpur, Jaisalmer',
+        'Goa - Beach & Resort weddings',
+        'Kerala - Backdrop & Temple weddings',
+        'Himachal Pradesh - Mountain weddings',
+        'Uttarakhand - Rishikesh, Nainital',
+        'South India - Tamil Nadu, Karnataka',
+        'North East - Assam, Meghalaya'
+      ],
+      
+      notAvailable: 'International destinations (Outside India)',
+      note: 'We only operate within India. International wedding services are not available.'
+    },
+
     pinkRun: {
       name: 'Pink Run & Marathons',
       description: 'Specialized event photography for marathons and community runs. Captures the vibrant sea of pink, shared enthusiasm, raw determination, and high-energy smiles of participants.',
@@ -329,7 +383,7 @@ Availability depends on:
       { name: 'Reception Photography', description: 'Professional coverage of wedding receptions' },
       { name: 'Candid Photography', description: 'Genuine emotions and natural expressions' },
       { name: 'Traditional Photography', description: 'Posed photographs and important ceremonial moments' },
-      { name: 'Destination Wedding', description: 'Destination wedding photography across India' },
+      { name: 'Destination Wedding', description: 'Destination wedding photography across India only' },
       { name: 'Anniversary Photography', description: 'Celebrate milestone moments' },
       { name: 'Maternity Shoot', description: 'Creative maternity photography celebrating pregnancy' },
       { name: 'Baby Shoot', description: 'Photography sessions for newborns, infants, and toddlers' },
@@ -344,7 +398,7 @@ Availability depends on:
       { name: 'Executive Headshots', description: 'Polished, publication-ready headshots for corporate profiles' },
       { name: 'Workspace & Industrial Photography', description: 'Capturing office culture, workspace design, warehouse hubs, and industrial yards' }
     ],
-    occasions: ['Wedding', 'Pre-Wedding', 'Engagement', 'Haldi', 'Mehendi', 'Sangeet', 'Reception', 'Corporate', 'Maternity', 'Baby Shoot', 'Birthday', 'Anniversary', 'Pink Run', 'Marathon'],
+    occasions: ['Wedding', 'Pre-Wedding', 'Engagement', 'Haldi', 'Mehendi', 'Sangeet', 'Reception', 'Corporate', 'Maternity', 'Baby Shoot', 'Birthday', 'Anniversary', 'Pink Run', 'Marathon', 'Destination Wedding'],
     styles: ['Traditional', 'Candid', 'Cinematography', 'Drone', 'Photobooth', 'Live Screening']
   },
 
@@ -370,15 +424,18 @@ Availability depends on:
     cancellationPolicy: 'Conditional'
   },
 
-  // ===== FAQ =====
+  // ===== FAQ (UPDATED) =====
   faq: [
     { q: 'Which photography services do you offer?', a: 'We provide wedding, candid, traditional, pre-wedding, engagement, Haldi, Mehendi, Sangeet, reception, maternity, baby, birthday, corporate, fashion, product, drone photography, cinematic films, live streaming, and Pink Run event photography.' },
     { q: 'Can I book only a pre-wedding shoot?', a: 'Yes. Individual services such as pre-wedding, maternity, birthday, and corporate photography can be booked separately.' },
-    { q: 'Do you travel outside Kota?', a: 'Yes. Destination weddings and outstation events can be covered. Travel charges may apply.' },
+    { q: 'Do you travel outside Kota?', a: 'Yes. We cover destination weddings and outstation events anywhere in India. Travel charges may apply. We do not provide services outside India.' },
     { q: 'Do you provide both photography and videography?', a: 'Yes. Both services can be booked individually or as a combined package.' },
     { q: 'What are the payment methods?', a: 'We accept Net Banking, Cash, Cheque/DD, Debit/Credit Cards, Mobile Wallets, and UPI. 25% advance is required for booking.' },
     { q: 'What is GoldenBox?', a: 'GoldenBox is our AI-powered local server system that delivers high-quality event photos instantly to attendees. No internet, no app, no phone number required. Guests scan a QR code and download photos in 3 seconds.' },
-    { q: 'Do you cover corporate events?', a: 'Yes. We provide corporate event photography including conferences, product launches, executive headshots, office culture, and industrial photography.' }
+    { q: 'Do you cover corporate events?', a: 'Yes. We provide corporate event photography including conferences, product launches, executive headshots, office culture, and industrial photography.' },
+    // ✅ NEW FAQ
+    { q: 'Do you shoot outside India?', a: 'No. We do not provide photography services outside India. We operate only within India.' },
+    { q: 'Do you cover international destination weddings?', a: 'No. We only provide destination wedding services within India. International weddings are not covered.' }
   ],
 
   // ===== PORTFOLIO =====
@@ -557,112 +614,95 @@ But don't just take our word for it; check out our portfolio and experience the 
   // KEYWORDS FOR DETECTION (MAXIMUM COVERAGE)
   // ========================================
   keywords: {
-    // Company
     company: ['fotographiya', 'photographiya', 'foto', 'company', 'studio', 'photography studio', 'wedding photography company', 'indian wedding photographer', 'photography services', 'photographer', 'candid photographer', 'traditional photographer', 'cinematographer', 'about company', 'tell me about company', 'your company', 'fotographiya company'],
 
-    // Academy
     academy: ['academy', 'fotographiya academy', 'photography course', 'learn photography', 'training', 'photography training', 'videography course', 'career in photography', 'photography career', 'paid internship', 'internship', 'courses', 'basic photography', 'basic videography', 'candid photography', 'cinematography', 'reelography', 'drone pilot', 'video editing', 'photo editing', 'master program', 'customized course', 'pick your specialization', 'phase one', 'phase two', 'outcome', 'commercial', 'birthday', 'jewelry', 'fashion', 'product', 'wedding', 'certificate', 'placement', 'top performer wins camera', 'real shoots', 'real clients', 'real experience', '9 months program', 'we are not instructors', 'career launchpad', 'photography classes', 'learn photography online', 'photography institute'],
 
-    // GoldenBox
     goldenbox: ['goldenbox', 'golden box', 'qr code', 'qr service', 'instant photo', 'real-time photo delivery', 'ai powered', 'no internet', 'no app download', 'no phone number', 'click and get', 'live entertainment', 'album selection', 'quick album selection', 'ai album selection', 'ai integrated', 'photo stylist', 'ai photo editor', 'handcrafted album', 'bespoke album', 'customized album', 'premium album', 'reelographer', 'same day reels', 'same day video', 'cinematic reels', 'professional camera equipment', 'latest cameras', 'drones', 'post production', 'color science', 'cinematic grading', 'skin tone optimization', 'after sales support', 'crm software', 'goldenbox ai', 'golden box system', 'qr photo delivery'],
 
-    // Services - Wedding
-    wedding: ['wedding', 'wedding photography', 'marriage', 'wedding shoot', 'wedding photographer', 'wedding coverage', 'wedding package', 'candid wedding', 'traditional wedding', 'wedding cinematography', 'wedding film', 'wedding videography', 'wedding ceremony', 'wedding reception', 'wedding portraits', 'bridal portraits', 'groom portraits', 'family portraits', 'wedding rituals', 'wedding traditions', 'indian wedding', 'rajasthan wedding', 'destination wedding', 'wedding photos', 'wedding album', 'wedding highlights', 'wedding teaser'],
+    wedding: ['wedding', 'wedding photography', 'marriage', 'wedding shoot', 'wedding photographer', 'wedding coverage', 'wedding package', 'candid wedding', 'traditional wedding', 'wedding cinematography', 'wedding film', 'wedding videography', 'wedding ceremony', 'wedding reception', 'wedding portraits', 'bridal portraits', 'groom portraits', 'family portraits', 'wedding rituals', 'wedding traditions', 'indian wedding', 'rajasthan wedding', 'wedding photos', 'wedding album', 'wedding highlights', 'wedding teaser'],
 
-    // Pre-Wedding
     prewedding: ['pre wedding', 'prewedding', 'engagement', 'engagement shoot', 'engagement photography', 'pre marriage shoot', 'couple shoot', 'couple photography', 'love story', 'romantic shoot', 'pre wedding photos', 'save the date', 'engagement announcement', 'couple portraits', 'pre wedding film', 'cinematic pre wedding'],
 
-    // Haldi
     haldi: ['haldi', 'haldi ceremony', 'haldi photography', 'haldi coverage', 'turmeric ceremony', 'haldi ritual', 'haldi function', 'haldi photos', 'haldi candid', 'haldi traditional'],
 
-    // Mehendi
     mehendi: ['mehendi', 'mehndi', 'mehendi ceremony', 'mehndi photography', 'mehendi coverage', 'mehndi function', 'henna ceremony', 'mehendi photos', 'mehendi dance', 'mehendi celebration'],
 
-    // Sangeet
     sangeet: ['sangeet', 'sangeet ceremony', 'sangeet photography', 'sangeet coverage', 'sangeet function', 'sangeet dance', 'sangeet performance', 'sangeet photos', 'sangeet videography', 'musical night', 'dance performance'],
 
-    // Reception
     reception: ['reception', 'reception photography', 'reception coverage', 'reception ceremony', 'reception function', 'reception photos', 'reception videography', 'wedding reception', 'reception party', 'reception stage', 'cake cutting', 'guest portraits'],
 
-    // Maternity
     maternity: ['maternity', 'maternity shoot', 'maternity photography', 'pregnancy photography', 'maternity photos', 'pregnancy shoot', 'baby bump', 'expecting mother', 'maternity portraits', 'maternity session'],
 
-    // Baby
     baby: ['baby', 'baby shoot', 'baby photography', 'newborn photography', 'infant photography', 'toddler photography', 'baby photos', 'baby session', 'cake smash', 'baby milestones', 'newborn shoot', 'baby portraits'],
 
-    // Birthday
     birthday: ['birthday', 'birthday photography', 'birthday shoot', 'birthday photos', 'birthday party', 'birthday celebration', 'cake cutting', 'birthday portraits', 'kids birthday', 'birthday event'],
 
-    // Corporate
     corporate: ['corporate', 'corporate photography', 'business photography', 'corporate event', 'headshots', 'product photography', 'brand campaigns', 'conference photography', 'team photo', 'corporate headshots', 'executive portraits', 'office photography', 'workspace photography', 'industrial photography', 'corporate event coverage', 'company event', 'team building', 'award ceremony', 'product launch', 'seminar photography'],
 
-    // Pink Run
     pinkRun: ['pink run', 'marathon', 'pink marathon', 'run photography', 'marathon photography', 'event photography', 'community run', 'pink event', 'women run', 'running event', 'marathon coverage', 'pink run kota', 'pink run rajasthan'],
 
-    // Fashion
     fashion: ['fashion', 'fashion photography', 'fashion shoot', 'editorial photography', 'lookbook', 'fashion brand', 'model photography', 'studio photography', 'fashion portraits', 'portfolio shoot', 'fashion editorial'],
 
-    // Product
     product: ['product', 'product photography', 'product shoot', 'e-commerce photography', 'catalog photography', 'product photos', 'commercial photography', 'product branding', 'jewelry photography', 'food photography', 'clothing photography'],
 
-    // Drone
     drone: ['drone', 'drone photography', 'aerial photography', 'drone videography', 'aerial view', 'drone shots', 'drone coverage', 'drone wedding', 'aerial wedding', 'drone filming'],
 
-    // Cinematic
     cinematic: ['cinematic', 'cinematic film', 'wedding film', 'cinematic wedding', 'highlight film', 'wedding teaser', 'cinematic video', 'wedding movie', 'cinematic storytelling', 'wedding cinema'],
 
-    // Live Streaming
     livestream: ['live streaming', 'live stream', 'live broadcast', 'livestreaming', 'wedding live', 'event live', 'remote viewing', 'online wedding', 'virtual wedding', 'live coverage'],
 
-    // Packages
     packages: ['silver', 'golden', 'premium', 'package', 'packages', 'pakages', 'pricing', 'price', 'cost', 'budget', 'wedding package', 'photography package', 'package details', 'package price'],
 
-    // About
     about: ['about', 'about us', 'who we are', 'mission', 'vision', 'founder', 'mohit', 'barthunia', 'awards', 'recognition', 'nakashatra', 'dainik angad', 'jeeto marathon', 'goldenbox inventor', 'company history', 'our story', 'about fotographiya', 'company mission', 'company vision'],
 
-    // Team
     team: ['team', 'employees', 'staff', 'people', 'workers', 'production team', 'tech team', 'operation team', 'management team', 'sales team', 'digital marketing team', 'how many employees', 'company team', 'photographers team', 'cinematographers team', 'drone operators', 'editors', 'album designers'],
 
-    // Portfolio
     portfolio: ['portfolio', 'gallery', 'work', 'samples', 'showcase', 'couples', '100 couples', 'wedding portfolio', 'our work', 'past work', 'wedding gallery', 'photo gallery', 'sample photos'],
 
-    // Contact
     contact: ['contact', 'reach us', 'find us', 'phone', 'call', 'email', 'whatsapp', 'address', 'location', 'kota', 'rajasthan', 'office address', 'istart nest', 'cad circle', 'gumanpura', 'contact number', 'contact details', 'get in touch', 'reach out'],
 
-    // Booking
     booking: ['book', 'booking', 'how to book', 'book event', 'book wedding', 'inquiry', 'enquire', 'hire', 'steps to book', 'booking process', 'book shoot', 'book photographer', 'hire photographer', 'wedding booking'],
 
-    // Testimonials
     testimonials: ['testimonials', 'reviews', 'client feedback', 'happy clients', 'what clients say', 'ashveen', 'annie', 'priyanka', '5 star', 'rating', 'client review', 'customer review', 'feedback', 'google review'],
 
-    // Social Media
     social: ['social media', 'social links', 'all social', 'instagram', 'facebook', 'youtube', 'linkedin', 'reddit', 'medium', 'pexels', 'follow us', 'social handles'],
 
-    // Technology
     technology: ['technology', 'ai', 'artificial intelligence', 'goldenbox', 'tech', 'qr', 'app', 'software', 'automation', 'ai tools', 'ai photography', 'tech driven'],
 
-    // Pages
     pages: ['home', 'about us', 'services page', 'wedding page', 'pre wedding page', 'destination page', 'anniversary page', 'corporate page', 'academy page', 'portfolio page', 'contact page', 'website page'],
 
-    // FAQ
     faq: ['faq', 'frequently asked questions', 'questions', 'can i book', 'do you travel', 'do you provide', 'which services', 'common questions', 'help', 'support'],
 
-    // Greetings
     greetings: ['hello', 'helo', 'hii', 'hi', 'hey', 'good morning', 'good afternoon', 'good evening', 'namaste', 'नमस्ते', 'कैसे हो', 'how are you', 'good day', 'hola', 'whats up'],
 
-    // Help
     help: ['how can you help', 'what can you tell me', 'what do you do', 'help me', 'help', 'assist', 'support', 'information', 'tell me about', 'what is', 'who is', 'where is', 'how to'],
 
-    // General
     general: ['fotographiya', 'photographiya', 'foto', 'company', 'studio', 'photography studio', 'wedding photography company', 'indian wedding photographer', 'photography services', 'photographer', 'candid photographer', 'traditional photographer', 'cinematographer', 'photo', 'video', 'film', 'shoot', 'session'],
 
-    // Anniversary
     anniversary: ['anniversary', 'anniversary photography', 'anniversary shoot', 'milestone', 'anniversary celebration', 'wedding anniversary', 'anniversary photos'],
 
-    // Destination
-    destination: ['destination', 'destination wedding', 'destination shoot', 'outstation wedding', 'travel wedding', 'royal wedding', 'beach wedding', 'fort wedding', 'destination photography'],
+    // ✅ UPDATED DESTINATION KEYWORDS
+    destination: [
+      'destination', 'destination wedding', 'destination shoot', 'outstation wedding', 
+      'travel wedding', 'royal wedding', 'beach wedding', 'fort wedding', 
+      'destination photography', 'india destination', 'indian destination',
+      'destination wedding india', 'wedding in rajasthan', 'wedding in goa',
+      'wedding in kerala', 'wedding in himachal', 'jaipur wedding', 'udaipur wedding',
+      'jodhpur wedding', 'goa wedding', 'kerala wedding', 'destination package',
+      'outstation shoot', 'travel shoot', 'wedding travel'
+    ],
 
-    // Payment
+    // ✅ NEW: International Keywords for Detection
+    international: [
+      'international', 'outside india', 'abroad', 'foreign', 'overseas',
+      'usa', 'uk', 'dubai', 'uae', 'europe', 'america', 'canada',
+      'australia', 'singapore', 'malaysia', 'thailand', 'bali',
+      'international wedding', 'foreign wedding', 'abroad wedding',
+      'usa wedding', 'uk wedding', 'dubai wedding', 'europe wedding',
+      'shoot outside india', 'photography outside india', 'international destination'
+    ],
+
     payment: ['payment', 'pay', 'cost', 'price', 'rate', 'charges', 'fee', 'advance', 'booking fee', 'payment method', 'net banking', 'upi', 'card payment', 'cash payment']
   }
 };

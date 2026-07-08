@@ -878,3 +878,50 @@
     width: 16px;
   }
 }
+/* ==============================
+   MARKDOWN STYLES
+   ============================== */
+
+/* Bold text */
+.chat-bold,
+.message-text strong {
+  font-weight: 700;
+  color: inherit;
+}
+
+/* Italic text */
+.message-text em {
+  font-style: italic;
+}
+
+/* Lists */
+.chat-list {
+  margin: 6px 0;
+  padding-left: 0;
+  list-style: none;
+}
+
+.chat-list-item {
+  margin: 2px 0;
+  padding-left: 4px;
+}
+
+/* For user messages - dark theme */
+.user-bubble .chat-bold,
+.user-bubble .message-text strong {
+  color: #ffffff;
+}
+
+.user-bubble .chat-list-item {
+  color: #ffffff;
+}
+
+/* For bot messages - light theme */
+.bot-bubble .chat-bold,
+.bot-bubble .message-text strong {
+  color: #1a1a1a;
+}
+
+.bot-bubble .chat-list-item {
+  color: #1a1a1a;
+}
