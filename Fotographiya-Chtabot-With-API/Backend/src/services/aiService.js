@@ -57,6 +57,8 @@ class AIProvider {
 // ============================================
 // ✅ GROQ PROVIDER
 // ============================================
+// aiService.js - Updated GroqProvider
+
 class GroqProvider extends AIProvider {
   constructor() {
     super(Config.GROQ_API_KEY);
@@ -65,7 +67,11 @@ class GroqProvider extends AIProvider {
   }
 
   async getResponse(userMessage, systemPrompt) {
-    if (!this.apiKey) return null;
+    // ✅ Check API key exists
+    if (!this.apiKey) {
+      console.log('⚠️ Groq: No API key found');
+      return null;
+    }
     
     try {
       const response = await axios.post(
@@ -88,9 +94,26 @@ class GroqProvider extends AIProvider {
         }
       );
       
-      return response.data.choices?.[0]?.message?.content || null;
+      const content = response.data.choices?.[0]?.message?.content;
+      if (content) {
+        console.log("✅ Groq Response Success!");
+        return content;
+      }
+      return null;
+      
     } catch (error) {
-      console.log("⚠️ Groq Failed:", error.message);
+      // ✅ Better error logging
+      if (error.response) {
+        console.log(`⚠️ Groq Failed: ${error.response.status}`);
+        if (error.response.status === 429) {
+          console.log('   Rate limit exceeded - trying next provider...');
+        }
+        if (error.response.status === 401) {
+          console.log('   Invalid API key - check your GROQ_API_KEY');
+        }
+      } else {
+        console.log("⚠️ Groq Failed:", error.message);
+      }
       return null;
     }
   }
@@ -218,9 +241,18 @@ class GeminiProvider extends AIProvider {
 // ✅ PROMPT BUILDER
 // ============================================
 class PromptBuilder {
-  static buildSystemPrompt(context) {
-    return `
+  // aiService.js - PromptBuilder
+
+static buildSystemPrompt(context) {
+  return `
 You are Fotographiya's official AI photography assistant.
+
+🚨 **CRITICAL RULES - MUST FOLLOW:**
+1. For destination wedding questions, ALWAYS mention Indian destinations ONLY
+2. ONLY say "We only operate within India" if user specifically asks about OUTSIDE India
+3. NEVER mention international destinations unless the user asks about them
+4. If user asks about international, reply: "We only operate within India. We do not provide services outside India."
+5. Normal responses should not mention "India Only" unless asked
 
 🎯 **RESPONSE GUIDELINES - FOLLOW EXACTLY:**
 
@@ -231,20 +263,34 @@ STRUCTURE:
 4. 💡 [Question]
 
 ========================================
-EXAMPLE:
+EXAMPLE FOR DESTINATION WEDDING:
 ========================================
-📸 **Pre-Wedding Photography Services**
+🏖️ **Destination Wedding Photography**
 
-We offer professional pre-wedding photography services for couples. Our team captures romantic moments at scenic locations with expert editing and creative direction.
+We offer professional destination wedding photography services across India. Our team covers all major Indian destinations including Rajasthan, Goa, Kerala, and Himachal Pradesh.
 
 **Key Points:**
-• Available at multiple scenic locations
-• Professional editing and retouching
+• Available in Rajasthan, Goa, Kerala, Himachal Pradesh
+• Professional photography and cinematography
 • Customized packages for every couple
+• Travel and accommodation arrangements
 
-**Learn More:** [Pre-Wedding Photography](https://www.fotographiya.com/services/prewedding-photography)
+**Learn More:** [Destination Wedding](https://www.fotographiya.com/services/destination-wedding)
 
-💡 Would you like to see our portfolio?
+💡 Would you like to know more about our destination wedding packages?
+========================================
+
+EXAMPLE FOR "DO YOU SHOOT OUTSIDE INDIA?":
+========================================
+❌ **No International Services**
+
+We only operate within India. We do not provide photography services outside India.
+
+📍 **Our Coverage:**
+• All Indian states
+• Rajasthan, Goa, Kerala, Himachal Pradesh
+
+💡 Would you like to know about our Indian destination packages?
 ========================================
 
 COMPANY CONTEXT:
@@ -258,8 +304,11 @@ IMPORTANT RULES:
 5. No duplicate sections
 6. Maintain professional tone throughout
 7. Use appropriate emoji for the topic
+8. For normal destination wedding questions, mention Indian destinations ONLY
+9. ONLY say "India Only" if user specifically asks about outside India
+10. If user asks about outside India, clearly say "NO" with full explanation
 `;
-  }
+}
 }
 
 // ============================================
@@ -284,61 +333,129 @@ class ResponseFormatter {
     return this._buildFinalResponse(extracted);
   }
 
-  static _fixBrokenLinks(text) {
-    const fixes = [
-      [/https:\/\/www\.\s*\)/g, 'https://www.fotographiya.com/about)'],
-      [/https:\/\/www\.\)/g, 'https://www.fotographiya.com/about)'],
-      [/\[About Us\]\(https:\/\/www\.\)/g, '[About Us](https://www.fotographiya.com/about)'],
-      [/\[About Us\]\(com\/about\)/g, '[About Us](https://www.fotographiya.com/about)'],
-      [/\[Portfolio\]\(https:\/\/www\.\)/g, '[Portfolio](https://www.fotographiya.com/portfolio)'],
-      [/\[Contact Us\]\(https:\/\/www\.\)/g, '[Contact Us](https://www.fotographiya.com/contact)'],
-    ];
-    
-    let fixedText = text;
-    for (const [pattern, replacement] of fixes) {
-      fixedText = fixedText.replace(pattern, replacement);
-    }
-    return fixedText;
-  }
+  // aiService.js - ResponseFormatter
 
-  static _removeDuplicateHeaders(text) {
-    const lines = text.split('\n');
-    const cleanedLines = [];
-    let foundFirstContent = false;
-    let hasKeyPoints = false;
-    let hasLearnMore = false;
+static _fixBrokenLinks(text) {
+  const fixes = [
+    // Existing fixes
+    [/https:\/\/www\.\s*\)/g, 'https://www.fotographiya.com/about)'],
+    [/https:\/\/www\.\)/g, 'https://www.fotographiya.com/about)'],
+    [/\[About Us\]\(https:\/\/www\.\)/g, '[About Us](https://www.fotographiya.com/about)'],
+    [/\[About Us\]\(com\/about\)/g, '[About Us](https://www.fotographiya.com/about)'],
+    [/\[Portfolio\]\(https:\/\/www\.\)/g, '[Portfolio](https://www.fotographiya.com/portfolio)'],
+    [/\[Contact Us\]\(https:\/\/www\.\)/g, '[Contact Us](https://www.fotographiya.com/contact)'],
+    [/\[Destination Wedding\]\(https:\/\/www\.\)/g, '[Destination Wedding](https://www.fotographiya.com/services/destination-wedding)'],
+    [/destination-wedding-services/g, 'destination-wedding'],
+    [/destination-weddingservices/g, 'destination-wedding'],
     
-    for (const line of lines) {
-      const trimmed = line.trim();
-      
-      if (!foundFirstContent) {
-        if (this._isHeaderToSkip(trimmed)) {
-          continue;
-        }
-        foundFirstContent = true;
-      }
-      
-      if (trimmed.startsWith('**Key Points:**') || trimmed.startsWith('Key Points:')) {
-        if (!hasKeyPoints) {
-          hasKeyPoints = true;
-          cleanedLines.push('**Key Points:**');
-        }
+    // ✅ ADD THESE NEW FIXES:
+    // Fix incomplete "About Us" links
+    [/\[About Us\]\(https:\/\/www\.\s*\)/g, '[About Us](https://www.fotographiya.com/about)'],
+    [/\[About Us\]\(http:\/\/www\.\)/g, '[About Us](https://www.fotographiya.com/about)'],
+    [/About Us\s*https:\/\/www\./g, '[About Us](https://www.fotographiya.com/about)'],
+    
+    // Fix any link with just domain
+    [/\[([^\]]+)\]\(https:\/\/www\.\)/g, '[$1](https://www.fotographiya.com/about)'],
+    
+    // Fix "Learn More: About Us" without link
+    [/Learn More:\s*About Us\s*$/gm, '**Learn More:** [About Us](https://www.fotographiya.com/about)'],
+    [/Learn More:\s*Portfolio\s*$/gm, '**Learn More:** [Portfolio](https://www.fotographiya.com/portfolio)'],
+    [/Learn More:\s*Contact Us\s*$/gm, '**Learn More:** [Contact Us](https://www.fotographiya.com/contact)'],
+    
+    // Remove extra spaces after links
+    [/\]\(\s*\)/g, '](https://www.fotographiya.com/about)'],
+  ];
+  
+  let fixedText = text;
+  for (const [pattern, replacement] of fixes) {
+    fixedText = fixedText.replace(pattern, replacement);
+  }
+  return fixedText;
+}
+  // aiService.js - ResponseFormatter
+
+static _removeDuplicateHeaders(text) {
+  const lines = text.split('\n');
+  const cleanedLines = [];
+  let foundFirstContent = false;
+  let hasKeyPoints = false;
+  let hasLearnMore = false;
+  let skipUntilContent = false;
+  
+  for (const line of lines) {
+    const trimmed = line.trim();
+    
+    // ===== SKIP ALL HEADERS AT THE START =====
+    if (!foundFirstContent) {
+      // Skip "## Key Points:", "### Key Points:", "Key Points:", etc.
+      if (trimmed.startsWith('## Key Points:') || 
+          trimmed.startsWith('### Key Points:') ||
+          trimmed.startsWith('**Key Points:**') || 
+          trimmed.startsWith('Key Points:') ||
+          trimmed.startsWith('📸 Key Points:') ||
+          trimmed.startsWith('##') || trimmed.startsWith('###') || trimmed.startsWith('#')) {
+        // Skip this line and mark to skip next lines if they are the intro
+        skipUntilContent = true;
         continue;
       }
       
-      if (trimmed.startsWith('**Learn More:**') || trimmed.startsWith('Learn More:')) {
-        if (!hasLearnMore) {
-          hasLearnMore = true;
-          cleanedLines.push(line);
-        }
+      // If it's a bullet point at start, skip it
+      if (trimmed.startsWith('•') || trimmed.startsWith('-') || trimmed.startsWith('*')) {
         continue;
       }
       
-      cleanedLines.push(line);
+      // If it's an empty line, skip it
+      if (trimmed === '') {
+        continue;
+      }
+      
+      // Found first real content
+      foundFirstContent = true;
+      skipUntilContent = false;
     }
     
-    return cleanedLines.join('\n');
+    // ===== HANDLE DUPLICATE SECTIONS =====
+    if (trimmed.startsWith('## Key Points:') || 
+        trimmed.startsWith('### Key Points:') ||
+        trimmed.startsWith('**Key Points:**') || 
+        trimmed.startsWith('Key Points:')) {
+      if (!hasKeyPoints) {
+        hasKeyPoints = true;
+        cleanedLines.push('**Key Points:**');
+      }
+      continue;
+    }
+    
+    if (trimmed.startsWith('## Learn More:') || 
+        trimmed.startsWith('### Learn More:') ||
+        trimmed.startsWith('**Learn More:**') || 
+        trimmed.startsWith('Learn More:')) {
+      if (!hasLearnMore) {
+        hasLearnMore = true;
+        // Keep the link that follows
+        cleanedLines.push('**Learn More:**');
+      }
+      continue;
+    }
+    
+    // Skip lines that were part of the skipped header section
+    if (skipUntilContent) {
+      // If it's short text (intro), skip it
+      if (trimmed.length < 100 && !trimmed.includes('.')) {
+        continue;
+      }
+      // If it's a bullet point, skip it
+      if (trimmed.startsWith('•') || trimmed.startsWith('-') || trimmed.startsWith('*')) {
+        continue;
+      }
+      skipUntilContent = false;
+    }
+    
+    cleanedLines.push(line);
   }
+  
+  return cleanedLines.join('\n');
+}
 
   static _isHeaderToSkip(trimmed) {
     const skipPatterns = [
@@ -424,7 +541,17 @@ class ResponseFormatter {
       const point = match[1].trim();
       if (point && point.length > 5 && 
           !point.startsWith('Learn More') && 
-          !point.startsWith('Key')) {
+          !point.startsWith('Key') &&
+          !point.includes('Bali') &&
+          !point.includes('Maldives') &&
+          !point.includes('Thailand') &&
+          !point.includes('Dubai') &&
+          !point.includes('USA') &&
+          !point.includes('UK') &&
+          !point.includes('Europe') &&
+          !point.includes('America') &&
+          !point.includes('Australia') &&
+          !point.includes('Singapore')) {
         points.push(point);
       }
     }
@@ -434,7 +561,9 @@ class ResponseFormatter {
       for (const sent of sentences.slice(1, 5)) {
         const clean = sent.trim();
         if (clean.length > 15 && clean.length < 100 && 
-            !clean.includes('?') && !clean.includes('Learn More')) {
+            !clean.includes('?') && !clean.includes('Learn More') &&
+            !clean.includes('Bali') && !clean.includes('Maldives') &&
+            !clean.includes('Thailand') && !clean.includes('Dubai')) {
           points.push(clean);
           if (points.length >= 4) break;
         }
@@ -456,11 +585,20 @@ class ResponseFormatter {
       if (url === 'https://www.') {
         url = 'https://www.fotographiya.com/about';
       }
+      // Fix destination links
+      if (url.includes('destination-wedding-services')) {
+        url = 'https://www.fotographiya.com/services/destination-wedding';
+      }
+      if (url.includes('destination-weddingservices')) {
+        url = 'https://www.fotographiya.com/services/destination-wedding';
+      }
       return { text: match[1], url };
     }
     
     const titleLower = title.toLowerCase();
-    if (titleLower.includes('about') || titleLower.includes('history')) {
+    if (titleLower.includes('destination') || titleLower.includes('wedding')) {
+      return { text: 'Destination Wedding', url: 'https://www.fotographiya.com/services/destination-wedding' };
+    } else if (titleLower.includes('about') || titleLower.includes('history')) {
       return { text: 'About Us', url: 'https://www.fotographiya.com/about' };
     } else if (titleLower.includes('portfolio') || titleLower.includes('gallery')) {
       return { text: 'Portfolio', url: 'https://www.fotographiya.com/portfolio' };
@@ -498,6 +636,7 @@ class ResponseFormatter {
       'golden': '✨',
       'goldenbox': '✨',
       'academy': '🎓',
+      'destination': '🏖️',
       'welcome': '👋',
       'hello': '👋',
       'hi': '👋'
@@ -511,42 +650,62 @@ class ResponseFormatter {
     return '📸';
   }
 
-  static _buildFinalResponse(content) {
-    let formatted = ` ${content.emoji} **${content.title}**\n\n`;
-    
-    // Add summary
-    if (content.summary) {
-      formatted += `${content.summary}\n\n`;
-    }
-    
-    // Add key points
+  // aiService.js - ResponseFormatter
+
+static _buildFinalResponse(content) {
+  // ✅ Remove any leading "Key Points" that might have been added
+  let formatted = '';
+  
+  // Skip if the content is just "Key Points"
+  if (content.title === 'Key Points' || content.title === 'Key Points:') {
+    // Use the first point as title instead
     if (content.points.length > 0) {
-      formatted += `**Key Points:**\n`;
-      for (const point of content.points.slice(0, 4)) {
-        formatted += `• ${point}\n`;
-      }
-      formatted += '\n';
+      content.title = 'Fotographiya';
     }
-    
-    // Add learn more link
-    if (content.linkText && content.linkUrl) {
-      formatted += `**Learn More:** [${content.linkText}](${content.linkUrl})\n\n`;
-    }
-    
-    // Add question
-    if (content.question) {
-      formatted += `💡 ${content.question}`;
-    } else {
-      formatted += `💡 What would you like to know more about?`;
-    }
-    
-    // Cleanup
-    formatted = formatted.replace(/\n{3,}/g, '\n\n');
-    formatted = formatted.replace(/\*\*Key Points:\*\*\s*\*\*Key Points:\*\*/g, '**Key Points:**');
-    formatted = formatted.replace(/^\s*\*\*Key Points:\*\*\s*/m, '');
-    
-    return formatted.trim();
   }
+  
+  formatted = ` ${content.emoji} **${content.title}**\n\n`;
+  
+  // Add summary
+  if (content.summary) {
+    formatted += `${content.summary}\n\n`;
+  }
+  
+  // Add key points
+  if (content.points.length > 0) {
+    formatted += `**Key Points:**\n`;
+    for (const point of content.points.slice(0, 4)) {
+      formatted += `• ${point}\n`;
+    }
+    formatted += '\n';
+  }
+  
+  // Add learn more link
+  if (content.linkText && content.linkUrl) {
+    formatted += `**Learn More:** [${content.linkText}](${content.linkUrl})\n\n`;
+  } else {
+    // ✅ Default link if missing
+    formatted += `**Learn More:** [About Us](https://www.fotographiya.com/about)\n\n`;
+  }
+  
+  // Add question
+  if (content.question) {
+    formatted += `💡 ${content.question}`;
+  } else {
+    formatted += `💡 What would you like to know more about?`;
+  }
+  
+  // Cleanup
+  formatted = formatted.replace(/\n{3,}/g, '\n\n');
+  formatted = formatted.replace(/\*\*Key Points:\*\*\s*\*\*Key Points:\*\*/g, '**Key Points:**');
+  formatted = formatted.replace(/^\s*\*\*Key Points:\*\*\s*/m, '');
+  
+  // ✅ Remove any "## Key Points:" that slipped through
+  formatted = formatted.replace(/^##\s*Key Points:\s*/m, '');
+  formatted = formatted.replace(/^###\s*Key Points:\s*/m, '');
+  
+  return formatted.trim();
+}
 }
 
 // ============================================
@@ -564,6 +723,11 @@ class FallbackResponse {
     // Farewell
     if (this._isFarewell(msg)) {
       return this._getFarewellResponse();
+    }
+    
+    // International Check FIRST
+    if (this._isInternational(msg)) {
+      return this._getInternationalResponse();
     }
     
     // Service-specific
@@ -614,8 +778,55 @@ class FallbackResponse {
     return `Thank you for visiting Fotographiya! 👋 Have a wonderful day. Feel free to reach out anytime.`;
   }
 
+  // ✅ INTERNATIONAL DETECTION
+  static _isInternational(msg) {
+    const keywords = [
+      'international', 'outside india', 'abroad', 'foreign', 'overseas',
+      'bali', 'maldives', 'thailand', 'dubai', 'uae', 'usa', 'uk', 
+      'europe', 'america', 'canada', 'australia', 'singapore', 'malaysia',
+      'international wedding', 'foreign wedding', 'abroad wedding',
+      'usa wedding', 'uk wedding', 'dubai wedding', 'europe wedding',
+      'shoot outside india', 'photography outside india'
+    ];
+    return keywords.some(kw => msg.includes(kw));
+  }
+
+  static _getInternationalResponse() {
+    return `❌ **No International Services**
+
+Fotographiya only operates within India. We do not provide photography services outside India.
+
+📍 **Our Coverage:**
+• All Indian states
+• Rajasthan, Goa, Kerala, Himachal Pradesh
+• South India, North East India
+
+💡 Would you like to know about our Indian destination wedding packages?`;
+  }
+
   static _getServiceResponse(msg) {
     const serviceMap = [
+      {
+        keywords: ['destination', 'outstation', 'travel wedding', 'destination wedding'],
+        response: `🏖️ **Destination Wedding Photography (India Only)**
+
+We offer professional destination wedding photography services available only within India. We do not cover international destinations like Bali, Maldives, Thailand, Dubai, etc.
+
+📍 **Indian Destinations We Cover:**
+• Rajasthan - Jaipur, Udaipur, Jodhpur, Jaisalmer
+• Goa - Beach & Resort weddings
+• Kerala - Backdrop & Temple weddings
+• Himachal Pradesh - Mountain weddings
+• Uttarakhand - Rishikesh, Nainital
+• South India - Tamil Nadu, Karnataka
+• All other Indian states
+
+❌ **Not Available:** International destinations
+
+**Learn More:** [Destination Wedding](https://www.fotographiya.com/services/destination-wedding)
+
+💡 Would you like to know about our Indian destination packages?`
+      },
       {
         keywords: ['pre wedding', 'prewedding'],
         response: `📸 **Pre-Wedding Photography Services**
@@ -807,23 +1018,37 @@ I'm your professional AI photography assistant. I can provide information about 
 // ============================================
 // ✅ AI RESPONSE HANDLER
 // ============================================
+// aiService.js - FIXED
+
+// ============================================
+// ✅ AI RESPONSE HANDLER (FIXED)
+// ============================================
 class AIResponseHandler {
   constructor() {
-    this.providers = [
-      new GroqProvider(),
-      new MistralProvider(),
-      new CerebrasProvider(),
-      new GeminiProvider()
+    // Store provider classes, not instances
+    this.providerClasses = [
+      GroqProvider,
+      MistralProvider,
+      CerebrasProvider,
+      GeminiProvider
     ];
   }
 
   async getAIResponse(userMessage, context) {
     const systemPrompt = PromptBuilder.buildSystemPrompt(context);
     
-    for (const provider of this.providers) {
-      const response = await provider.getResponse(userMessage, systemPrompt);
-      if (response) {
-        return ResponseFormatter.formatResponse(response);
+    // Try each provider with a fresh instance
+    for (const ProviderClass of this.providerClasses) {
+      try {
+        const provider = new ProviderClass();
+        const response = await provider.getResponse(userMessage, systemPrompt);
+        if (response) {
+          console.log(`✅ ${ProviderClass.name} responded successfully!`);
+          return ResponseFormatter.formatResponse(response);
+        }
+      } catch (error) {
+        console.log(`⚠️ ${ProviderClass.name} failed:`, error.message);
+        // Continue to next provider
       }
     }
     
@@ -831,7 +1056,6 @@ class AIResponseHandler {
     return FallbackResponse.getResponse(userMessage);
   }
 }
-
 // ============================================
 // ✅ EXPORTS
 // ============================================

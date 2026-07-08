@@ -20,7 +20,23 @@ function isOffTopic(message) {
 }
 
 // ============================================
-// ✅ CHAT MESSAGE ROUTE
+// ✅ INTERNATIONAL KEYWORDS CHECK
+// ============================================
+const INTERNATIONAL_KEYWORDS = [
+  'bali', 'maldives', 'thailand', 'dubai', 'uae', 'usa', 'uk', 'europe',
+  'america', 'canada', 'australia', 'singapore', 'malaysia', 'international',
+  'outside india', 'abroad', 'foreign', 'overseas', 'international wedding',
+  'shoot outside india', 'photography outside india', 'do you shoot outside',
+  'outside country', 'foreign country', 'other country'
+];
+
+function isInternationalQuestion(message) {
+  const msg = message.toLowerCase();
+  return INTERNATIONAL_KEYWORDS.some(keyword => msg.includes(keyword));
+}
+
+// ============================================
+// ✅ CHAT MESSAGE ROUTE - ONLY ONE!
 // ============================================
 router.post('/message', async (req, res) => {
   try {
@@ -35,7 +51,18 @@ router.post('/message', async (req, res) => {
 
     console.log(`📩 Message: ${message}`);
 
-    // 🔥 Check if it's an off-topic question
+    // 🔥 STEP 1: Check if it's about international services
+    if (isInternationalQuestion(message)) {
+      return res.json({
+        success: true,
+        data: {
+          message: "❌ **No International Services**\n\nWe only operate within India. We do not provide photography services outside India.\n\n📍 **Our Coverage:** All Indian states including Rajasthan, Goa, Kerala, Himachal Pradesh, and more.\n\n💡 Would you like to know about our Indian destination wedding packages?",
+          timestamp: new Date().toISOString()
+        }
+      });
+    }
+
+    // 🔥 STEP 2: Check if it's an off-topic question
     if (isOffTopic(message)) {
       return res.json({
         success: true,
@@ -46,6 +73,7 @@ router.post('/message', async (req, res) => {
       });
     }
     
+    // 🔥 STEP 3: Get AI response
     const context = scraperService.buildContextForAI(message);
     const reply = await getAIResponse(message, context);
     
