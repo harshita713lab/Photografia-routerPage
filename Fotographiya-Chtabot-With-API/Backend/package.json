@@ -8,29 +8,20 @@
     "start": "node --max-old-space-size=4096 server.js"
   },
   "dependencies": {
-    "@google/generative-ai": "^0.24.1",
-    "@playwright/test": "^1.61.1",
-    "axios": "^1.18.1",
-    "cheerio": "^1.2.0",
-    "cors": "^2.8.6",
-    "dotenv": "^16.6.1",
-    "express": "^4.22.2",
-    "express-rate-limit": "^8.5.2",
-    "helmet": "^7.2.0",
-    "morgan": "^1.11.0",
-    "puppeteer": "^25.3.0",
+    "@google/generative-ai": "^0.21.0",
+    "axios": "^1.7.2",
+    "cheerio": "^1.0.0-rc.12",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "express-rate-limit": "^7.2.0",
+    "helmet": "^7.1.0",
+    "morgan": "^1.10.0",
+    "puppeteer": "^22.10.0",
     "puppeteer-extra": "^3.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2"
   },
   "devDependencies": {
-    "nodemon": "^3.1.14"
-  },
-  "keywords": [
-    "chatbot",
-    "photography",
-    "ai",
-    "groq"
-  ],
-  "author": "Fotographiya",
-  "license": "ISC"
+    "nodemon": "^3.1.4"
+  }
 }

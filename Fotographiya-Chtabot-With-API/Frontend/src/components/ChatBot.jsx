@@ -6,6 +6,8 @@ import TypingIndicator from './TypingIndicator'
 
 const ChatBot = () => {
   const [isOpen, setIsOpen] = useState(false)
+  
+  // ✅ FIX: Always start with welcome message - NO localStorage
   const [messages, setMessages] = useState([
     {
       id: 1,
@@ -14,11 +16,13 @@ const ChatBot = () => {
       timestamp: new Date()
     }
   ])
+  
   const [isLoading, setIsLoading] = useState(false)
+  const [isInitialLoading, setIsInitialLoading] = useState(true)
   const [sessionId, setSessionId] = useState(null)
   const messagesEndRef = useRef(null)
 
-  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api'
+  const API_URL = '/api'
   const WHATSAPP_NUMBER = '+919001110144'
   const PHONE_NUMBER = '+919001110144'
 
@@ -26,14 +30,33 @@ const ChatBot = () => {
     setIsOpen(!isOpen)
   }
 
+  // ✅ Session ID - store only session, not messages
   useEffect(() => {
-    let storedSessionId = localStorage.getItem('chatSessionId')
+    let storedSessionId
+    try {
+      storedSessionId = localStorage.getItem('chatSessionId')
+    } catch (e) {
+      console.warn('localStorage not available')
+    }
+    
     if (!storedSessionId) {
       storedSessionId = generateSessionId()
-      localStorage.setItem('chatSessionId', storedSessionId)
+      try {
+        localStorage.setItem('chatSessionId', storedSessionId)
+      } catch (e) {}
     }
     setSessionId(storedSessionId)
   }, [])
+
+  // ✅ Initial loading state
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsInitialLoading(false)
+    }, 600)
+    return () => clearTimeout(timer)
+  }, [])
+
+  // ✅ NO localStorage for messages - removed completely
 
   const generateSessionId = () => {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
@@ -51,7 +74,7 @@ const ChatBot = () => {
 
   useEffect(() => {
     scrollToBottom()
-  }, [messages])
+  }, [messages, isLoading, isInitialLoading])
 
   const sendMessage = async (userMessage) => {
     const userMsg = {
@@ -76,8 +99,13 @@ const ChatBot = () => {
       })
 
       if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}))
-        throw new Error(errorData.message || `Server error: ${response.status}`)
+        let errorMessage = `Server error: ${response.status}`
+        if (response.status === 429) {
+          errorMessage = 'Too many messages. Please wait a moment.'
+        } else if (response.status === 500) {
+          errorMessage = 'Server error. Please try again later.'
+        }
+        throw new Error(errorMessage)
       }
 
       const data = await response.json()
@@ -98,7 +126,7 @@ const ChatBot = () => {
       console.error('Chat Error:', error)
       const fallbackMsg = {
         id: Date.now() + 1,
-        text: `I'm having trouble connecting. Please try again later or contact us directly:\n\nCall: ${PHONE_NUMBER}\nWhatsApp: ${WHATSAPP_NUMBER}`,
+        text: `⚠️ ${error.message || 'Something went wrong. Please try again.'}`,
         sender: 'bot',
         timestamp: new Date()
       }
@@ -182,7 +210,7 @@ const ChatBot = () => {
           {messages.map((msg) => (
             <ChatMessage key={msg.id} message={msg} />
           ))}
-          {isLoading && <TypingIndicator />}
+          {(isLoading || isInitialLoading) && <TypingIndicator />}
           <div ref={messagesEndRef} />
         </div>
 

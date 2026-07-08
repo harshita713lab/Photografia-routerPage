@@ -1,34 +1,38 @@
 /* ==============================
    FONT FROM ASSETS
    ============================== */
+/* ChatBot.css - Updated with your actual file names */
+
+/* ==============================
+   FONT FROM ASSETS (MATCHING YOUR FILES)
+   ============================== */
 @font-face {
   font-family: 'Inter';
-  src: url('../assets/font/Inter_18pt-Regular.ttf') format('truetype');
+  src: url('../assets/font/Inter_18pt-Regular (1).ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'Inter';
-  src: url('../assets/font/Inter_18pt-Medium.ttf') format('truetype');
+  src: url('../assets/font/Inter_18pt-Medium (1).ttf') format('truetype');
   font-weight: 500;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'Inter';
-  src: url('../assets/font/Inter_18pt-SemiBold.ttf') format('truetype');
+  src: url('../assets/font/Inter_18pt-SemiBold (1).ttf') format('truetype');
   font-weight: 600;
   font-style: normal;
 }
 
-@font-face {
+/*@font-face {
   font-family: 'Inter';
-  src: url('../assets/font/Inter_18pt-Bold.ttf') format('truetype');
+  src: url('../assets/font/Inter_18pt-Bold (1).ttf') format('truetype');
   font-weight: 700;
   font-style: normal;
-}
-
+}*/
 /* ==============================
    CHAT TOGGLE BUTTON
    ============================== */
@@ -516,10 +520,10 @@
 }
 
 /* ==============================
-   LINKS - BUTTON STYLE WITH GRADIENT BORDER
-   ============================== */
+    LINKS - BUTTON STYLE WITH GRADIENT BORDER
+    ============================== */
 
-.message-text .link-container {
+.link-container {
   display: grid;
   gap: 6px;
   margin-top: 8px;
@@ -528,26 +532,26 @@
 }
 
 /* ===== DEFAULT: 2 COLUMNS ===== */
-.message-text .link-container {
+.link-container {
   grid-template-columns: 1fr 1fr;
 }
 
 /* ===== 1 LINK: FULL WIDTH ===== */
-.message-text .link-container:has(a:only-child) {
+.link-container:has(a:only-child) {
   grid-template-columns: 1fr;
 }
 
 /* ===== 3 LINKS: 1st FULL, 2nd & 3rd SIDE BY SIDE ===== */
-.message-text .link-container:has(a:nth-child(3):last-child) {
+.link-container:has(a:nth-child(3):last-child) {
   grid-template-columns: 1fr 1fr;
 }
 
-.message-text .link-container:has(a:nth-child(3):last-child) a:first-child {
+.link-container:has(a:nth-child(3):last-child) a:first-child {
   grid-column: 1 / -1;
 }
 
 /* ===== LINK STYLING - BUTTON STYLE WITH GRADIENT BORDER ===== */
-.message-text a.chat-inline-link {
+a.chat-inline-link {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -574,7 +578,7 @@
 }
 
 /* ===== GRADIENT BORDER ===== */
-.message-text a.chat-inline-link::before {
+a.chat-inline-link::before {
   content: '';
   position: absolute;
   top: -2px;
@@ -587,7 +591,7 @@
   transition: all 0.4s ease;
 }
 
-.message-text a.chat-inline-link::after {
+a.chat-inline-link::after {
   content: '';
   position: absolute;
   top: 0;
@@ -600,22 +604,22 @@
 }
 
 /* ===== HOVER - SHINY GRADIENT BORDER WITH BUTTON EFFECT ===== */
-.message-text a.chat-inline-link:hover {
+a.chat-inline-link:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 16px rgba(8, 8, 8, 0.08);
 }
 
-.message-text a.chat-inline-link:hover::before {
+a.chat-inline-link:hover::before {
   background: linear-gradient(135deg, #343435, #414241, #0b0209);
 }
 
-.message-text a.chat-inline-link:active {
+a.chat-inline-link:active {
   transform: translateY(0px);
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
 }
 
 /* ===== ICON STYLING ===== */
-.message-text a.chat-inline-link i {
+a.chat-inline-link i {
   font-size: 16px;
   width: 20px;
   text-align: center;
@@ -623,37 +627,8 @@
   transition: color 0.3s ease;
 }
 
-.message-text a.chat-inline-link:hover i {
+a.chat-inline-link:hover i {
   color: #000000;
-}
-
-/* ========================================
-   USER MESSAGE LINKS (Dark Mode)
-   ======================================== */
-.user-bubble .message-text .link-container a.chat-inline-link {
-  background: transparent;
-  color: #ffffff !important;
-  box-shadow: 0 1px 3px rgba(255, 255, 255, 0.04);
-}
-
-.user-bubble .message-text .link-container a.chat-inline-link::after {
-  background: rgba(255, 255, 255, 0.06);
-}
-
-.user-bubble .message-text .link-container a.chat-inline-link::before {
-  background: linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.05), rgba(255,255,255,0.15));
-}
-
-.user-bubble .message-text .link-container a.chat-inline-link i {
-  color: rgba(255, 255, 255, 0.6);
-}
-
-.user-bubble .message-text .link-container a.chat-inline-link:hover::before {
-  background: linear-gradient(135deg, #ffffff, #aaaaaa, #ffffff);
-}
-
-.user-bubble .message-text .link-container a.chat-inline-link:hover i {
-  color: #ffffff;
 }
 
 /* ========================================
@@ -699,18 +674,18 @@
     padding: 10px 14px 14px;
   }
 
-  .message-text .link-container {
+  .link-container {
     gap: 4px;
   }
 
-  .message-text a.chat-inline-link {
+  a.chat-inline-link {
     min-height: 34px;
     padding: 8px 10px;
     font-size: 12px;
     border-width: 1.5px;
   }
   
-  .message-text a.chat-inline-link::before {
+  a.chat-inline-link::before {
     top: -1.5px;
     left: -1.5px;
     right: -1.5px;
@@ -718,11 +693,11 @@
     border-radius: 8px;
   }
   
-  .message-text a.chat-inline-link::after {
+  a.chat-inline-link::after {
     border-radius: 6px;
   }
   
-  .message-text a.chat-inline-link i {
+  a.chat-inline-link i {
     font-size: 14px;
     width: 18px;
   }
@@ -849,11 +824,11 @@
     font-size: 16px;
   }
 
-  .message-text .link-container {
+  .link-container {
     gap: 4px;
   }
 
-  .message-text a.chat-inline-link {
+  a.chat-inline-link {
     font-size: 11px;
     padding: 6px 8px;
     min-height: 30px;
@@ -861,7 +836,7 @@
     border-width: 1.5px;
   }
   
-  .message-text a.chat-inline-link::before {
+  a.chat-inline-link::before {
     top: -1.5px;
     left: -1.5px;
     right: -1.5px;
@@ -869,11 +844,11 @@
     border-radius: 7px;
   }
   
-  .message-text a.chat-inline-link::after {
+  a.chat-inline-link::after {
     border-radius: 5px;
   }
   
-  .message-text a.chat-inline-link i {
+  a.chat-inline-link i {
     font-size: 12px;
     width: 16px;
   }
@@ -924,4 +899,158 @@
 
 .bot-bubble .chat-list-item {
   color: #1a1a1a;
+}
+/* ========================================
+   SOCIAL MEDIA LINKS - 2 COLUMN GRID
+   ======================================== */
+
+/* Social media grid container */
+.message-text .social-links-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin: 8px 0;
+  width: 100%;
+}
+
+/* 1 link - full width */
+.message-text .social-links-grid.social-grid-1 {
+  grid-template-columns: 1fr;
+}
+
+/* 2 links - 50% 50% */
+.message-text .social-links-grid.social-grid-2 {
+  grid-template-columns: 1fr 1fr;
+}
+
+/* 3 links - 1st full, next 2 half */
+.message-text .social-links-grid.social-grid-3 {
+  grid-template-columns: 1fr 1fr;
+}
+
+.message-text .social-links-grid.social-grid-3 a:first-child {
+  grid-column: 1 / -1;
+}
+
+/* 4+ links - 2 columns */
+.message-text .social-links-grid.social-grid-4 {
+  grid-template-columns: 1fr 1fr;
+}
+
+/* Social media link button - same as chat-inline-link */
+.message-text .social-links-grid a.social-link-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background: #ffffff;
+  color: #1a1a1a !important;
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.3;
+  text-align: center;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+  min-height: 40px;
+  word-break: break-word;
+  width: 100%;
+  position: relative;
+  background-clip: padding-box;
+  border: 0.2px solid rgb(223, 222, 222);
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+/* Gradient border effect */
+.message-text .social-links-grid a.social-link-btn::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #d0d0d0, #f0f0f0, #d0d0d0);
+  z-index: -1;
+  transition: all 0.4s ease;
+}
+
+.message-text .social-links-grid a.social-link-btn::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #ffffff;
+  border-radius: 7px;
+  z-index: -1;
+}
+
+/* Hover effect */
+.message-text .social-links-grid a.social-link-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(8, 8, 8, 0.08);
+}
+
+.message-text .social-links-grid a.social-link-btn:hover::before {
+  background: linear-gradient(135deg, #343435, #414241, #0b0209);
+}
+
+.message-text .social-links-grid a.social-link-btn:active {
+  transform: translateY(0px);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+/* Dark mode for user messages */
+.user-bubble .message-text .social-links-grid a.social-link-btn {
+  background: transparent;
+  color: #ffffff !important;
+  box-shadow: 0 1px 3px rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.user-bubble .message-text .social-links-grid a.social-link-btn::after {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.user-bubble .message-text .social-links-grid a.social-link-btn::before {
+  background: linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.05), rgba(255,255,255,0.15));
+}
+
+.user-bubble .message-text .social-links-grid a.social-link-btn:hover::before {
+  background: linear-gradient(135deg, #ffffff, #aaaaaa, #ffffff);
+}
+
+.user-bubble .message-text .social-links-grid a.social-link-btn:hover i {
+  color: #ffffff;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .message-text .social-links-grid {
+    gap: 4px;
+  }
+  
+  .message-text .social-links-grid a.social-link-btn {
+    font-size: 11px;
+    padding: 6px 8px;
+    min-height: 30px;
+    border-radius: 6px;
+  }
+  
+  .message-text .social-links-grid a.social-link-btn::before {
+    top: -1.5px;
+    left: -1.5px;
+    right: -1.5px;
+    bottom: -1.5px;
+    border-radius: 7px;
+  }
+  
+  .message-text .social-links-grid a.social-link-btn::after {
+    border-radius: 5px;
+  }
 }

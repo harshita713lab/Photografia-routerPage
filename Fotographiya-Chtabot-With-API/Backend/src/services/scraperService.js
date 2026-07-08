@@ -6,8 +6,11 @@
 const axios = require("axios");
 const cheerio = require("cheerio");
 const companyData = require("../data/companyData");
-// Naya puppeteer scraper import karo
 const puppeteerScraper = require("./puppeteerScraper");
+
+// ✅ DEBUG - Check if companyData loaded
+console.log("📦 companyData loaded in scraperService:", !!companyData);
+console.log("🏢 companyData.company exists:", !!companyData?.company);
 
 class ScraperService {
   constructor() {
@@ -17,7 +20,7 @@ class ScraperService {
   }
 
   // ================================================
-  // 🔍 SCRAPED DATA GET KARO (FIXED)
+  // 🔍 SCRAPED DATA GET KARO
   // ================================================
   getScrapedData() {
     return this.scrapedData;
@@ -27,14 +30,16 @@ class ScraperService {
   getAllPageUrls() {
     const urls = [];
 
-    for (const [key, url] of Object.entries(companyData.pages)) {
+    const pages = companyData.pages || {};
+    for (const [key, url] of Object.entries(pages)) {
       if (url && typeof url === "string" && url.startsWith("http")) {
         urls.push({ key, url });
       }
     }
 
-    if (companyData.links && Array.isArray(companyData.links)) {
-      for (const url of companyData.links) {
+    const links = companyData.links || [];
+    if (Array.isArray(links)) {
+      for (const url of links) {
         if (url && typeof url === "string" && url.startsWith("http")) {
           const exists = urls.some((u) => u.url === url);
           if (!exists) {
@@ -129,9 +134,8 @@ class ScraperService {
     }
   }
 
-  // ===== SAARE PAGES SCRAPE KARO (FIXED) =====
+  // ===== SAARE PAGES SCRAPE KARO =====
   async scrapeAllPages() {
-    // Agar already scraping chal rahi hai toh return karo
     if (this.isScraping) {
       console.log("⏳ Scraping already in progress...");
       return this.scrapedData;
@@ -142,7 +146,6 @@ class ScraperService {
     try {
       const puppeteerResults = await puppeteerScraper.scrapeAllPages();
 
-      // Check karo ki kuch pages successfully scrape hue hain ya nahi
       const successCount = Object.values(puppeteerResults).filter(
         (r) => r.success === true,
       ).length;
@@ -192,51 +195,34 @@ class ScraperService {
   }
 
   // ================================================
-  // 🆕 SMART SEARCH - SPACES REMOVE + PARTIAL MATCH
+  // 🔍 SMART SEARCH
   // ================================================
-
-  /*
-   * 🔍 Normalize query for better matching
-   * - Remove extra spaces
-   * - Convert to lowercase
-   * - Remove special characters
-   */
   normalizeQuery(query) {
     return query
       .toLowerCase()
       .trim()
-      .replace(/\s+/g, " ") // Multiple spaces → single space
-      .replace(/[^\w\s]/g, ""); // Remove special characters
+      .replace(/\s+/g, " ")
+      .replace(/[^\w\s]/g, "");
   }
 
-  /*
-   * 🔍 Check if text matches query (with variations)
-   * - Exact match
-   * - Without spaces ("golden box" → "goldenbox")
-   * - Partial match
-   */
   textMatchesQuery(text, query) {
     if (!text) return false;
 
     const textLower = text.toLowerCase();
     const queryLower = query.toLowerCase();
 
-    // 1. Exact match
     if (textLower.includes(queryLower)) return true;
 
-    // 2. Without spaces ("golden box" → "goldenbox")
     const queryNoSpace = queryLower.replace(/\s/g, "");
     const textNoSpace = textLower.replace(/\s/g, "");
     if (textNoSpace.includes(queryNoSpace)) return true;
 
-    // 3. Individual words match (at least 2 words)
     const queryWords = queryLower.split(/\s+/).filter((w) => w.length > 2);
     if (queryWords.length >= 2) {
       let matchCount = 0;
       for (const word of queryWords) {
         if (textLower.includes(word)) matchCount++;
       }
-      // At least 50% words match
       if (matchCount >= Math.ceil(queryWords.length / 2)) return true;
     }
 
@@ -244,63 +230,48 @@ class ScraperService {
   }
 
   // ================================================
-  // 🔍 SEARCH IN LIVE DATA (SCRAPED) - IMPROVED
+  // 🔍 SEARCH IN LIVE DATA
   // ================================================
   searchInScrapedData(query) {
     const queryLower = query.toLowerCase();
     const results = [];
 
-    // 🔥 SPECIAL: Check if query is about Golden Box
+    // Golden Box special check
     const goldenBoxKeywords = [
-      "golden box",
-      "goldenbox",
-      "gb",
-      "qr photo",
-      "instant photo",
-      "golden box system",
-      "golden box technology",
+      "golden box", "goldenbox", "gb", "qr photo", "instant photo",
+      "golden box system", "golden box technology"
     ];
     const isGoldenBoxQuery = goldenBoxKeywords.some(
       (kw) => queryLower.includes(kw) || kw.includes(queryLower),
     );
 
-    // If Golden Box query, return hardcoded golden box data directly
-    if (isGoldenBoxQuery) {
-      console.log("✨ Golden Box query detected — returning hardcoded data");
-      const gb = companyData.goldenBox;
-      if (gb) {
-        let goldenBoxContent = `📦 GOLDENBOX: ${gb.description || "AI-powered photo delivery system"}`;
-        if (gb.features && Array.isArray(gb.features)) {
-          goldenBoxContent += "\nFeatures: " + gb.features.join(", ");
-        }
-        if (gb.aiPowered) {
-          goldenBoxContent += "\n" + gb.aiPowered;
-        }
-
-        return [
-          {
-            page: "goldenbox",
-            url: companyData.website || "https://www.fotographiya.com",
-            title: "GoldenBox - AI Photo Delivery System",
-            source: "HARDCODED (Golden Box Direct)",
-            matches: [
-              {
-                type: "content",
-                snippet: goldenBoxContent.slice(0, 300),
-              },
-            ],
-          },
-        ];
+    const goldenBox = companyData.goldenBox || {};
+    if (isGoldenBoxQuery && Object.keys(goldenBox).length > 0) {
+      let goldenBoxContent = `📦 GOLDENBOX: ${goldenBox.description || "AI-powered photo delivery system"}`;
+      if (goldenBox.features && Array.isArray(goldenBox.features)) {
+        goldenBoxContent += "\nFeatures: " + goldenBox.features.join(", ");
       }
+      if (goldenBox.aiPowered) {
+        goldenBoxContent += "\n" + goldenBox.aiPowered;
+      }
+
+      return [{
+        page: "goldenbox",
+        url: companyData.company?.website || "https://www.fotographiya.com",
+        title: "GoldenBox - AI Photo Delivery System",
+        source: "HARDCODED (Golden Box Direct)",
+        matches: [{
+          type: "content",
+          snippet: goldenBoxContent.slice(0, 300),
+        }, ],
+      }, ];
     }
 
-    // Normal search in scraped data
     for (const [key, data] of Object.entries(this.scrapedData)) {
       if (!data.success) continue;
 
       const matches = [];
 
-      // Check content with improved matching
       if (data.content && this.textMatchesQuery(data.content, query)) {
         const idx = data.content.toLowerCase().indexOf(queryLower);
         const snippet = data.content.substring(
@@ -310,14 +281,12 @@ class ScraperService {
         matches.push({ type: "content", snippet: snippet.trim() });
       }
 
-      // Check headings
       for (const heading of data.headings || []) {
         if (this.textMatchesQuery(heading, query)) {
           matches.push({ type: "heading", snippet: heading });
         }
       }
 
-      // Check paragraphs
       for (const para of data.paragraphs || []) {
         if (this.textMatchesQuery(para, query)) {
           const idx = para.toLowerCase().indexOf(queryLower);
@@ -329,7 +298,6 @@ class ScraperService {
         }
       }
 
-      // Check list items
       for (const item of data.listItems || []) {
         if (this.textMatchesQuery(item, query)) {
           matches.push({ type: "list", snippet: item });
@@ -351,64 +319,52 @@ class ScraperService {
   }
 
   // ================================================
-  // 📦 SEARCH IN HARDCODED DATA (IMPROVED)
+  // 📦 SEARCH IN HARDCODED DATA
   // ================================================
   searchInHardcodedData(query) {
     const queryLower = query.toLowerCase().trim();
     const results = [];
     const allMatches = [];
 
-    // 🔥 SPECIAL: Check if query is about Golden Box
+    // Golden Box special check
     const goldenBoxKeywords = [
-      "golden box",
-      "goldenbox",
-      "gb",
-      "qr photo",
-      "instant photo",
+      "golden box", "goldenbox", "gb", "qr photo", "instant photo"
     ];
     const isGoldenBoxQuery = goldenBoxKeywords.some(
       (kw) => queryLower.includes(kw) || kw.includes(queryLower),
     );
 
-    if (isGoldenBoxQuery) {
-      console.log("✨ Golden Box query detected in hardcoded search");
-      const gb = companyData.goldenBox;
-      if (gb) {
-        let content = `📦 GOLDENBOX\n`;
-        content += `Description: ${gb.description || "AI-powered photo delivery system"}\n`;
-        if (gb.features) {
-          content += `Features: ${gb.features.join(", ")}\n`;
-        }
-        if (gb.aiPowered) {
-          content += `AI Powered: ${gb.aiPowered}\n`;
-        }
-        if (gb.steps) {
-          content += `How it works: Capture → AI Processing → QR Display → Download\n`;
-        }
-
-        return [
-          {
-            page: "goldenbox",
-            url: companyData.website || "https://www.fotographiya.com",
-            title: "GoldenBox - AI Photo Delivery System",
-            source: "HARDCODED (Golden Box Direct)",
-            matches: [
-              {
-                type: "content",
-                snippet: content.slice(0, 400),
-              },
-            ],
-          },
-        ];
+    const goldenBox = companyData.goldenBox || {};
+    if (isGoldenBoxQuery && Object.keys(goldenBox).length > 0) {
+      let content = `📦 GOLDENBOX\n`;
+      content += `Description: ${goldenBox.description || "AI-powered photo delivery system"}\n`;
+      if (goldenBox.features) {
+        content += `Features: ${goldenBox.features.join(", ")}\n`;
       }
+      if (goldenBox.aiPowered) {
+        content += `AI Powered: ${goldenBox.aiPowered}\n`;
+      }
+      if (goldenBox.steps) {
+        content += `How it works: Capture → AI Processing → QR Display → Download\n`;
+      }
+
+      return [{
+        page: "goldenbox",
+        url: companyData.company?.website || "https://www.fotographiya.com",
+        title: "GoldenBox - AI Photo Delivery System",
+        source: "HARDCODED (Golden Box Direct)",
+        matches: [{
+          type: "content",
+          snippet: content.slice(0, 400),
+        }, ],
+      }, ];
     }
 
-    // 🔍 RECURSIVE SEARCH FUNCTION (IMPROVED)
+    // RECURSIVE SEARCH
     function searchInObject(obj, path = "") {
       if (!obj) return;
 
       if (typeof obj === "string") {
-        // Check with improved matching
         if (obj.toLowerCase().includes(queryLower)) {
           allMatches.push({
             path: path,
@@ -427,7 +383,6 @@ class ScraperService {
 
       if (typeof obj === "object") {
         for (const [key, value] of Object.entries(obj)) {
-          // Also check object keys
           if (key.toLowerCase().includes(queryLower)) {
             allMatches.push({
               path: path ? `${path}.${key}` : key,
@@ -439,11 +394,9 @@ class ScraperService {
       }
     }
 
-    // 📦 COMPANY DATA MEIN SEARCH KARO
     searchInObject(companyData);
 
     if (allMatches.length > 0) {
-      // Group matches by category
       const groupedMatches = {};
       for (const match of allMatches) {
         const category = match.path.split(".")[0] || "general";
@@ -451,7 +404,6 @@ class ScraperService {
         groupedMatches[category].push(match);
       }
 
-      // Results mein add karo
       for (const [category, matches] of Object.entries(groupedMatches)) {
         const categoryNames = {
           company: "🏢 Company Info",
@@ -471,7 +423,7 @@ class ScraperService {
 
         results.push({
           page: "hardcoded",
-          url: companyData.website || "https://www.fotographiya.com",
+          url: companyData.company?.website || "https://www.fotographiya.com",
           title: `Fotographiya - ${categoryNames[category] || category}`,
           source: "HARDCODED (Fallback)",
           matches: matches.slice(0, 5).map((m) => ({
@@ -486,10 +438,9 @@ class ScraperService {
   }
 
   // ================================================
-  // 🎯 HYBRID SEARCH - LIVE FIRST, THEN HARDCODED
+  // 🎯 HYBRID SEARCH
   // ================================================
   searchHybrid(query) {
-    // STEP 1: LIVE DATA MEIN SEARCH
     let liveResults = this.searchInScrapedData(query);
 
     if (liveResults.length > 0) {
@@ -497,7 +448,6 @@ class ScraperService {
       return liveResults;
     }
 
-    // STEP 2: HARDCODED DATA MEIN SEARCH (Fallback)
     console.log(`⚠️ No live data found, searching hardcoded data...`);
     let hardcodedResults = this.searchInHardcodedData(query);
 
@@ -508,40 +458,37 @@ class ScraperService {
       return hardcodedResults;
     }
 
-    // STEP 3: Kuch nahi mila
     console.log(`❌ No data found in live or hardcoded`);
     return [];
   }
 
   // ================================================
-  // 🧠 BUILD AI CONTEXT - HYBRID APPROACH (IMPROVED)
+  // 🧠 BUILD AI CONTEXT - FIXED
   // ================================================
-  // ================================================
-// 🧠 BUILD AI CONTEXT - HYBRID APPROACH (IMPROVED)
-// ================================================
-buildContextForAI(userMessage) {
-  const query = userMessage.toLowerCase();
-  const contextParts = [];
+  buildContextForAI(userMessage) {
+    const query = userMessage.toLowerCase();
+    const contextParts = [];
 
-  // ===== PART 1: BASIC INFO =====
-  const c = companyData.company;
-  contextParts.push(`🏢 COMPANY: ${c.name}`);
-  contextParts.push(`📍 Location: ${c.location}`);
-  contextParts.push(`📞 Phone: ${c.phone}`);
-  contextParts.push(`📧 Email: ${c.email}`);
-  contextParts.push(`🌐 Website: [Fotographiya Website](${c.website})`);
-  contextParts.push(`👤 Founder: ${c.founder}`);
-  contextParts.push(`📅 Established: ${c.established}`);
-  contextParts.push(`⭐ Rating: ${c.rating || "4.6/5"}`);
-  contextParts.push(`👥 Customers: ${c.customers || "100+ Happy Couples"}`);
+    // ===== PART 1: BASIC INFO =====
+    // ✅ SAFE ACCESS
+    const c = companyData.company || {};
 
-  // ===== PART 2: TEAM CONTEXT =====
-  contextParts.push("\n👥 TEAM STRUCTURE:");
-  contextParts.push(`Total Employees: 50+`);
-  contextParts.push(`Team Size Range: 11-50 employees`);
+    contextParts.push(`🏢 COMPANY: ${c.name || 'Fotographiya'}`);
+    contextParts.push(`📍 Location: ${c.location || 'Kota, Rajasthan, India'}`);
+    contextParts.push(`📞 Phone: ${c.phone || '+91 9001110144'}`);
+    contextParts.push(`📧 Email: ${c.email || 'fotographiyaworld@gmail.com'}`);
+    contextParts.push(`🌐 Website: [Fotographiya Website](${c.website || 'https://www.fotographiya.com'})`);
+    contextParts.push(`👤 Founder: ${c.founder || 'Mohit Barthunia'}`);
+    contextParts.push(`📅 Established: ${c.established || '2023'}`);
+    contextParts.push(`⭐ Rating: ${c.rating || '4.6/5'}`);
+    contextParts.push(`👥 Customers: ${c.customers || '100+ Happy Couples'}`);
 
-  const team = companyData.team;
-  if (team) {
+    // ===== PART 2: TEAM CONTEXT =====
+    contextParts.push("\n👥 TEAM STRUCTURE:");
+    contextParts.push(`Total Employees: 50+`);
+    contextParts.push(`Team Size Range: 11-50 employees`);
+
+    const team = companyData.team || {};
     contextParts.push(`\n📋 TEAM DEPARTMENTS:`);
     contextParts.push(`• Production Team: 10+ members (Photographers, Cinematographers, Drone Operators)`);
     contextParts.push(`• Tech Team: 10+ members (Software Developers, AI & Technology)`);
@@ -550,112 +497,117 @@ buildContextForAI(userMessage) {
     contextParts.push(`• Sales Team: 3+ members`);
     contextParts.push(`• Digital Marketing: 3+ members`);
 
-    contextParts.push(`\n📌 TEAM ROLES:`);
-    for (const role of team.roles || []) {
-      contextParts.push(`• ${role}`);
+    if (team.roles && Array.isArray(team.roles)) {
+      contextParts.push(`\n📌 TEAM ROLES:`);
+      for (const role of team.roles) {
+        contextParts.push(`• ${role}`);
+      }
     }
-  }
 
-  // ===== PART 3: SOCIAL MEDIA =====
-  if (companyData.socialMedia) {
-    contextParts.push("\n📱 SOCIAL MEDIA:");
-    const platformNames = {
-      instagram: "Instagram",
-      facebook: "Facebook",
-      youtube: "YouTube",
-      linkedin: "LinkedIn",
-      reddit: "Reddit",
-      medium: "Medium",
-      pexels: "Pexels",
+    // ===== PART 3: SOCIAL MEDIA =====
+    const socialMedia = companyData.socialMedia || {};
+    if (Object.keys(socialMedia).length > 0) {
+      contextParts.push("\n📱 SOCIAL MEDIA:");
+      const platformNames = {
+        instagram: "Instagram",
+        facebook: "Facebook",
+        youtube: "YouTube",
+        linkedin: "LinkedIn",
+        reddit: "Reddit",
+        medium: "Medium",
+        pexels: "Pexels",
+      };
+      for (const [platform, data] of Object.entries(socialMedia)) {
+        const url = data?.url || data;
+        const name = platformNames[platform] || platform.charAt(0).toUpperCase() + platform.slice(1);
+        contextParts.push(`• ${name}: [${name}](${url})`);
+      }
+    }
+
+    // ===== PART 4: PAGE LINKS =====
+    contextParts.push("\n🔗 ALL PAGE LINKS:");
+    const pageNames = {
+      home: "Homepage",
+      about: "About Us",
+      services: "Our Services",
+      wedding: "Wedding Photography",
+      prewedding: "Pre-Wedding Photography",
+      destination: "Destination Wedding",
+      anniversary: "Anniversary Photography",
+      corporate: "Corporate Photography",
+      academy: "Fotographiya Academy",
+      portfolio: "Portfolio Gallery",
+      contact: "Contact Us",
     };
-    for (const [platform, data] of Object.entries(companyData.socialMedia)) {
-      const url = data.url || data;
-      const name = platformNames[platform] || platform.charAt(0).toUpperCase() + platform.slice(1);
+
+    const pages = companyData.pages || {};
+    for (const [key, url] of Object.entries(pages)) {
+      const name = pageNames[key] || key.charAt(0).toUpperCase() + key.slice(1);
       contextParts.push(`• ${name}: [${name}](${url})`);
     }
-  }
 
-  // ===== PART 4: PAGE LINKS =====
-  contextParts.push("\n🔗 ALL PAGE LINKS:");
-  const pageNames = {
-    home: "Homepage",
-    about: "About Us",
-    services: "Our Services",
-    wedding: "Wedding Photography",
-    prewedding: "Pre-Wedding Photography",
-    destination: "Destination Wedding",
-    anniversary: "Anniversary Photography",
-    corporate: "Corporate Photography",
-    academy: "Fotographiya Academy",
-    portfolio: "Portfolio Gallery",
-    contact: "Contact Us",
-  };
-  for (const [key, url] of Object.entries(companyData.pages)) {
-    const name = pageNames[key] || key.charAt(0).toUpperCase() + key.slice(1);
-    contextParts.push(`• ${name}: [${name}](${url})`);
-  }
+    // ===== PART 5: GOLDEN BOX CONTEXT =====
+    const goldenBoxKeywords = [
+      "golden box", "goldenbox", "gb", "qr photo", "instant photo"
+    ];
+    const isGoldenBoxQuery = goldenBoxKeywords.some(
+      (kw) => query.includes(kw) || kw.includes(query)
+    );
 
-  // ===== PART 5: GOLDEN BOX CONTEXT =====
-  const goldenBoxKeywords = [
-    "golden box", "goldenbox", "gb", "qr photo", "instant photo"
-  ];
-  const isGoldenBoxQuery = goldenBoxKeywords.some(
-    (kw) => query.includes(kw) || kw.includes(query)
-  );
-
-  if (isGoldenBoxQuery) {
-    contextParts.push("\n✨ GOLDENBOX DETAILS:");
-    const gb = companyData.goldenBox;
-    if (gb) {
-      contextParts.push(`Description: ${gb.description || "AI-powered photo delivery system"}`);
-      if (gb.features) {
-        contextParts.push(`Features: ${gb.features.join(", ")}`);
+    const goldenBox = companyData.goldenBox || {};
+    if (isGoldenBoxQuery && Object.keys(goldenBox).length > 0) {
+      contextParts.push("\n✨ GOLDENBOX DETAILS:");
+      contextParts.push(`Description: ${goldenBox.description || "AI-powered photo delivery system"}`);
+      if (goldenBox.features && Array.isArray(goldenBox.features)) {
+        contextParts.push(`Features: ${goldenBox.features.join(", ")}`);
       }
-      if (gb.aiPowered) {
-        contextParts.push(`AI Powered: ${gb.aiPowered}`);
+      if (goldenBox.aiPowered) {
+        contextParts.push(`AI Powered: ${goldenBox.aiPowered}`);
       }
-      if (gb.steps) {
-        contextParts.push(`How it works: ${gb.steps.capture || "Capture"} → ${gb.steps.processing || "AI Processing"} → ${gb.steps.qrDisplay || "QR Display"} → ${gb.steps.download || "Download"}`);
+      if (goldenBox.steps) {
+        const steps = goldenBox.steps;
+        contextParts.push(`How it works: ${steps.capture || "Capture"} → ${steps.processing || "AI Processing"} → ${steps.qrDisplay || "QR Display"} → ${steps.download || "Download"}`);
       }
     }
-  }
 
-  // ===== PART 6: HYBRID SEARCH =====
-  const searchResults = this.searchHybrid(query);
+    // ===== PART 6: HYBRID SEARCH =====
+    const searchResults = this.searchHybrid(query);
 
-  if (searchResults.length > 0) {
-    const source = searchResults[0].source || "UNKNOWN";
-    contextParts.push(`\n📄 SEARCH RESULTS (Source: ${source}):`);
+    if (searchResults && searchResults.length > 0) {
+      const source = searchResults[0].source || "UNKNOWN";
+      contextParts.push(`\n📄 SEARCH RESULTS (Source: ${source}):`);
 
-    for (const result of searchResults.slice(0, 4)) {
-      contextParts.push(`\n--- ${result.page?.toUpperCase() || "INFO"} ---`);
-      if (result.url) contextParts.push(`URL: ${result.url}`);
-      if (result.title) contextParts.push(`Title: ${result.title}`);
-      if (result.source) contextParts.push(`Source: ${result.source}`);
+      for (const result of searchResults.slice(0, 4)) {
+        contextParts.push(`\n--- ${result.page?.toUpperCase() || "INFO"} ---`);
+        if (result.url) contextParts.push(`URL: ${result.url}`);
+        if (result.title) contextParts.push(`Title: ${result.title}`);
+        if (result.source) contextParts.push(`Source: ${result.source}`);
 
-      for (const match of result.matches?.slice(0, 3) || []) {
-        if (match.type === "heading") {
-          contextParts.push(`📌 ${match.snippet}`);
-        } else if (match.type === "list") {
-          contextParts.push(`• ${match.snippet}`);
-        } else if (match.type === "package") {
-          contextParts.push(`📦 ${match.name}: ${match.details}`);
-        } else if (match.type === "service") {
-          contextParts.push(`🎯 ${match.name}: ${match.details}`);
-        } else if (match.type === "faq") {
-          contextParts.push(`❓ ${match.name}: ${match.details}`);
-        } else {
-          contextParts.push(`📝 ${match.snippet || match.details}`);
+        if (result.matches && Array.isArray(result.matches)) {
+          for (const match of result.matches.slice(0, 3)) {
+            if (match.type === "heading") {
+              contextParts.push(`📌 ${match.snippet}`);
+            } else if (match.type === "list") {
+              contextParts.push(`• ${match.snippet}`);
+            } else if (match.type === "package") {
+              contextParts.push(`📦 ${match.name}: ${match.details}`);
+            } else if (match.type === "service") {
+              contextParts.push(`🎯 ${match.name}: ${match.details}`);
+            } else if (match.type === "faq") {
+              contextParts.push(`❓ ${match.name}: ${match.details}`);
+            } else {
+              contextParts.push(`📝 ${match.snippet || match.details}`);
+            }
+          }
         }
       }
+    } else {
+      contextParts.push("\n📄 No specific data found for this query.");
+      contextParts.push("Please ask about our services, packages, academy, or portfolio.");
     }
-  } else {
-    contextParts.push("\n📄 No specific data found for this query.");
-    contextParts.push("Please ask about our services, packages, academy, or portfolio.");
-  }
 
-  return contextParts.join("\n");
-}
+    return contextParts.join("\n");
+  }
 
   // ===== STATUS =====
   getStatus() {

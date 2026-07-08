@@ -1,5 +1,6 @@
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 const axios = require("axios");
+const companyData = require("../data/companyData");
 
 // ============================================
 // ✅ CONFIGURATION
@@ -33,20 +34,11 @@ class AIProvider {
     this.apiKey = apiKey;
     this.timeout = 30000;
     this.temperature = 0.2;
-    this.maxTokens = 150;
+    this.maxTokens = 200;
   }
 
   async getResponse(userMessage, systemPrompt) {
     throw new Error("getResponse method must be implemented by subclass");
-  }
-
-  _createRequestConfig(data) {
-    return {
-      method: 'POST',
-      headers: this._getHeaders(),
-      data: data,
-      timeout: this.timeout
-    };
   }
 
   _getHeaders() {
@@ -57,8 +49,6 @@ class AIProvider {
 // ============================================
 // ✅ GROQ PROVIDER
 // ============================================
-// aiService.js - Updated GroqProvider
-
 class GroqProvider extends AIProvider {
   constructor() {
     super(Config.GROQ_API_KEY);
@@ -67,7 +57,6 @@ class GroqProvider extends AIProvider {
   }
 
   async getResponse(userMessage, systemPrompt) {
-    // ✅ Check API key exists
     if (!this.apiKey) {
       console.log('⚠️ Groq: No API key found');
       return null;
@@ -102,18 +91,7 @@ class GroqProvider extends AIProvider {
       return null;
       
     } catch (error) {
-      // ✅ Better error logging
-      if (error.response) {
-        console.log(`⚠️ Groq Failed: ${error.response.status}`);
-        if (error.response.status === 429) {
-          console.log('   Rate limit exceeded - trying next provider...');
-        }
-        if (error.response.status === 401) {
-          console.log('   Invalid API key - check your GROQ_API_KEY');
-        }
-      } else {
-        console.log("⚠️ Groq Failed:", error.message);
-      }
+      console.log("⚠️ Groq Failed:", error.message);
       return null;
     }
   }
@@ -238,81 +216,86 @@ class GeminiProvider extends AIProvider {
 }
 
 // ============================================
-// ✅ PROMPT BUILDER
+// ✅ PROMPT BUILDER - NO LINKS
 // ============================================
 class PromptBuilder {
-  // aiService.js - PromptBuilder
-
-static buildSystemPrompt(context) {
-  return `
+  static buildSystemPrompt(context) {
+    return `
 You are Fotographiya's official AI photography assistant.
 
-🚨 **CRITICAL RULES - MUST FOLLOW:**
-1. For destination wedding questions, ALWAYS mention Indian destinations ONLY
-2. ONLY say "We only operate within India" if user specifically asks about OUTSIDE India
-3. NEVER mention international destinations unless the user asks about them
-4. If user asks about international, reply: "We only operate within India. We do not provide services outside India."
-5. Normal responses should not mention "India Only" unless asked
+🚨 **IMPORTANT RULES:**
+1. NEVER include any links in your responses
+2. Just provide helpful text information
+3. Keep responses clear and professional
+4. Use emojis for visual appeal
 
-🎯 **RESPONSE GUIDELINES - FOLLOW EXACTLY:**
+🎯 **RESPONSE STRUCTURE:**
+[Emoji] **Title**
 
-STRUCTURE:
-1. [3-4 line SUMMARY - clear and professional]
-2. **Key Points:** (3-4 bullet points)
-3. **Learn More:** [Link Text](URL)
-4. 💡 [Question]
-
-========================================
-EXAMPLE FOR DESTINATION WEDDING:
-========================================
-🏖️ **Destination Wedding Photography**
-
-We offer professional destination wedding photography services across India. Our team covers all major Indian destinations including Rajasthan, Goa, Kerala, and Himachal Pradesh.
+[3-4 line summary - clear and professional]
 
 **Key Points:**
-• Available in Rajasthan, Goa, Kerala, Himachal Pradesh
-• Professional photography and cinematography
-• Customized packages for every couple
-• Travel and accommodation arrangements
+• Point 1
+• Point 2
+• Point 3
 
-**Learn More:** [Destination Wedding](https://www.fotographiya.com/services/destination-wedding)
+💡 [Follow-up question]
 
-💡 Would you like to know more about our destination wedding packages?
+========================================
+✅ **CORRECT RESPONSE EXAMPLE:**
+========================================
+📱 **Fotographiya's Social Media Accounts**
+
+Stay connected with us across all platforms to explore our photography services, behind-the-scenes content, and creative insights.
+
+**Key Points:**
+• Follow us on Facebook, Instagram, YouTube, Pexels, Reddit, LinkedIn, and Medium
+• Engage with our community of 100+ happy couples
+• Access exclusive content and photography tips
+
+💡 Which platform would you like to connect with us on?
+
+========================================
+❌ **WRONG - NEVER DO THIS:**
+========================================
+• [Facebook](https://facebook.com) ← NO LINKS!
+• [Instagram](https://instagram.com) ← NO LINKS!
+• "Learn More:" with a link ← NO LINKS!
+• Any markdown links [text](url) ← NO LINKS!
+
+========================================
+📌 **WHAT TO INCLUDE INSTEAD OF LINKS:**
 ========================================
 
-EXAMPLE FOR "DO YOU SHOOT OUTSIDE INDIA?":
-========================================
-❌ **No International Services**
+SOCIAL MEDIA - just mention platform names:
+• "Follow us on Facebook, Instagram, YouTube, Pexels, Reddit, LinkedIn, and Medium"
 
-We only operate within India. We do not provide photography services outside India.
+SERVICES - just mention service names:
+• "We offer Wedding Photography, Pre-Wedding Photography, Destination Wedding, and Corporate Photography"
 
-📍 **Our Coverage:**
-• All Indian states
-• Rajasthan, Goa, Kerala, Himachal Pradesh
+CONTACT - just mention contact methods:
+• "You can reach us via WhatsApp, phone call, or email"
 
-💡 Would you like to know about our Indian destination packages?
-========================================
+PACKAGES - just mention package names:
+• "We offer Silver, Golden, and Premium packages"
+
+PAGES - just mention page names:
+• "Visit our About Us, Portfolio, Academy, and GoldenBox pages"
+
+⚠️ **REMEMBER:**
+- NO markdown links [text](url)
+- NO "Learn More:" with links
+- NO clickable links at all
+- Just plain text with emojis and bullet points
 
 COMPANY CONTEXT:
 ${context}
-
-IMPORTANT RULES:
-1. Summary must be 3-4 lines ONLY
-2. Key Points must be 3-4 bullets ONLY
-3. Include ONE link ONLY
-4. Include ONE question ONLY
-5. No duplicate sections
-6. Maintain professional tone throughout
-7. Use appropriate emoji for the topic
-8. For normal destination wedding questions, mention Indian destinations ONLY
-9. ONLY say "India Only" if user specifically asks about outside India
-10. If user asks about outside India, clearly say "NO" with full explanation
 `;
-}
+  }
 }
 
 // ============================================
-// ✅ RESPONSE FORMATTER
+// ✅ RESPONSE FORMATTER - REMOVES ALL LINKS
 // ============================================
 class ResponseFormatter {
   static formatResponse(text) {
@@ -320,428 +303,125 @@ class ResponseFormatter {
     
     let cleanText = text;
     
-    // ===== STEP 1: FIX BROKEN LINKS =====
-    cleanText = this._fixBrokenLinks(cleanText);
+    // ===== STEP 1: REMOVE ALL MARKDOWN LINKS =====
+    cleanText = this._removeAllLinks(cleanText);
     
     // ===== STEP 2: REMOVE DUPLICATE HEADERS =====
     cleanText = this._removeDuplicateHeaders(cleanText);
     
-    // ===== STEP 3: EXTRACT CONTENT =====
-    const extracted = this._extractContent(cleanText);
+    // ===== STEP 3: CLEAN UP EXTRA SEPARATORS =====
+    cleanText = this._cleanSeparators(cleanText);
     
-    // ===== STEP 4: BUILD FINAL RESPONSE =====
-    return this._buildFinalResponse(extracted);
+    // ===== STEP 4: REMOVE "Learn More:" sections =====
+    cleanText = this._removeLearnMoreSections(cleanText);
+    
+    // ===== STEP 5: CLEAN EXTRA SPACES =====
+    cleanText = this._cleanExtraSpaces(cleanText);
+    
+    return cleanText.trim();
   }
 
-  // aiService.js - ResponseFormatter
-
-static _fixBrokenLinks(text) {
-  const fixes = [
-    // Existing fixes
-    [/https:\/\/www\.\s*\)/g, 'https://www.fotographiya.com/about)'],
-    [/https:\/\/www\.\)/g, 'https://www.fotographiya.com/about)'],
-    [/\[About Us\]\(https:\/\/www\.\)/g, '[About Us](https://www.fotographiya.com/about)'],
-    [/\[About Us\]\(com\/about\)/g, '[About Us](https://www.fotographiya.com/about)'],
-    [/\[Portfolio\]\(https:\/\/www\.\)/g, '[Portfolio](https://www.fotographiya.com/portfolio)'],
-    [/\[Contact Us\]\(https:\/\/www\.\)/g, '[Contact Us](https://www.fotographiya.com/contact)'],
-    [/\[Destination Wedding\]\(https:\/\/www\.\)/g, '[Destination Wedding](https://www.fotographiya.com/services/destination-wedding)'],
-    [/destination-wedding-services/g, 'destination-wedding'],
-    [/destination-weddingservices/g, 'destination-wedding'],
-    
-    // ✅ ADD THESE NEW FIXES:
-    // Fix incomplete "About Us" links
-    [/\[About Us\]\(https:\/\/www\.\s*\)/g, '[About Us](https://www.fotographiya.com/about)'],
-    [/\[About Us\]\(http:\/\/www\.\)/g, '[About Us](https://www.fotographiya.com/about)'],
-    [/About Us\s*https:\/\/www\./g, '[About Us](https://www.fotographiya.com/about)'],
-    
-    // Fix any link with just domain
-    [/\[([^\]]+)\]\(https:\/\/www\.\)/g, '[$1](https://www.fotographiya.com/about)'],
-    
-    // Fix "Learn More: About Us" without link
-    [/Learn More:\s*About Us\s*$/gm, '**Learn More:** [About Us](https://www.fotographiya.com/about)'],
-    [/Learn More:\s*Portfolio\s*$/gm, '**Learn More:** [Portfolio](https://www.fotographiya.com/portfolio)'],
-    [/Learn More:\s*Contact Us\s*$/gm, '**Learn More:** [Contact Us](https://www.fotographiya.com/contact)'],
-    
-    // Remove extra spaces after links
-    [/\]\(\s*\)/g, '](https://www.fotographiya.com/about)'],
-  ];
-  
-  let fixedText = text;
-  for (const [pattern, replacement] of fixes) {
-    fixedText = fixedText.replace(pattern, replacement);
+  // ✅ Remove ALL markdown links
+  static _removeAllLinks(text) {
+    // Remove [text](url) patterns - replace with just the text
+    return text.replace(/\[([^\]]+)\]\([^)]+\)/g, (match, text) => {
+      return text;
+    });
   }
-  return fixedText;
-}
-  // aiService.js - ResponseFormatter
 
-static _removeDuplicateHeaders(text) {
-  const lines = text.split('\n');
-  const cleanedLines = [];
-  let foundFirstContent = false;
-  let hasKeyPoints = false;
-  let hasLearnMore = false;
-  let skipUntilContent = false;
-  
-  for (const line of lines) {
-    const trimmed = line.trim();
+  // ✅ Remove "Learn More:" sections completely
+  static _removeLearnMoreSections(text) {
+    const lines = text.split('\n');
+    const result = [];
+    let skipNextLine = false;
     
-    // ===== SKIP ALL HEADERS AT THE START =====
-    if (!foundFirstContent) {
-      // Skip "## Key Points:", "### Key Points:", "Key Points:", etc.
-      if (trimmed.startsWith('## Key Points:') || 
-          trimmed.startsWith('### Key Points:') ||
-          trimmed.startsWith('**Key Points:**') || 
-          trimmed.startsWith('Key Points:') ||
-          trimmed.startsWith('📸 Key Points:') ||
-          trimmed.startsWith('##') || trimmed.startsWith('###') || trimmed.startsWith('#')) {
-        // Skip this line and mark to skip next lines if they are the intro
-        skipUntilContent = true;
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i];
+      const trimmed = line.trim();
+      
+      // Skip "Learn More:" lines
+      if (trimmed === '**Learn More:**' || trimmed === 'Learn More:' || 
+          trimmed.startsWith('**Learn More:**') || trimmed.startsWith('Learn More:')) {
+        skipNextLine = true;
         continue;
       }
       
-      // If it's a bullet point at start, skip it
-      if (trimmed.startsWith('•') || trimmed.startsWith('-') || trimmed.startsWith('*')) {
+      // Skip the line after "Learn More:" (usually a link)
+      if (skipNextLine) {
+        skipNextLine = false;
         continue;
       }
       
-      // If it's an empty line, skip it
-      if (trimmed === '') {
+      result.push(line);
+    }
+    
+    return result.join('\n');
+  }
+
+  // ✅ Remove duplicate headers
+  static _removeDuplicateHeaders(text) {
+    const lines = text.split('\n');
+    const result = [];
+    const seenHeaders = new Set();
+    
+    for (const line of lines) {
+      const trimmed = line.trim();
+      
+      if (result.length === 0 && trimmed === '') continue;
+      
+      // Handle Key Points
+      if (/^\s*[*#]*\s*Key Points:?\s*$/i.test(trimmed)) {
+        if (seenHeaders.has('keypoints')) continue;
+        seenHeaders.add('keypoints');
+        result.push('**Key Points:**');
         continue;
       }
       
-      // Found first real content
-      foundFirstContent = true;
-      skipUntilContent = false;
+      result.push(line);
     }
     
-    // ===== HANDLE DUPLICATE SECTIONS =====
-    if (trimmed.startsWith('## Key Points:') || 
-        trimmed.startsWith('### Key Points:') ||
-        trimmed.startsWith('**Key Points:**') || 
-        trimmed.startsWith('Key Points:')) {
-      if (!hasKeyPoints) {
-        hasKeyPoints = true;
-        cleanedLines.push('**Key Points:**');
-      }
-      continue;
-    }
-    
-    if (trimmed.startsWith('## Learn More:') || 
-        trimmed.startsWith('### Learn More:') ||
-        trimmed.startsWith('**Learn More:**') || 
-        trimmed.startsWith('Learn More:')) {
-      if (!hasLearnMore) {
-        hasLearnMore = true;
-        // Keep the link that follows
-        cleanedLines.push('**Learn More:**');
-      }
-      continue;
-    }
-    
-    // Skip lines that were part of the skipped header section
-    if (skipUntilContent) {
-      // If it's short text (intro), skip it
-      if (trimmed.length < 100 && !trimmed.includes('.')) {
-        continue;
-      }
-      // If it's a bullet point, skip it
-      if (trimmed.startsWith('•') || trimmed.startsWith('-') || trimmed.startsWith('*')) {
-        continue;
-      }
-      skipUntilContent = false;
-    }
-    
-    cleanedLines.push(line);
-  }
-  
-  return cleanedLines.join('\n');
-}
-
-  static _isHeaderToSkip(trimmed) {
-    const skipPatterns = [
-      '**Key Points:**', 'Key Points:',
-      '📸 Key Points:', '### Key Points:',
-      '**Learn More:**', 'Learn More:',
-      '### Learn More:', '📸',
-      '###', '##', '#'
-    ];
-    
-    if (skipPatterns.some(pattern => trimmed.startsWith(pattern))) {
-      return true;
-    }
-    
-    if (trimmed.startsWith('•') || trimmed.startsWith('-') || trimmed.startsWith('*')) {
-      return true;
-    }
-    
-    return trimmed === '';
+    return result.join('\n');
   }
 
-  static _extractContent(text) {
-    const content = {
-      title: 'Fotographiya',
-      summary: '',
-      points: [],
-      linkText: '',
-      linkUrl: '',
-      question: '',
-      emoji: '📸'
-    };
-
-    // Extract title
-    const titleMatch = text.match(/[^\n]*\*\*[^\n]+\*\*/);
-    if (titleMatch) {
-      content.title = titleMatch[0]
-        .replace(/^[^\w\s]+\s*/, '')
-        .replace(/\*\*/g, '')
-        .trim();
-    }
-
-    // Extract summary
-    content.summary = this._extractSummary(text);
-    
-    // Extract bullet points
-    content.points = this._extractBulletPoints(text);
-    
-    // Extract link
-    const link = this._extractLink(text, content.title);
-    content.linkText = link.text;
-    content.linkUrl = link.url;
-    
-    // Extract question
-    content.question = this._extractQuestion(text);
-    
-    // Determine emoji
-    content.emoji = this._determineEmoji(content.title);
-    
-    return content;
+  // ✅ Clean up extra separators
+  static _cleanSeparators(text) {
+    return text
+      .split('\n')
+      .filter(line => {
+        const trimmed = line.trim();
+        return trimmed !== '---' && 
+               trimmed !== '===' && 
+               trimmed !== '--' && 
+               !/^[\-=\*]{3,}$/.test(trimmed);
+      })
+      .join('\n');
   }
 
-  static _extractSummary(text) {
-    const summaryMatch = text.match(/\*\*[^\n]+\*\*\n\n([^\n]+)/);
-    if (summaryMatch) {
-      return summaryMatch[1].trim();
-    }
-    
-    const sentences = text.match(/[^.!?]+[.!?]+/g) || [];
-    if (sentences.length > 0) {
-      let startIdx = sentences[0].length < 30 ? 1 : 0;
-      return sentences.slice(startIdx, startIdx + 3).join(' ').trim();
-    }
-    
-    return '';
+  // ✅ Clean extra spaces and empty lines
+  static _cleanExtraSpaces(text) {
+    return text
+      .replace(/\n{3,}/g, '\n\n')
+      .replace(/[ \t]+\n/g, '\n')
+      .replace(/\n[ \t]+/g, '\n');
   }
-
-  static _extractBulletPoints(text) {
-    const points = [];
-    const bulletRegex = /[•\-*]\s*(.*?)(?=[•\-*]|$)/g;
-    let match;
-    
-    while ((match = bulletRegex.exec(text)) !== null) {
-      const point = match[1].trim();
-      if (point && point.length > 5 && 
-          !point.startsWith('Learn More') && 
-          !point.startsWith('Key') &&
-          !point.includes('Bali') &&
-          !point.includes('Maldives') &&
-          !point.includes('Thailand') &&
-          !point.includes('Dubai') &&
-          !point.includes('USA') &&
-          !point.includes('UK') &&
-          !point.includes('Europe') &&
-          !point.includes('America') &&
-          !point.includes('Australia') &&
-          !point.includes('Singapore')) {
-        points.push(point);
-      }
-    }
-    
-    if (points.length === 0) {
-      const sentences = text.match(/[^.!?]+[.!?]+/g) || [];
-      for (const sent of sentences.slice(1, 5)) {
-        const clean = sent.trim();
-        if (clean.length > 15 && clean.length < 100 && 
-            !clean.includes('?') && !clean.includes('Learn More') &&
-            !clean.includes('Bali') && !clean.includes('Maldives') &&
-            !clean.includes('Thailand') && !clean.includes('Dubai')) {
-          points.push(clean);
-          if (points.length >= 4) break;
-        }
-      }
-    }
-    
-    return points;
-  }
-
-  static _extractLink(text, title) {
-    const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/;
-    const match = text.match(linkRegex);
-    
-    if (match) {
-      let url = match[2];
-      if (url && !url.startsWith('http')) {
-        url = `https://www.fotographiya.com/${url}`;
-      }
-      if (url === 'https://www.') {
-        url = 'https://www.fotographiya.com/about';
-      }
-      // Fix destination links
-      if (url.includes('destination-wedding-services')) {
-        url = 'https://www.fotographiya.com/services/destination-wedding';
-      }
-      if (url.includes('destination-weddingservices')) {
-        url = 'https://www.fotographiya.com/services/destination-wedding';
-      }
-      return { text: match[1], url };
-    }
-    
-    const titleLower = title.toLowerCase();
-    if (titleLower.includes('destination') || titleLower.includes('wedding')) {
-      return { text: 'Destination Wedding', url: 'https://www.fotographiya.com/services/destination-wedding' };
-    } else if (titleLower.includes('about') || titleLower.includes('history')) {
-      return { text: 'About Us', url: 'https://www.fotographiya.com/about' };
-    } else if (titleLower.includes('portfolio') || titleLower.includes('gallery')) {
-      return { text: 'Portfolio', url: 'https://www.fotographiya.com/portfolio' };
-    } else {
-      return { text: 'Contact Us', url: 'https://www.fotographiya.com/contact' };
-    }
-  }
-
-  static _extractQuestion(text) {
-    const questionMatch = text.match(/💡\s*([^?]+\?)/);
-    if (questionMatch) {
-      return questionMatch[1].trim();
-    }
-    
-    const questionSentences = text.match(/[^.!?]+\?/g) || [];
-    if (questionSentences.length > 0) {
-      return questionSentences[questionSentences.length - 1].trim();
-    }
-    
-    return '';
-  }
-
-  static _determineEmoji(title) {
-    const titleLower = title.toLowerCase();
-    const emojiMap = {
-      'wedding': '💍',
-      'pre': '📸',
-      'contact': '📞',
-      'team': '👥',
-      'history': '🏢',
-      'about': '🏢',
-      'portfolio': '🖼️',
-      'gallery': '🖼️',
-      'social': '📱',
-      'golden': '✨',
-      'goldenbox': '✨',
-      'academy': '🎓',
-      'destination': '🏖️',
-      'welcome': '👋',
-      'hello': '👋',
-      'hi': '👋'
-    };
-    
-    for (const [key, emoji] of Object.entries(emojiMap)) {
-      if (titleLower.includes(key)) {
-        return emoji;
-      }
-    }
-    return '📸';
-  }
-
-  // aiService.js - ResponseFormatter
-
-static _buildFinalResponse(content) {
-  // ✅ Remove any leading "Key Points" that might have been added
-  let formatted = '';
-  
-  // Skip if the content is just "Key Points"
-  if (content.title === 'Key Points' || content.title === 'Key Points:') {
-    // Use the first point as title instead
-    if (content.points.length > 0) {
-      content.title = 'Fotographiya';
-    }
-  }
-  
-  formatted = ` ${content.emoji} **${content.title}**\n\n`;
-  
-  // Add summary
-  if (content.summary) {
-    formatted += `${content.summary}\n\n`;
-  }
-  
-  // Add key points
-  if (content.points.length > 0) {
-    formatted += `**Key Points:**\n`;
-    for (const point of content.points.slice(0, 4)) {
-      formatted += `• ${point}\n`;
-    }
-    formatted += '\n';
-  }
-  
-  // Add learn more link
-  if (content.linkText && content.linkUrl) {
-    formatted += `**Learn More:** [${content.linkText}](${content.linkUrl})\n\n`;
-  } else {
-    // ✅ Default link if missing
-    formatted += `**Learn More:** [About Us](https://www.fotographiya.com/about)\n\n`;
-  }
-  
-  // Add question
-  if (content.question) {
-    formatted += `💡 ${content.question}`;
-  } else {
-    formatted += `💡 What would you like to know more about?`;
-  }
-  
-  // Cleanup
-  formatted = formatted.replace(/\n{3,}/g, '\n\n');
-  formatted = formatted.replace(/\*\*Key Points:\*\*\s*\*\*Key Points:\*\*/g, '**Key Points:**');
-  formatted = formatted.replace(/^\s*\*\*Key Points:\*\*\s*/m, '');
-  
-  // ✅ Remove any "## Key Points:" that slipped through
-  formatted = formatted.replace(/^##\s*Key Points:\s*/m, '');
-  formatted = formatted.replace(/^###\s*Key Points:\s*/m, '');
-  
-  return formatted.trim();
-}
 }
 
 // ============================================
-// ✅ FALLBACK RESPONSES
+// ✅ FALLBACK RESPONSES - NO LINKS
 // ============================================
 class FallbackResponse {
   static getResponse(userMessage) {
     const msg = userMessage.toLowerCase().trim();
     
-    // Greetings
-    if (this._isGreeting(msg)) {
-      return this._getGreetingResponse(msg);
-    }
+    if (this._isGreeting(msg)) return this._getGreetingResponse(msg);
+    if (this._isFarewell(msg)) return this._getFarewellResponse();
+    if (this._isInternational(msg)) return this._getInternationalResponse();
     
-    // Farewell
-    if (this._isFarewell(msg)) {
-      return this._getFarewellResponse();
-    }
-    
-    // International Check FIRST
-    if (this._isInternational(msg)) {
-      return this._getInternationalResponse();
-    }
-    
-    // Service-specific
     const serviceResponse = this._getServiceResponse(msg);
-    if (serviceResponse) {
-      return serviceResponse;
-    }
+    if (serviceResponse) return serviceResponse;
     
-    // Off-topic
-    if (this._isOffTopic(msg)) {
-      return this._getOffTopicResponse();
-    }
+    if (this._isOffTopic(msg)) return this._getOffTopicResponse();
     
-    // Default
     return this._getDefaultResponse();
   }
 
@@ -754,19 +434,6 @@ class FallbackResponse {
     if (msg.includes('how are you') || msg.includes('how r u') || msg.includes('how are u')) {
       return `I am doing well, thank you for asking! 😊 How can I assist you with Fotographiya today?`;
     }
-    
-    if (msg.includes('good morning')) {
-      return `Good morning! ☀️ I'm your Fotographiya assistant. How may I help you today?`;
-    }
-    
-    if (msg.includes('good evening')) {
-      return `Good evening! 🌙 Welcome to Fotographiya. How can I assist you today?`;
-    }
-    
-    if (msg.includes('good afternoon')) {
-      return `Good afternoon! ☀️ I'm here to help with any questions about Fotographiya.`;
-    }
-    
     return `Hello! 👋 Welcome to Fotographiya. I'm your AI assistant. How may I help you today?`;
   }
 
@@ -778,16 +445,9 @@ class FallbackResponse {
     return `Thank you for visiting Fotographiya! 👋 Have a wonderful day. Feel free to reach out anytime.`;
   }
 
-  // ✅ INTERNATIONAL DETECTION
   static _isInternational(msg) {
-    const keywords = [
-      'international', 'outside india', 'abroad', 'foreign', 'overseas',
-      'bali', 'maldives', 'thailand', 'dubai', 'uae', 'usa', 'uk', 
-      'europe', 'america', 'canada', 'australia', 'singapore', 'malaysia',
-      'international wedding', 'foreign wedding', 'abroad wedding',
-      'usa wedding', 'uk wedding', 'dubai wedding', 'europe wedding',
-      'shoot outside india', 'photography outside india'
-    ];
+    const keywords = ['international', 'outside india', 'abroad', 'foreign', 'overseas',
+      'bali', 'maldives', 'thailand', 'dubai', 'uae', 'usa', 'uk', 'europe', 'america'];
     return keywords.some(kw => msg.includes(kw));
   }
 
@@ -797,9 +457,7 @@ class FallbackResponse {
 Fotographiya only operates within India. We do not provide photography services outside India.
 
 📍 **Our Coverage:**
-• All Indian states
-• Rajasthan, Goa, Kerala, Himachal Pradesh
-• South India, North East India
+• All Indian states including Rajasthan, Goa, Kerala, and Himachal Pradesh
 
 💡 Would you like to know about our Indian destination wedding packages?`;
   }
@@ -807,25 +465,43 @@ Fotographiya only operates within India. We do not provide photography services 
   static _getServiceResponse(msg) {
     const serviceMap = [
       {
-        keywords: ['destination', 'outstation', 'travel wedding', 'destination wedding'],
-        response: `🏖️ **Destination Wedding Photography (India Only)**
+        keywords: ['social', 'all social', 'platforms', 'channels', 'social media'],
+        response: `📱 **Fotographiya's Social Media Accounts**
 
-We offer professional destination wedding photography services available only within India. We do not cover international destinations like Bali, Maldives, Thailand, Dubai, etc.
+Stay connected with us across all platforms to explore our photography services, behind-the-scenes content, and creative insights.
 
-📍 **Indian Destinations We Cover:**
-• Rajasthan - Jaipur, Udaipur, Jodhpur, Jaisalmer
-• Goa - Beach & Resort weddings
-• Kerala - Backdrop & Temple weddings
-• Himachal Pradesh - Mountain weddings
-• Uttarakhand - Rishikesh, Nainital
-• South India - Tamil Nadu, Karnataka
-• All other Indian states
+**Key Points:**
+• Follow us on Facebook, Instagram, YouTube, Pexels, Reddit, LinkedIn, and Medium
+• Engage with our community of 100+ happy couples
+• Access exclusive content and photography tips
 
-❌ **Not Available:** International destinations
+💡 Which platform would you like to connect with us on?`
+      },
+      {
+        keywords: ['package', 'pricing', 'cost', 'budget', 'price', 'rate', 'charges', 'silver', 'golden', 'premium'],
+        response: `📦 **Our Photography Packages**
 
-**Learn More:** [Destination Wedding](https://www.fotographiya.com/services/destination-wedding)
+We offer three comprehensive photography packages to suit every couple's needs and budget.
 
-💡 Would you like to know about our Indian destination packages?`
+**Key Points:**
+• Silver Package: Basic wedding coverage with professional photography, edited digital photos, and online gallery
+• Golden Package: Comprehensive coverage with photography and cinematography, professional editing, album, and online gallery
+• Premium Package: Premium coverage with photography, cinematography, drone shots, premium album, and all digital assets
+
+💡 Which package interests you the most?`
+      },
+      {
+        keywords: ['wedding'],
+        response: `💍 **Wedding Photography Services**
+
+We provide comprehensive wedding photography covering all ceremonies - from pre-wedding rituals to the reception, with professional editing and creative storytelling.
+
+**Key Points:**
+• Candid and traditional photography
+• Cinematic videography
+• Full-day coverage with professional editing
+
+💡 Would you like to see our wedding portfolio?`
       },
       {
         keywords: ['pre wedding', 'prewedding'],
@@ -838,25 +514,20 @@ We offer professional pre-wedding photography services for couples. Our team cap
 • Professional editing and retouching
 • Customized packages for every couple
 
-**Learn More:** [Pre-Wedding Photography](https://www.fotographiya.com/services/prewedding-photography)
-
 💡 Would you like to see our portfolio?`
       },
       {
-        keywords: ['wedding'],
-        response: `💍 **Wedding Photography Services**
+        keywords: ['destination'],
+        response: `🏖️ **Destination Wedding Photography**
 
-We provide comprehensive wedding photography covering all ceremonies - from pre-wedding rituals to the reception, with professional editing and creative storytelling.
+We offer professional destination wedding photography services across India. Our team covers all major Indian destinations including Rajasthan, Goa, Kerala, and Himachal Pradesh.
 
 **Key Points:**
-• Candid and traditional photography
-• Cinematic videography
-• Full-day coverage
-• Professional editing
+• Available in Rajasthan, Goa, Kerala, and Himachal Pradesh
+• Professional photography and cinematography
+• Customized packages with travel and accommodation arrangements
 
-**Learn More:** [Wedding Photography](https://www.fotographiya.com/services/wedding-photography)
-
-💡 Would you like to see our portfolio?`
+💡 Would you like to know more about our destination wedding packages?`
       },
       {
         keywords: ['contact', 'phone', 'call', 'email'],
@@ -865,71 +536,44 @@ We provide comprehensive wedding photography covering all ceremonies - from pre-
 You can reach us through multiple channels for inquiries, bookings, and consultations.
 
 **Key Points:**
-• Phone: +91 9001110144
+• WhatsApp: +91 9001110144
+• Phone Call: +91 9001110144
 • Email: fotographiyaworld@gmail.com
 • Office: Kota, Rajasthan
-
-**Learn More:** [Contact Us](https://www.fotographiya.com/contact)
 
 💡 How can we assist you today?`
       },
       {
-        keywords: ['team', 'employee', 'staff'],
-        response: `👥 **Our Team**
+        keywords: ['facebook', 'fb', 'facebootk'],
+        response: `📘 **Follow us on Facebook**
 
-Fotographiya has a team of 50+ dedicated professionals across multiple departments, working together to deliver exceptional photography services.
+Stay connected with us on Facebook to see client testimonials, wedding highlights, and company updates.
 
-**Key Points:**
-• Production Team: 10+ members
-• Tech Team: 10+ members
-• Operations Team: 20+ members
-• Management: 5+ members
-
-💡 Would you like to learn more about our team members?`
+💡 Would you like to follow us on other platforms too?`
       },
       {
-        keywords: ['portfolio', 'gallery'],
-        response: `🖼️ **Portfolio Gallery**
+        keywords: ['instagram', 'insta', 'ig'],
+        response: `📸 **Follow us on Instagram**
 
-Our portfolio showcases 100+ weddings and events we've captured with creativity, passion, and professional excellence.
+Stay connected with us on Instagram to see our latest wedding highlights, behind-the-scenes content, and client testimonials.
 
-**Key Points:**
-• 100+ weddings covered
-• Premium photo and video galleries
-• Cinematic storytelling
-
-**Learn More:** [Portfolio Gallery](https://www.fotographiya.com/portfolio)
-
-💡 Want to see more of our work?`
+💡 Would you like to follow us on other platforms too?`
       },
       {
-        keywords: ['history', 'founder', 'established', 'about'],
-        response: `🏢 **About Fotographiya**
+        keywords: ['youtube', 'yt', 'you tube'],
+        response: `🎬 **Follow us on YouTube**
 
-Fotographiya was founded in 2023 by Mohit Barthunia in Kota, Rajasthan, India. We blend traditional artistry with modern technology to create timeless memories.
+Subscribe to our YouTube channel to watch cinematic wedding films, event highlights, and behind-the-scenes videos.
 
-**Key Points:**
-• Founded: 2023
-• Location: Kota, Rajasthan
-• 100+ happy couples
-• 50+ team members
-
-**Learn More:** [About Us](https://www.fotographiya.com/about)
-
-💡 Would you like to know more about our journey?`
+💡 Would you like to follow us on other platforms too?`
       },
       {
-        keywords: ['social', 'instagram', 'facebook', 'youtube'],
-        response: `📱 **Follow Fotographiya on Social Media**
+        keywords: ['linkedin', 'in'],
+        response: `💼 **Follow us on LinkedIn**
 
-Stay connected with us on social media to see our latest work, client testimonials, and behind-the-scenes content.
+Connect with us on LinkedIn for professional updates, company news, and career opportunities.
 
-**Key Points:**
-• [Instagram](https://www.instagram.com/fotographiya_official/) - Daily wedding highlights
-• [Facebook](https://www.facebook.com/people/Fotographiya-Wedphotography/100092454265642/) - Client testimonials
-• [YouTube](https://www.youtube.com/@Fotographiya_official) - Cinematic wedding films
-
-💡 Want to see more of our work?`
+💡 Would you like to follow us on other platforms too?`
       },
       {
         keywords: ['goldenbox', 'golden box', 'qr'],
@@ -940,10 +584,7 @@ GoldenBox is our innovative AI-powered system that delivers high-quality event p
 **Key Points:**
 • No internet required
 • No app download needed
-• 3-second instant download
-• AI-enhanced premium quality
-
-**Learn More:** [GoldenBox Technology](https://www.fotographiya.com)
+• 3-second instant download with AI-enhanced premium quality
 
 💡 Would you like to know more about GoldenBox?`
       },
@@ -959,9 +600,48 @@ Fotographiya Academy offers professional photography and videography courses wit
 • Industry-recognized certificate
 • Top performer wins a camera
 
-**Learn More:** [Fotographiya Academy](https://www.fotographiya.com/fotographiya-academy)
-
 💡 Would you like to explore our course offerings?`
+      },
+      {
+        keywords: ['about', 'history', 'founder', 'established'],
+        response: `🏢 **About Fotographiya**
+
+Fotographiya was founded in 2023 by Mohit Barthunia in Kota, Rajasthan, India. We blend traditional artistry with modern technology to create timeless memories.
+
+**Key Points:**
+• Founded in 2023
+• Based in Kota, Rajasthan
+• 100+ happy couples served
+• 50+ dedicated team members
+
+💡 Would you like to know more about our journey?`
+      },
+      {
+        keywords: ['portfolio', 'gallery'],
+        response: `🖼️ **Portfolio Gallery**
+
+Our portfolio showcases 100+ weddings and events we've captured with creativity, passion, and professional excellence.
+
+**Key Points:**
+• 100+ weddings covered
+• Premium photo and video galleries
+• Cinematic storytelling with professional editing
+
+💡 Want to see more of our work?`
+      },
+      {
+        keywords: ['team', 'employee', 'staff'],
+        response: `👥 **Our Team**
+
+Fotographiya has a team of 50+ dedicated professionals across multiple departments, working together to deliver exceptional photography services.
+
+**Key Points:**
+• Production Team: 10+ members
+• Tech Team: 10+ members
+• Operations Team: 20+ members
+• Management: 5+ members
+
+💡 Would you like to learn more about our team?`
       }
     ];
 
@@ -975,12 +655,7 @@ Fotographiya Academy offers professional photography and videography courses wit
   }
 
   static _isOffTopic(msg) {
-    const keywords = [
-      "bts", "kpop", "ipl", "cricket", "movie", "actor", 
-      "singer", "song", "netflix", "prime", "football",
-      "prime minister", "president", "modi", "trump",
-      "china", "pakistan"
-    ];
+    const keywords = ["bts", "kpop", "ipl", "cricket", "movie", "actor", "singer", "song", "netflix", "prime", "football"];
     return keywords.some(kw => msg.includes(kw));
   }
 
@@ -1004,12 +679,10 @@ I'm a specialized AI assistant for Fotographiya - your premier wedding photograp
 I'm your professional AI photography assistant. I can provide information about our photography services, packages, GoldenBox technology, and academy.
 
 **Key Points:**
-• Wedding & Pre-Wedding Photography
-• Corporate & Event Photography
+• Wedding and Pre-Wedding Photography
+• Corporate and Event Photography
 • GoldenBox AI Technology
 • Fotographiya Academy
-
-**Learn More:** [Contact Us](https://www.fotographiya.com/contact)
 
 💡 How can I assist you with Fotographiya today?`;
   }
@@ -1018,14 +691,8 @@ I'm your professional AI photography assistant. I can provide information about 
 // ============================================
 // ✅ AI RESPONSE HANDLER
 // ============================================
-// aiService.js - FIXED
-
-// ============================================
-// ✅ AI RESPONSE HANDLER (FIXED)
-// ============================================
 class AIResponseHandler {
   constructor() {
-    // Store provider classes, not instances
     this.providerClasses = [
       GroqProvider,
       MistralProvider,
@@ -1037,7 +704,6 @@ class AIResponseHandler {
   async getAIResponse(userMessage, context) {
     const systemPrompt = PromptBuilder.buildSystemPrompt(context);
     
-    // Try each provider with a fresh instance
     for (const ProviderClass of this.providerClasses) {
       try {
         const provider = new ProviderClass();
@@ -1048,7 +714,6 @@ class AIResponseHandler {
         }
       } catch (error) {
         console.log(`⚠️ ${ProviderClass.name} failed:`, error.message);
-        // Continue to next provider
       }
     }
     
@@ -1056,6 +721,7 @@ class AIResponseHandler {
     return FallbackResponse.getResponse(userMessage);
   }
 }
+
 // ============================================
 // ✅ EXPORTS
 // ============================================
