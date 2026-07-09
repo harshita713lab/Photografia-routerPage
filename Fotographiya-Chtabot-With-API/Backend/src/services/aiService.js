@@ -227,33 +227,21 @@ You are Fotographiya's official AI photography assistant.
 1. NEVER include any links in your responses
 2. Just provide helpful text information
 3. Keep responses clear and professional
-4. Use emojis for visual appeal
+4. Use emojis for visual appeal.
 
-🎯 **RESPONSE STRUCTURE:**
+🚨 **WEDDING EXAMPLES RULE:**
+When asked about wedding examples (celebrity, destination, etc.), ONLY use the couple names and details provided in the COMPANY CONTEXT. DO NOT invent or use any other names like "Deepika Padukone" or "Ranveer Singh". Stick strictly to the provided data.
+
+🎯 **NEW, CONCISE RESPONSE STRUCTURE:**
 [Emoji] **Title**
 
-[3-4 line summary - clear and professional]
+[A short, 1-2 sentence summary.]
 
-**Key Points:**
-• Point 1
-• Point 2
-• Point 3
+• **Point 1:** [Brief and informative]
+• **Point 2:** [Brief and informative]
+• **Point 3:** [Brief and informative]
 
 💡 [Follow-up question]
-
-========================================
-✅ **CORRECT RESPONSE EXAMPLE:**
-========================================
-📱 **Fotographiya's Social Media Accounts**
-
-Stay connected with us across all platforms to explore our photography services, behind-the-scenes content, and creative insights.
-
-**Key Points:**
-• Follow us on Facebook, Instagram, YouTube, Pexels, Reddit, LinkedIn, and Medium
-• Engage with our community of 100+ happy couples
-• Access exclusive content and photography tips
-
-💡 Which platform would you like to connect with us on?
 
 ========================================
 ❌ **WRONG - NEVER DO THIS:**
@@ -411,19 +399,23 @@ class ResponseFormatter {
 // ============================================
 class FallbackResponse {
   static getResponse(userMessage) {
-    const msg = userMessage.toLowerCase().trim();
-    
-    if (this._isGreeting(msg)) return this._getGreetingResponse(msg);
-    if (this._isFarewell(msg)) return this._getFarewellResponse();
-    if (this._isInternational(msg)) return this._getInternationalResponse();
-    
-    const serviceResponse = this._getServiceResponse(msg);
-    if (serviceResponse) return serviceResponse;
-    
-    if (this._isOffTopic(msg)) return this._getOffTopicResponse();
-    
-    return this._getDefaultResponse();
-  }
+  const msg = userMessage.toLowerCase().trim();
+  
+  // Check all conditions
+  if (this._isGreeting(msg)) return this._getGreetingResponse(msg);
+  if (this._isFarewell(msg)) return this._getFarewellResponse();
+  if (this._isInternational(msg)) return this._getInternationalResponse();
+  
+  // ✅ ADD THIS LINE - Wedding check
+  if (this._isWedding(msg)) return this._getWeddingResponse();
+  
+  const serviceResponse = this._getServiceResponse(msg);
+  if (serviceResponse) return serviceResponse;
+  
+  if (this._isOffTopic(msg)) return this._getOffTopicResponse();
+  
+  return this._getDefaultResponse();
+}
 
   static _isGreeting(msg) {
     const greetings = ['hello', 'hi', 'hey', 'helloo', 'how are you', 'how r u', 'how are u'];
@@ -718,6 +710,69 @@ I'm your professional AI photography assistant. I can provide information about 
 
 💡 How can I assist you with Fotographiya today?`;
   }
+  static _isWedding(msg) {
+    const keywords = [
+      // Celebrity
+      'celebrity wedding', 'famous wedding', 'royal wedding',
+      'anubhav dubey', 'ayushi pandey', 'rahul sharma', 'priya singh',
+      'vikram mehta', 'ananya reddy', 'arjun kapoor', 'meera nair',
+      'karan malhotra', 'riya gupta', 'amit patel', 'sneha desai',
+      // Featured
+      'yash and sakshi', 'prabal and rani', 'rohan and kavya',
+      'siddharth and nisha', 'aditya and pooja', 'vivek and swati',
+      // Pre-wedding
+      'harshita and nilanshi', 'kunal and sana', 'ankit and divya',
+      'nikhil and anjali', 'raj and priyanka', 'manish and neha',
+      // Destination
+      'divyanshu and kuntal', 'raja and rani', 'virat and anushka',
+      'dhruv and kashish', 'samarth and ishita', 'gaurav and megha',
+      // General
+      'wedding portfolio', 'wedding gallery', 'our weddings'
+    ];
+    return keywords.some(kw => msg.includes(kw));
+  }
+
+  static _getWeddingResponse() {
+  const companyData = require('../data/companyData');
+  const weddings = companyData.weddings || {};
+  
+  let response = "💍 **Our Wedding Portfolio**\n\nHere are the beautiful weddings we've captured:\n\n";
+  
+  if (weddings.celebrity?.featured) {
+    response += "**🌟 Celebrity Weddings:**\n";
+    for (const w of weddings.celebrity.featured) {
+      response += `• ${w.couple} - ${w.location}\n`;
+    }
+    response += "\n";
+  }
+  
+  if (weddings.featured?.length > 0) {
+    response += "**📸 Featured Weddings:**\n";
+    for (const w of weddings.featured) {
+      response += `• ${w.couple} - ${w.location}\n`;
+    }
+    response += "\n";
+  }
+  
+  if (weddings.prewedding?.length > 0) {
+    response += "**💕 Pre-Wedding Shoots:**\n";
+    for (const w of weddings.prewedding) {
+      response += `• ${w.couple} - ${w.location}\n`;
+    }
+    response += "\n";
+  }
+  
+  if (weddings.destination?.length > 0) {
+    response += "**🏖️ Destination Weddings:**\n";
+    for (const w of weddings.destination) {
+      response += `• ${w.couple} - ${w.location}\n`;
+    }
+  }
+  
+  response += "\n💡 Which wedding would you like to know more about?";
+  
+  return response;
+}
 }
 
 // ============================================

@@ -34,7 +34,25 @@ const LINK_CONFIG = {
     label: 'LinkedIn',
     icon: '💼'
   },
-
+  medium: {
+    keywords: ['medium'],
+    link: 'https://medium.com/@fotographiya',
+    label: 'Medium',
+    icon: '📝'
+  },
+  reddit: {
+    keywords: ['reddit'],
+    link: 'https://www.reddit.com/r/fotographiya',
+    label: 'Reddit',
+    icon: '🤖'
+  },
+  pexels: {
+    keywords: ['pexels', 'pixel'],
+    link: 'https://www.pexels.com/@fotographiya',
+    label: 'Pexels',
+    icon: '🖼️'
+  },
+  
   // 📌 SOCIAL MEDIA - All (Group)
   allSocial: {
     keywords: ['social media', 'social accounts', 'all social', 'social platforms'],
@@ -42,7 +60,10 @@ const LINK_CONFIG = {
       { label: 'Instagram', link: 'https://www.instagram.com/fotographiya_official/', icon: '📸' },
       { label: 'Facebook', link: 'https://www.facebook.com/people/Fotographiya-Wedphotography/100092454265642/', icon: '📘' },
       { label: 'YouTube', link: 'https://www.youtube.com/@Fotographiya_official', icon: '🎬' },
-      { label: 'LinkedIn', link: 'https://www.linkedin.com/company/fotographiya', icon: '💼' }
+      { label: 'LinkedIn', link: 'https://www.linkedin.com/company/fotographiya', icon: '💼' },
+      { label: 'Medium', link: 'https://medium.com/@fotographiya', icon: '📝' },
+      { label: 'Reddit', link: 'https://www.reddit.com/r/fotographiya', icon: '🤖' },
+      { label: 'Pexels', link: 'https://www.pexels.com/@fotographiya', icon: '🖼️' }
     ]
   },
 
@@ -131,15 +152,15 @@ const LINK_CONFIG = {
 
   // 📌 LOCATION - ONLY MAP
   location: {
-    keywords: ['location', 'address', 'studio', 'kota', 'rajasthan'],
-    link: 'https://maps.google.com/?q=Kota,Rajasthan',
-    label: 'Google Maps',
+    keywords: ['location', 'address', 'studio', 'kota', 'rajasthan', 'where is fotographiya company', 'where is studio', 'how can i find location'],
+    link: 'https://www.google.com/maps/search/?api=1&query=F3%2C+Ballabh+Bari%2C+Electricity+Board+Area%2C+Kota%2C+Rajasthan+324007',
+    label: 'View on Google Maps',
     icon: '📍'
   },
 
   // 📌 OTHER PAGES
   about: {
-    keywords: ['about us', 'about', 'founder', 'history'],
+    keywords: ['about us', 'about', 'founder', 'history', 'who are you'],
     link: 'https://www.fotographiya.com/about',
     label: 'About Us',
     icon: '📖'
@@ -174,6 +195,19 @@ function findMatchingLinks(userMessage) {
   const lowerText = userMessage.toLowerCase().trim();
   const matches = [];
   const matchedWords = new Set();
+  
+  // 🔥 PRIORITY MATCHES: Check for general group keywords first
+  const groupKeywords = {
+    allSocial: ['social media', 'social accounts', 'all social', 'social platforms'],
+    allPackages: ['packages', 'pricing', 'budget', 'cost', 'price'],
+    contact: ['contact', 'contact us', 'reach us', 'help', 'support', 'customer care']
+  };
+  
+  for (const [key, keywords] of Object.entries(groupKeywords)) {
+    if (keywords.some(kw => lowerText.includes(kw))) {
+      return [LINK_CONFIG[key]]; // Return only the group and stop
+    }
+  }
   
   // 🔥 STEP 1: Check each word/phrase in the message
   for (const [key, config] of Object.entries(LINK_CONFIG)) {
