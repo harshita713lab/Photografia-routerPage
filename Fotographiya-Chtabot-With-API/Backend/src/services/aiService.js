@@ -491,6 +491,38 @@ We offer three comprehensive photography packages to suit every couple's needs a
 💡 Which package interests you the most?`
       },
       {
+      keywords: ['birthday', 'cake smash', 'kids birthday', 'birthday party', 'birthday celebration'],
+      response: `🎂 **Birthday Photography Services**
+
+We capture the joy, laughter, and love that fills the air on your special day. From the first slice of cake to the last dance, we freeze those moments forever.
+
+**Key Points:**
+• Professional birthday photography covering every moment
+• Fun cake smash sessions for kids and adults
+• Beautiful portraits capturing personality
+• Complete party coverage from start to finish
+• Premium printed albums and digital frames
+
+💡 Would you like to know about our birthday photography packages?`
+    },
+
+    // 🆕 ROKA
+    {
+      keywords: ['roka', 'pre engagement', 'tilak', 'ring ceremony', 'roka ritual'],
+      response: `💍 **Roka Ceremony Photography**
+
+The Roka ceremony is one of the most cherished pre-wedding rituals in Indian culture. We capture every ritual, emotion, and sacred moment of this beautiful tradition.
+
+**Key Points:**
+• Professional photography covering all rituals
+• Cinematic videography available
+• Candid photography capturing real emotions
+• Traditional coverage of tilak, ring exchange, and blessings
+• Premium leather albums and canvas prints
+
+💡 Would you like to know more about our Roka photography packages?`
+    },
+      {
         keywords: ['wedding'],
         response: `💍 **Wedding Photography Services**
 

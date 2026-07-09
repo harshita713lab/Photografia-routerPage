@@ -1,3 +1,4 @@
+// ChatBot.jsx
 import React, { useState, useRef, useEffect } from 'react'
 import '../styles/ChatBot.css'
 import ChatMessage from './ChatMessage'
@@ -6,8 +7,6 @@ import TypingIndicator from './TypingIndicator'
 
 const ChatBot = () => {
   const [isOpen, setIsOpen] = useState(false)
-  
-  // ✅ FIX: Always start with welcome message - NO localStorage
   const [messages, setMessages] = useState([
     {
       id: 1,
@@ -17,6 +16,7 @@ const ChatBot = () => {
     }
   ])
   
+  const [lastUserMessage, setLastUserMessage] = useState(null) // ✅ NEW
   const [isLoading, setIsLoading] = useState(false)
   const [isInitialLoading, setIsInitialLoading] = useState(true)
   const [sessionId, setSessionId] = useState(null)
@@ -30,7 +30,6 @@ const ChatBot = () => {
     setIsOpen(!isOpen)
   }
 
-  // ✅ Session ID - store only session, not messages
   useEffect(() => {
     let storedSessionId
     try {
@@ -48,15 +47,12 @@ const ChatBot = () => {
     setSessionId(storedSessionId)
   }, [])
 
-  // ✅ Initial loading state
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsInitialLoading(false)
     }, 600)
     return () => clearTimeout(timer)
   }, [])
-
-  // ✅ NO localStorage for messages - removed completely
 
   const generateSessionId = () => {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
@@ -77,6 +73,9 @@ const ChatBot = () => {
   }, [messages, isLoading, isInitialLoading])
 
   const sendMessage = async (userMessage) => {
+    // ✅ Store last user message BEFORE sending
+    setLastUserMessage(userMessage)
+    
     const userMsg = {
       id: Date.now(),
       text: userMessage,
@@ -207,9 +206,20 @@ const ChatBot = () => {
         </div>
 
         <div className="chat-body">
-          {messages.map((msg) => (
-            <ChatMessage key={msg.id} message={msg} />
-          ))}
+          {messages.map((msg, index) => {
+            // ✅ Last user message se pehle wali bot messages ko null bhejo
+            // ✅ Current bot message ko lastUserMessage bhejo
+            const isLastBotMessage = msg.sender === 'bot' && index === messages.length - 1;
+            const userMsgForLinks = isLastBotMessage ? lastUserMessage : null;
+            
+            return (
+              <ChatMessage 
+                key={msg.id} 
+                message={msg} 
+                lastUserMessage={userMsgForLinks}
+              />
+            )
+          })}
           {(isLoading || isInitialLoading) && <TypingIndicator />}
           <div ref={messagesEndRef} />
         </div>

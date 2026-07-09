@@ -82,7 +82,10 @@ const companyData = {
     corporate: "https://www.fotographiya.com/services/corporate-photography",
     academy: "https://www.fotographiya.com/fotographiya-academy",
     portfolio: "https://www.fotographiya.com/portfolio",
-    contact: "https://www.fotographiya.com/contact"
+    contact: "https://www.fotographiya.com/contact",
+    maternity: "https://www.fotographiya.com/services/maternity-photography",
+    birthday: "https://www.fotographiya.com/services/birthday-photography",
+    roka: "https://www.fotographiya.com/services/roka-photography"
   },
 
   links: [
@@ -110,7 +113,16 @@ const companyData = {
     },
     corporate: {
       description: "Professional corporate photography services for events, conferences, team photos, and brand imagery."
-    }
+    },
+    maternity: {
+    description: "Professional maternity photography celebrating the beauty of pregnancy. We capture the glow, the love, and the anticipation of expecting mothers."
+  },
+  birthday: {
+    description: "Professional birthday photography capturing the joy, laughter, and love of your special day from cake smash to celebration."
+  },
+  roka: {
+    description: "Professional Roka ceremony photography capturing every ritual, emotion, and sacred moment of this cherished pre-wedding tradition."
+  }
   },
 
   packages: {
