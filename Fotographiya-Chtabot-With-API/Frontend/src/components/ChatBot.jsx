@@ -216,6 +216,7 @@ const ChatBot = () => {
               <ChatMessage 
                 key={msg.id} 
                 message={msg} 
+                index={index} // Pass the index to ChatMessage
                 lastUserMessage={userMsgForLinks}
               />
             )

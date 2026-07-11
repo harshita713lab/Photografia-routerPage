@@ -3,7 +3,6 @@ const router = express.Router();
 const { getAIResponse } = require('./services/aiService');
 const scraperService = require('./services/scraperService');
 
-// ✅ Correctly import companyData from the relative path
 const companyData = require('./data/companyData');
 // ============================================
 // ✅ WEDDING KEYWORDS (CATEGORIZED)
@@ -70,36 +69,15 @@ const INTERNATIONAL_KEYWORDS = [
   'outside country', 'foreign country', 'other country'
 ];
 
-// ✅ NEW: ALLOWED TOPICS for comprehensive off-topic check
-const ALLOWED_TOPICS = [
-  'fotographiya', 'photography', 'services', 'packages', 'goldenbox', 'academy',
-  'wedding', 'pre-wedding', 'destination', 'celebrity', 'team', 'contact',
-  'price', 'cost', 'budget', 'portfolio', 'gallery', 'about', 'founder',
-  'maternity', 'birthday', 'roka', 'corporate', 'reviews', 'location',
-  'instagram', 'facebook', 'youtube', 'linkedin', 'medium', 'reddit', 'pexels',
-  'social media', 'social accounts', 'all social', 'social platforms', 'all platforms', 'social links',
-  'silver package', 'golden package', 'premium package', 'all packages',
-  'contact us', 'reach us', 'help', 'support', 'customer care',
-  'address', 'studio', 'kota', 'rajasthan', 'where is fotographiya', 'map', 'direction', 'google map',
-  'reviews', 'customer review', 'testimonial', 'feedback', 'what people say',
-  'golden box', 'qr photo', 'course', 'training', 'internship', 'work samples', 'our work', 'showcase'
-];
-
 // ============================================
 // ✅ FUNCTIONS
 // ============================================
 function checkKeywords(message, keywords) {
-  // Ensure message is a string before calling toLowerCase
-  if (typeof message !== 'string') {
-    console.warn('checkKeywords received non-string message:', message);
-    return false;
-  }
   const msg = message.toLowerCase();
   return keywords.some(keyword => msg.includes(keyword));
 }
 
 function getWeddingResponseType(message) {
-  if (typeof message !== 'string') return null;
   if (checkKeywords(message, CELEBRITY_WEDDING_KEYWORDS)) {
     return 'celebrity';
   }
@@ -115,15 +93,36 @@ function getWeddingResponseType(message) {
   return null;
 }
 
+// ✅ NEW: Comprehensive Off-Topic Check
 function isOffTopic(message) {
-  const msg = message.toLowerCase();
-  return OFF_TOPIC_KEYWORDS.some(keyword => msg.includes(keyword));
+  const msgLower = message.toLowerCase().trim();
+  
+  // If the message contains any allowed topic, it's NOT off-topic
+  const isAllowed = ALLOWED_TOPICS.some(topic => msgLower.includes(topic));
+  if (isAllowed) return false;
+  
+  // If it doesn't contain an allowed topic, check if it contains a forbidden off-topic keyword
+  return OFF_TOPIC_KEYWORDS.some(kw => msgLower.includes(kw));
 }
 
 function isInternationalQuestion(message) {
-  const msg = message.toLowerCase();
+  const msg = message.toLowerCase().trim();
   return INTERNATIONAL_KEYWORDS.some(keyword => msg.includes(keyword));
 }
+
+function getInternationalResponse() {
+  return `❌ **No International Services**\n\nFotographiya only operates within India. We do not provide photography services outside India.\n\n📍 **Our Coverage:** All Indian states including Rajasthan, Goa, Kerala, and Himachal Pradesh.\n\n💡 Would you like to know about our Indian destination wedding packages?`;
+}
+
+function getOffTopicResponse() {
+  return `⚠️ **Specialized Assistance Only**\n\nI'm a specialized AI assistant for Fotographiya - your premier wedding photography company. I can only help with topics related to our services.\n\n**Key Points:**\n• Wedding Photography\n• Pre-Wedding Photography\n• GoldenBox AI Technology\n• Fotographiya Academy\n\n💡 What would you like to know about Fotographiya?`;
+}
+
+function getDefaultResponse() {
+  return `📸 **Welcome to Fotographiya**\n\nI'm your professional AI photography assistant. I can provide information about our photography services, packages, GoldenBox technology, and academy.\n\n**Key Points:**\n• Wedding and Pre-Wedding Photography\n• Corporate and Event Photography\n• GoldenBox AI Technology\n• Fotographiya Academy\n\n💡 How can I assist you with Fotographiya today?`;
+}
+
+
 
 // ============================================
 // ✅ CHAT MESSAGE ROUTE
@@ -142,16 +141,13 @@ router.post('/message', async (req, res) => {
     console.log(`📩 Message: ${message}`);
 
     // 🔥 STEP 1: Check if it's about international services
+    // This check happens before AI call, so AI won't be asked about international
     if (isInternationalQuestion(message)) {
       return res.json({
         success: true,
-        data: {
-          message: "❌ **No International Services**\n\nWe only operate within India. We do not provide photography services outside India.\n\n📍 **Our Coverage:** All Indian states including Rajasthan, Goa, Kerala, Himachal Pradesh, and more.\n\n💡 Would you like to know about our Indian destination wedding packages?",
-          timestamp: new Date().toISOString()
-        }
+        data: { message: getInternationalResponse(), timestamp: new Date().toISOString() }
       });
     }
-
     // 🔥 NEW: Check for team/employee questions
     if (checkKeywords(message, TEAM_KEYWORDS)) {
       const teamData = companyData.team || {};
@@ -170,22 +166,75 @@ router.post('/message', async (req, res) => {
       });
     }
 
-    // 🔥 STEP 2: Check if it's an off-topic question
-    if (isOffTopic(message)) {
+    // 🔥 STEP 2: Check for specific wedding questions
+    const weddingType = getWeddingResponseType(message);
+    if (weddingType) {
+      const weddings = companyData.weddings || {};
+      let responseText = '';
+
+      if (weddingType === 'celebrity' && weddings.celebrity?.featured?.length > 0) {
+        responseText = "🌟 **Celebrity Weddings**\n\nHere are some of the famous weddings we've captured:\n\n";
+        weddings.celebrity.featured.slice(0, 3).forEach(w => {
+          responseText += `• **${w.couple}** in ${w.location}\n`;
+        });
+        responseText += "\n💡 Ask for 'celebrity weddings' to see more details!";
+
+      } else if (weddingType === 'destination' && weddings.destination?.length > 0) {
+        responseText = "🏖️ **Destination Weddings**\n\nWe specialize in destination weddings across India. Here are a few examples:\n\n";
+        weddings.destination.slice(0, 3).forEach(w => {
+          responseText += `• **${w.couple}** in ${w.location}\n`;
+        });
+        responseText += "\n💡 We cover many beautiful locations. Where are you planning yours?";
+
+      } else if (weddingType === 'pre-wedding' && weddings.prewedding?.length > 0) {
+        responseText = "💕 **Pre-Wedding Shoots**\n\nOur pre-wedding shoots are all about capturing your unique love story. Here are some examples:\n\n";
+        weddings.prewedding.slice(0, 3).forEach(w => {
+          responseText += `• **${w.couple}** in ${w.location}\n`;
+        });
+        responseText += "\n💡 Interested in a pre-wedding shoot? We can suggest some great concepts!";
+
+      } else { // General wedding question
+        responseText = "💍 **Our Wedding Portfolio**\n\nWe have had the privilege of capturing beautiful love stories. Here are a few highlights:\n\n";
+        
+        if (weddings.celebrity?.featured?.[0]) {
+          const w = weddings.celebrity.featured[0];
+          responseText += `🌟 **Celebrity:** ${w.couple} in ${w.location}\n`;
+        }
+        if (weddings.featured?.[0]) {
+          const w = weddings.featured[0];
+          responseText += `📸 **Featured:** ${w.couple} in ${w.location}\n`;
+        }
+        if (weddings.destination?.[0]) {
+          const w = weddings.destination[0];
+          responseText += `🏖️ **Destination:** ${w.couple} in ${w.location}\n`;
+        }
+        if (weddings.prewedding?.[0]) {
+          const w = weddings.prewedding[0];
+          responseText += `💕 **Pre-Wedding:** ${w.couple} in ${w.location}\n`;
+        }
+        responseText += "\n💡 You can ask for 'celebrity weddings', 'destination weddings', or 'pre-wedding shoots' to see more specific examples!";
+      }
+
       return res.json({
         success: true,
         data: {
-          message: getOffTopicResponse(), // Use the function
+          message: responseText,
           timestamp: new Date().toISOString()
         }
       });
     }
-    
-    // 🔥 STEP 3: Determine context for AI (including wedding type if detected)
-    const weddingType = getWeddingResponseType(message); // Detect wedding type
-    const context = scraperService.buildContextForAI(message, weddingType); // Pass weddingType to context builder
+
+    // 🔥 STEP 3: Check if it's an off-topic question
+    // This check happens before AI call, so AI won't be asked off-topic questions
+    if (isOffTopic(message)) {
+      return res.json({
+        success: true,
+        data: { message: getOffTopicResponse(), timestamp: new Date().toISOString() }
+      });
+    }
     
     // 🔥 STEP 4: Get AI response
+    const context = scraperService.buildContextForAI(message);
     const reply = await getAIResponse(message, context);
     
     res.json({ 

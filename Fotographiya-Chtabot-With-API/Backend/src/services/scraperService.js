@@ -427,8 +427,7 @@ searchHybrid(query) {
   // ================================================
   // 🧠 BUILD AI CONTEXT - FIXED
   // ================================================
-  // scraperService.js - buildContextForAI() FIXED
-buildContextForAI(userMessage) {
+buildContextForAI(userMessage, weddingType = null) {
   const query = userMessage.toLowerCase();
   const contextParts = [];
   
@@ -454,6 +453,44 @@ buildContextForAI(userMessage) {
   if (packages.golden) contextParts.push(`• Golden: ${packages.golden.includes}`);
   if (packages.premium) contextParts.push(`• Premium: ${packages.premium.includes}`);
   
+  // ===== PART 4: WEDDING DATA BASED ON TYPE (if provided) =====
+  if (weddingType) {
+    const weddings = companyData.weddings || {};
+    let weddingExamples = [];
+
+    if (weddingType === 'celebrity' && weddings.celebrity?.featured) {
+      weddingExamples = weddings.celebrity.featured;
+      contextParts.push("\n🌟 CELEBRITY WEDDINGS WE'VE CAPTURED:");
+    } else if (weddingType === 'destination' && weddings.destination) {
+      weddingExamples = weddings.destination;
+      contextParts.push("\n🏖️ DESTINATION WEDDINGS WE'VE CAPTURED:");
+    } else if (weddingType === 'pre-wedding' && weddings.prewedding) {
+      weddingExamples = weddings.prewedding;
+      contextParts.push("\n💕 PRE-WEDDING SHOOTS WE'VE CAPTURED:");
+    } else if (weddingType === 'general') {
+      // For general, include a mix of all wedding types
+      if (weddings.celebrity?.featured) weddingExamples.push(...weddings.celebrity.featured);
+      if (weddings.featured) weddingExamples.push(...weddings.featured);
+      if (weddings.destination) weddingExamples.push(...weddings.destination);
+      if (weddings.prewedding) weddingExamples.push(...weddings.prewedding);
+      contextParts.push("\n💍 WEDDINGS WE'VE CAPTURED:");
+    }
+
+    // Add all examples to context
+    weddingExamples.forEach(w => { // Modified logic for wedding examples
+      if (weddingType === 'pre-wedding') {
+        // For pre-wedding, only show couple names
+        contextParts.push(`• Couple: ${w.couple}`);
+      } else if (weddingType === 'destination') {
+        // For destination, show couple, location, and description
+        contextParts.push(`• Couple: ${w.couple}, Location: ${w.location}, Description: ${w.description || 'N/A'}`);
+      } else {
+        // For celebrity, featured, or general, show couple and description (no location)
+        contextParts.push(`• Couple: ${w.couple}, Description: ${w.description || 'N/A'}`);
+      }
+    });
+  }
+
   // ===== PART 4: LIVE DATA - SIRF CONTENT, NO URLS =====
   contextParts.push("\n📄 WEBSITE CONTENT:");
   
@@ -490,7 +527,7 @@ buildContextForAI(userMessage) {
     contextParts.push("• Fotographiya Academy for professional courses");
   }
   
-  // ===== PART 5: GOLDEN BOX - SIRF TEXT =====
+  // ===== PART 6: GOLDEN BOX - SIRF TEXT =====
   const goldenBox = companyData.goldenBox || {};
   if (Object.keys(goldenBox).length > 0) {
     contextParts.push("\n✨ GOLDENBOX:");
@@ -499,8 +536,8 @@ buildContextForAI(userMessage) {
       contextParts.push(`Features: ${goldenBox.features.join(", ")}`);
     }
   }
-  
-  // ===== PART 6: ACADEMY - SIRF TEXT =====
+
+  // ===== PART 7: ACADEMY - SIRF TEXT =====
   const academy = companyData.academy || {};
   if (Object.keys(academy).length > 0) {
     contextParts.push("\n🎓 ACADEMY:");

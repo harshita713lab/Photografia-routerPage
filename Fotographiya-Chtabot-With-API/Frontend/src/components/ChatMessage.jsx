@@ -1,15 +1,17 @@
-// ChatMessage.jsx - COMPLETE REPLACEMENT
+// ChatMessage.jsx - COMPLETE REPLACEMENT WITH ALL SOCIAL LINKS
 
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import '../styles/ChatBot.css';
 
 // ============================================
-// ✅ MASTER KEYWORD TO LINK MAPPING
+// ✅ MASTER KEYWORD TO LINK MAPPING (COMPLETE)
 // ============================================
 
 const LINK_CONFIG = {
-  // 📌 SOCIAL MEDIA - Individual
+  // ============================================
+  // 📌 SOCIAL MEDIA - INDIVIDUAL
+  // ============================================
   instagram: {
     keywords: ['instagram', 'insta', 'ig'],
     link: 'https://www.instagram.com/fotographiya_official/',
@@ -17,19 +19,19 @@ const LINK_CONFIG = {
     icon: '📸'
   },
   facebook: {
-    keywords: ['facebook', 'fb'],
+    keywords: ['facebook', 'fb', 'facebootk', 'fsbuk'],
     link: 'https://www.facebook.com/people/Fotographiya-Wedphotography/100092454265642/',
     label: 'Facebook',
     icon: '📘'
   },
   youtube: {
-    keywords: ['youtube', 'yt'],
+    keywords: ['youtube', 'yt', 'you tube'],
     link: 'https://www.youtube.com/@Fotographiya_official',
     label: 'YouTube',
     icon: '🎬'
   },
   linkedin: {
-    keywords: ['linkedin'],
+    keywords: ['linkedin', 'linked in'],
     link: 'https://www.linkedin.com/company/fotographiya',
     label: 'LinkedIn',
     icon: '💼'
@@ -47,27 +49,31 @@ const LINK_CONFIG = {
     icon: '🤖'
   },
   pexels: {
-    keywords: ['pexels', 'pixel'],
+    keywords: ['pexels', 'pixel', 'pixels'],
     link: 'https://www.pexels.com/@fotographiya',
     label: 'Pexels',
     icon: '🖼️'
   },
   
-  // 📌 SOCIAL MEDIA - All (Group)
+  // ============================================
+  // 📌 SOCIAL MEDIA - ALL (GROUP)
+  // ============================================
   allSocial: {
-    keywords: ['social media', 'social accounts', 'all social', 'social platforms'],
+    keywords: ['social media', 'social accounts', 'all social', 'social platforms', 'all platforms', 'social links'],
     links: [
-      { label: 'Instagram', link: 'https://www.instagram.com/fotographiya_official/', icon: '📸' },
-      { label: 'Facebook', link: 'https://www.facebook.com/people/Fotographiya-Wedphotography/100092454265642/', icon: '📘' },
-      { label: 'YouTube', link: 'https://www.youtube.com/@Fotographiya_official', icon: '🎬' },
-      { label: 'LinkedIn', link: 'https://www.linkedin.com/company/fotographiya', icon: '💼' },
-      { label: 'Medium', link: 'https://medium.com/@fotographiya', icon: '📝' },
-      { label: 'Reddit', link: 'https://www.reddit.com/r/fotographiya', icon: '🤖' },
-      { label: 'Pexels', link: 'https://www.pexels.com/@fotographiya', icon: '🖼️' }
+      { label: '📸 Instagram', link: 'https://www.instagram.com/fotographiya_official/' },
+      { label: '📘 Facebook', link: 'https://www.facebook.com/people/Fotographiya-Wedphotography/100092454265642/' },
+      { label: '🎬 YouTube', link: 'https://www.youtube.com/@Fotographiya_official' },
+      { label: '💼 LinkedIn', link: 'https://www.linkedin.com/company/fotographiya' },
+      { label: '📝 Medium', link: 'https://medium.com/@fotographiya' },
+      { label: '🤖 Reddit', link: 'https://www.reddit.com/r/fotographiya' },
+      { label: '🖼️ Pexels', link: 'https://www.pexels.com/@fotographiya' }
     ]
   },
 
-  // 📌 SERVICES - EXACT WORD MATCH
+  // ============================================
+  // 📌 SERVICES
+  // ============================================
   maternity: {
     keywords: ['maternity', 'pregnancy', 'baby bump', 'motherhood'],
     link: 'https://www.fotographiya.com/services/maternity-photography',
@@ -75,7 +81,7 @@ const LINK_CONFIG = {
     icon: '👶'
   },
   prewedding: {
-    keywords: ['pre wedding', 'prewedding', 'pre-wedding', 'engagement'],
+    keywords: ['pre wedding', 'pre-wedding', 'prewedding', 'engagement'],
     link: 'https://www.fotographiya.com/services/prewedding-photography',
     label: 'Pre-Wedding Photography',
     icon: '📸'
@@ -105,13 +111,25 @@ const LINK_CONFIG = {
     icon: '💍'
   },
   corporate: {
-    keywords: ['corporate', 'event'],
+    keywords: ['corporate', 'event photography', 'corporate event'],
     link: 'https://www.fotographiya.com/services/corporate-photography',
     label: 'Corporate Photography',
     icon: '🏢'
   },
 
+  // ============================================
+  // 📌 SERVICES - GENERAL
+  // ============================================
+  allServices: {
+    keywords: ['services', 'offerings', 'what do you do', 'what services do you provide'],
+    link: 'https://www.fotographiya.com/services',
+    label: 'All Services',
+    icon: '🎯'
+  },
+  
+  // ============================================
   // 📌 PACKAGES
+  // ============================================
   silver: {
     keywords: ['silver package', 'silver pack'],
     link: 'https://www.fotographiya.com/packages/silver',
@@ -139,7 +157,9 @@ const LINK_CONFIG = {
     ]
   },
 
-  // 📌 CONTACT - ONLY WHEN "CONTACT" WORD IS USED
+  // ============================================
+  // 📌 CONTACT
+  // ============================================
   contact: {
     keywords: ['contact', 'contact us', 'reach us', 'help', 'support', 'customer care'],
     links: [
@@ -150,43 +170,73 @@ const LINK_CONFIG = {
     ]
   },
 
-  // 📌 LOCATION - ONLY MAP
+  // ============================================
+  // 📌 LOCATION - MAP LINK
+  // ============================================
   location: {
-    keywords: ['location', 'address', 'studio', 'kota', 'rajasthan', 'where is fotographiya company', 'where is studio', 'how can i find location'],
+    keywords: [
+      'location', 'address', 'studio', 'kota', 'rajasthan', 
+      'where is fotographiya', 'where is studio', 'how can i find location',
+      'map', 'direction', 'google map', 'find us', 'come to'
+    ],
     link: 'https://www.google.com/maps/search/?api=1&query=F3%2C+Ballabh+Bari%2C+Electricity+Board+Area%2C+Kota%2C+Rajasthan+324007',
-    label: 'View on Google Maps',
+    label: '📍 View on Google Maps',
     icon: '📍'
   },
 
+  // ============================================
   // 📌 OTHER PAGES
+  // ============================================
   about: {
     keywords: ['about us', 'about', 'founder', 'history', 'who are you'],
     link: 'https://www.fotographiya.com/about',
     label: 'About Us',
     icon: '📖'
   },
+  
+  // ============================================
+  // 📌 REVIEWS - About Us Page Link
+  // ============================================
+  reviews: {
+    keywords: ['review', 'reviews', 'customer review', 'customer reviews', 'testimonial', 'testimonials', 'feedback', 'what people say'],
+    link: 'https://www.fotographiya.com/about',
+    label: '⭐ Customer Reviews',
+    icon: '⭐'
+  },
+
+  // ============================================
+  // 📌 PORTFOLIO
+  // ============================================
+  portfolio: {
+    keywords: ['portfolio', 'gallery', 'work samples', 'our work', 'showcase'],
+    link: 'https://www.fotographiya.com/portfolio',
+    label: '🖼️ Portfolio Gallery',
+    icon: '🖼️'
+  },
+
+  // ============================================
+  // 📌 GOLDENBOX
+  // ============================================
   goldenbox: {
     keywords: ['golden box', 'goldenbox', 'qr photo'],
     link: 'https://www.fotographiya.com/goldenbox',
-    label: 'GoldenBox',
+    label: '✨ GoldenBox',
     icon: '✨'
   },
+
+  // ============================================
+  // 📌 ACADEMY
+  // ============================================
   academy: {
     keywords: ['academy', 'course', 'training', 'internship'],
     link: 'https://www.fotographiya.com/fotographiya-academy',
-    label: 'Fotographiya Academy',
+    label: '🎓 Fotographiya Academy',
     icon: '🎓'
-  },
-  portfolio: {
-    keywords: ['portfolio', 'gallery', 'work samples'],
-    link: 'https://www.fotographiya.com/portfolio',
-    label: 'Portfolio',
-    icon: '🖼️'
   }
 };
 
 // ============================================
-// ✅ SMART WORD MATCHING FUNCTION
+// ✅ SMART WORD MATCHING FUNCTION (FIXED)
 // ============================================
 
 function findMatchingLinks(userMessage) {
@@ -194,121 +244,177 @@ function findMatchingLinks(userMessage) {
   
   const lowerText = userMessage.toLowerCase().trim();
   const matches = [];
-  const matchedWords = new Set();
+  const matchedKeys = new Set();
   
-  // 🔥 PRIORITY MATCHES: Check for general group keywords first
+  // 🔥 STEP 1: Check for group keywords first (highest priority)
   const groupKeywords = {
-    allSocial: ['social media', 'social accounts', 'all social', 'social platforms'],
+    allSocial: ['social media', 'social accounts', 'all social', 'social platforms', 'all platforms', 'social links'],
     allPackages: ['packages', 'pricing', 'budget', 'cost', 'price'],
     contact: ['contact', 'contact us', 'reach us', 'help', 'support', 'customer care']
   };
   
   for (const [key, keywords] of Object.entries(groupKeywords)) {
     if (keywords.some(kw => lowerText.includes(kw))) {
-      return [LINK_CONFIG[key]]; // Return only the group and stop
+      const config = LINK_CONFIG[key];
+      if (config) {
+        // Return only the group match
+        return [config];
+      }
     }
   }
   
-  // 🔥 STEP 1: Check each word/phrase in the message
-  for (const [key, config] of Object.entries(LINK_CONFIG)) {
-    let isMatch = false;
-    let matchedKeyword = '';
+  // 🔥 STEP 2: Check individual social media first (highest priority for social)
+  const socialKeys = ['instagram', 'facebook', 'youtube', 'linkedin', 'medium', 'reddit', 'pexels'];
+  
+  for (const key of socialKeys) {
+    const config = LINK_CONFIG[key];
+    if (!config) continue;
     
     for (const keyword of config.keywords) {
-      const kwLower = keyword.toLowerCase();
-      
-      // ✅ Check if keyword exists as a WHOLE WORD in the message
-      // Using word boundaries - matches "maternity" in "do you shoot maternity?"
-      const wordRegex = new RegExp(`\\b${kwLower.replace(/\s+/g, '\\s+')}\\b`, 'i');
-      
-      if (wordRegex.test(lowerText)) {
-        isMatch = true;
-        matchedKeyword = keyword;
+      if (lowerText.includes(keyword.toLowerCase())) {
+        if (!matchedKeys.has(key)) {
+          matchedKeys.add(key);
+          matches.push({
+            type: 'single',
+            label: config.label,
+            link: config.link,
+            icon: config.icon || '🔗',
+            key: key
+          });
+        }
         break;
       }
-      
-      // ✅ Also check if message starts with the keyword
-      if (lowerText.startsWith(kwLower)) {
+    }
+  }
+  
+  // 🔥 STEP 3: Check services with PRIORITY ORDER
+  const servicePriority = [
+    'prewedding', 'destination', 'maternity', 'birthday', 'roka', 'corporate', 'wedding'
+  ];
+  
+  // Check specific services
+  for (const key of servicePriority) {
+    const config = LINK_CONFIG[key];
+    if (!config) continue;
+    if (matchedKeys.has(key)) continue;
+    
+    let isMatch = false;
+    for (const keyword of config.keywords) {
+      if (lowerText.includes(keyword.toLowerCase())) {
         isMatch = true;
-        matchedKeyword = keyword;
-        break;
-      }
-      
-      // ✅ Check if message ends with the keyword
-      if (lowerText.endsWith(kwLower)) {
-        isMatch = true;
-        matchedKeyword = keyword;
         break;
       }
     }
     
     if (isMatch) {
-      matchedWords.add(key);
-      
-      if (config.links) {
-        matches.push({
-          type: 'multiple',
-          links: config.links,
-          key: key
-        });
-      } else if (config.link) {
+      matchedKeys.add(key);
+      matches.push({
+        type: 'single',
+        label: config.label,
+        link: config.link,
+        icon: config.icon || '🔗',
+        key: key
+      });
+    }
+  }
+  
+  // 🔥 STEP 4: Check location (map link)
+  const locationConfig = LINK_CONFIG.location;
+  if (locationConfig && !matchedKeys.has('location')) {
+    for (const keyword of locationConfig.keywords) {
+      if (lowerText.includes(keyword.toLowerCase())) {
+        matchedKeys.add('location');
         matches.push({
           type: 'single',
-          label: config.label,
-          link: config.link,
-          icon: config.icon || '🔗',
-          key: key
+          label: locationConfig.label,
+          link: locationConfig.link,
+          icon: locationConfig.icon || '📍',
+          key: 'location'
         });
-      }
-    }
-  }
-  
-  // 🔥 STEP 2: Remove duplicates and overlapping matches
-  // Example: If "pre wedding" matched, remove "wedding" match
-  const finalMatches = [];
-  const matchedKeys = new Set();
-  
-  // Sort: Longer keywords first (pre wedding > wedding)
-  matches.sort((a, b) => {
-    const aLen = a.key ? a.key.length : 0;
-    const bLen = b.key ? b.key.length : 0;
-    return bLen - aLen;
-  });
-  
-  for (const match of matches) {
-    const key = match.key || '';
-    
-    // Check if this key is already covered by a longer match
-    let isCovered = false;
-    for (const existingKey of matchedKeys) {
-      // If existing key is "prewedding" and current is "wedding" - skip current
-      if (existingKey.includes(key) && existingKey !== key) {
-        isCovered = true;
         break;
       }
-      // If existing key is "wedding" and current is "prewedding" - keep both (different services)
     }
+  }
+  
+  // 🔥 STEP 5: Check reviews
+  const reviewsConfig = LINK_CONFIG.reviews;
+  if (reviewsConfig && !matchedKeys.has('reviews')) {
+    for (const keyword of reviewsConfig.keywords) {
+      if (lowerText.includes(keyword.toLowerCase())) {
+        matchedKeys.add('reviews');
+        matches.push({
+          type: 'single',
+          label: reviewsConfig.label,
+          link: reviewsConfig.link,
+          icon: reviewsConfig.icon || '⭐',
+          key: 'reviews'
+        });
+        break;
+      }
+    }
+  }
+  
+  // 🔥 STEP 6: Check portfolio
+  const portfolioConfig = LINK_CONFIG.portfolio;
+  if (portfolioConfig && !matchedKeys.has('portfolio')) {
+    for (const keyword of portfolioConfig.keywords) {
+      if (lowerText.includes(keyword.toLowerCase())) {
+        matchedKeys.add('portfolio');
+        matches.push({
+          type: 'single',
+          label: portfolioConfig.label,
+          link: portfolioConfig.link,
+          icon: portfolioConfig.icon || '🖼️',
+          key: 'portfolio'
+        });
+        break;
+      }
+    }
+  }
+  
+  // 🔥 STEP 7: Check other pages (about, goldenbox, academy)
+  const otherKeys = ['about', 'goldenbox', 'academy', 'allServices'];
+  
+  for (const key of otherKeys) {
+    const config = LINK_CONFIG[key];
+    if (!config) continue;
+    if (matchedKeys.has(key)) continue;
     
-    if (!isCovered) {
-      matchedKeys.add(key);
-      finalMatches.push(match);
+    for (const keyword of config.keywords) {
+      if (lowerText.includes(keyword.toLowerCase())) {
+        matchedKeys.add(key);
+        if (config.link) {
+          matches.push({
+            type: 'single',
+            label: config.label,
+            link: config.link,
+            icon: config.icon || '🔗',
+            key: key
+          });
+        } else if (config.links) {
+          matches.push({
+            type: 'multiple',
+            links: config.links,
+            key: key
+          });
+        }
+        break;
+      }
     }
   }
   
-  // 🔥 STEP 3: Special case - if "maternity" matched, remove "wedding" if both are there
-  // But keep both if user asked about both
-  const hasMaternity = finalMatches.some(m => m.key === 'maternity');
-  const hasWedding = finalMatches.some(m => m.key === 'wedding');
-  const hasPrewedding = finalMatches.some(m => m.key === 'prewedding');
+  // 🔥 STEP 8: Remove duplicates
+  const uniqueMatches = [];
+  const seenKeys = new Set();
   
-  // If user has "maternity" and "wedding" both, keep both
-  // If user has "prewedding", remove "wedding" (because prewedding is more specific)
-  if (hasPrewedding && hasWedding) {
-    const filtered = finalMatches.filter(m => m.key !== 'wedding');
-    return filtered.length > 0 ? filtered : null;
+  for (const match of matches) {
+    if (!seenKeys.has(match.key)) {
+      seenKeys.add(match.key);
+      uniqueMatches.push(match);
+    }
   }
   
-  return finalMatches.length > 0 ? finalMatches : null;
+  return uniqueMatches.length > 0 ? uniqueMatches : null;
 }
 
 // ============================================
@@ -417,7 +523,7 @@ const parseMessage = (text) => {
 };
 
 // ============================================
-// ✅ markdownComponents - NO STARS
+// ✅ markdownComponents
 // ============================================
 
 const markdownComponents = {
@@ -437,6 +543,22 @@ const markdownComponents = {
 // ============================================
 
 const ChatMessage = ({ message, lastUserMessage }) => {
+  // ✅ Always show contact links for the bot
+  const permanentContactLinks = [
+    {
+      label: '📝 Contact Page',
+      link: 'https://www.fotographiya.com/contact'
+    }
+  ];
+
+  const renderPermanentLinks = () => (
+    <div className="link-container permanent-links">
+      {permanentContactLinks.map((link, idx) => (
+        <a key={idx} href={link.link} target="_blank" rel="noopener noreferrer" className="chat-inline-link">{link.label}</a>
+      ))}
+    </div>
+  );
+
   const isBot = message.sender === 'bot';
   const time = new Date(message.timestamp).toLocaleTimeString([], { 
     hour: '2-digit', 
@@ -462,10 +584,10 @@ const ChatMessage = ({ message, lastUserMessage }) => {
 
   // ===== BOT MESSAGE =====
   
-  // ✅ STEP 1: Sirf user ke last message ke hisaab se links dhoondo
+  // ✅ STEP 1: Find keyword-based links from user's last message
   const keywordLinks = lastUserMessage ? findMatchingLinks(lastUserMessage) : null;
   
-  // ✅ STEP 2: Agar keyword match hai toh AI answer + Links
+  // ✅ STEP 2: If keyword match found, show AI answer + links
   if (keywordLinks && keywordLinks.length > 0) {
     return (
       <div className="message-wrapper bot">
@@ -474,12 +596,15 @@ const ChatMessage = ({ message, lastUserMessage }) => {
         </div>
         <div className="message-content">
           <div className="message-bubble bot-bubble">
-            {/* AI ka answer - WITHOUT STARS */}
+            {/* AI ka answer */}
             <ReactMarkdown components={markdownComponents}>
               {message.text || ''}
             </ReactMarkdown>
+
+            {/* ✅ Always show permanent contact links */}
+            {isBot && message.id !== 1 && renderPermanentLinks()}
             
-            {/* Links - Sirf user ke keyword ke hisaab se */}
+            {/* ✅ Keyword-based links */}
             {keywordLinks.map((linkGroup, index) => {
               if (linkGroup.type === 'multiple') {
                 return (
@@ -519,7 +644,7 @@ const ChatMessage = ({ message, lastUserMessage }) => {
     );
   }
 
-  // ✅ STEP 3: No keyword match - Sirf AI ka answer (no links)
+  // ✅ STEP 3: No keyword match - Only AI answer (no links)
   return (
     <div className="message-wrapper bot">
       <div className="message-avatar">
@@ -530,6 +655,9 @@ const ChatMessage = ({ message, lastUserMessage }) => {
           <ReactMarkdown components={markdownComponents}>
             {message.text || ''}
           </ReactMarkdown>
+
+          {/* ✅ Always show permanent contact links */}
+          {isBot && message.id !== 1 && renderPermanentLinks()}
         </div>
         <span className="message-time">{time}</span>
       </div>

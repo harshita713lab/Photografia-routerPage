@@ -226,6 +226,7 @@ You are Fotographiya's official AI photography assistant.
 🚨 **IMPORTANT RULES:**
 1. NEVER include any links in your responses
 2. Just provide helpful text information
+3. DO NOT use any external knowledge or information not explicitly provided in this COMPANY CONTEXT. If you don't have the information, state that you don't know or cannot help with that specific query.
 3. Keep responses clear and professional
 4. Use emojis for visual appeal.
 
@@ -398,21 +399,13 @@ class ResponseFormatter {
 // ✅ FALLBACK RESPONSES - NO LINKS
 // ============================================
 class FallbackResponse {
-  static getResponse(userMessage) {
+  static getResponse(userMessage, context) { // Added context parameter
   const msg = userMessage.toLowerCase().trim();
   
-  // Check all conditions
   if (this._isGreeting(msg)) return this._getGreetingResponse(msg);
   if (this._isFarewell(msg)) return this._getFarewellResponse();
-  if (this._isInternational(msg)) return this._getInternationalResponse();
-  
-  // ✅ ADD THIS LINE - Wedding check
-  if (this._isWedding(msg)) return this._getWeddingResponse();
-  
-  const serviceResponse = this._getServiceResponse(msg);
+  const serviceResponse = this._getServiceResponse(msg, context); // Pass context to service response
   if (serviceResponse) return serviceResponse;
-  
-  if (this._isOffTopic(msg)) return this._getOffTopicResponse();
   
   return this._getDefaultResponse();
 }
@@ -437,25 +430,10 @@ class FallbackResponse {
     return `Thank you for visiting Fotographiya! 👋 Have a wonderful day. Feel free to reach out anytime.`;
   }
 
-  static _isInternational(msg) {
-    const keywords = ['international', 'outside india', 'abroad', 'foreign', 'overseas',
-      'bali', 'maldives', 'thailand', 'dubai', 'uae', 'usa', 'uk', 'europe', 'america'];
-    return keywords.some(kw => msg.includes(kw));
-  }
-
-  static _getInternationalResponse() {
-    return `❌ **No International Services**
-
-Fotographiya only operates within India. We do not provide photography services outside India.
-
-📍 **Our Coverage:**
-• All Indian states including Rajasthan, Goa, Kerala, and Himachal Pradesh
-
-💡 Would you like to know about our Indian destination wedding packages?`;
-  }
-
-  static _getServiceResponse(msg) {
+  static _getServiceResponse(msg, context) {
     const serviceMap = [
+      // Note: Many of these can now be handled by AI if context is rich enough.
+      // This fallback is for when AI fails or if these are very common direct questions.
       {
         keywords: ['social', 'all social', 'platforms', 'channels', 'social media'],
         response: `📱 **Fotographiya's Social Media Accounts**
@@ -678,25 +656,6 @@ Fotographiya has a team of 50+ dedicated professionals across multiple departmen
     return null;
   }
 
-  static _isOffTopic(msg) {
-    const keywords = ["bts", "kpop", "ipl", "cricket", "movie", "actor", "singer", "song", "netflix", "prime", "football"];
-    return keywords.some(kw => msg.includes(kw));
-  }
-
-  static _getOffTopicResponse() {
-    return `⚠️ **Specialized Assistance Only**
-
-I'm a specialized AI assistant for Fotographiya - your premier wedding photography company. I can only help with topics related to our services.
-
-**Key Points:**
-• Wedding Photography
-• Pre-Wedding Photography
-• GoldenBox AI Technology
-• Fotographiya Academy
-
-💡 What would you like to know about Fotographiya?`;
-  }
-
   static _getDefaultResponse() {
     return `📸 **Welcome to Fotographiya**
 
@@ -710,69 +669,6 @@ I'm your professional AI photography assistant. I can provide information about 
 
 💡 How can I assist you with Fotographiya today?`;
   }
-  static _isWedding(msg) {
-    const keywords = [
-      // Celebrity
-      'celebrity wedding', 'famous wedding', 'royal wedding',
-      'anubhav dubey', 'ayushi pandey', 'rahul sharma', 'priya singh',
-      'vikram mehta', 'ananya reddy', 'arjun kapoor', 'meera nair',
-      'karan malhotra', 'riya gupta', 'amit patel', 'sneha desai',
-      // Featured
-      'yash and sakshi', 'prabal and rani', 'rohan and kavya',
-      'siddharth and nisha', 'aditya and pooja', 'vivek and swati',
-      // Pre-wedding
-      'harshita and nilanshi', 'kunal and sana', 'ankit and divya',
-      'nikhil and anjali', 'raj and priyanka', 'manish and neha',
-      // Destination
-      'divyanshu and kuntal', 'raja and rani', 'virat and anushka',
-      'dhruv and kashish', 'samarth and ishita', 'gaurav and megha',
-      // General
-      'wedding portfolio', 'wedding gallery', 'our weddings'
-    ];
-    return keywords.some(kw => msg.includes(kw));
-  }
-
-  static _getWeddingResponse() {
-  const companyData = require('../data/companyData');
-  const weddings = companyData.weddings || {};
-  
-  let response = "💍 **Our Wedding Portfolio**\n\nHere are the beautiful weddings we've captured:\n\n";
-  
-  if (weddings.celebrity?.featured) {
-    response += "**🌟 Celebrity Weddings:**\n";
-    for (const w of weddings.celebrity.featured) {
-      response += `• ${w.couple} - ${w.location}\n`;
-    }
-    response += "\n";
-  }
-  
-  if (weddings.featured?.length > 0) {
-    response += "**📸 Featured Weddings:**\n";
-    for (const w of weddings.featured) {
-      response += `• ${w.couple} - ${w.location}\n`;
-    }
-    response += "\n";
-  }
-  
-  if (weddings.prewedding?.length > 0) {
-    response += "**💕 Pre-Wedding Shoots:**\n";
-    for (const w of weddings.prewedding) {
-      response += `• ${w.couple} - ${w.location}\n`;
-    }
-    response += "\n";
-  }
-  
-  if (weddings.destination?.length > 0) {
-    response += "**🏖️ Destination Weddings:**\n";
-    for (const w of weddings.destination) {
-      response += `• ${w.couple} - ${w.location}\n`;
-    }
-  }
-  
-  response += "\n💡 Which wedding would you like to know more about?";
-  
-  return response;
-}
 }
 
 // ============================================
