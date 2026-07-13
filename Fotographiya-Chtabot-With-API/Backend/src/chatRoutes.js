@@ -4,6 +4,116 @@ const { getAIResponse } = require('./services/aiService');
 const scraperService = require('./services/scraperService');
 
 // ============================================
+// ✅ PACKAGE & COST KEYWORDS
+// ============================================
+
+const PACKAGE_KEYWORDS = [
+  'price', 'cost', 'budget', 'package price', 'how much', 'charges', 'fees',
+  'silver package', 'golden package', 'premium package', 'silver pack', 'golden pack', 'premium pack',
+  'how many photographers', 'photographer count', 'team size', 'how many people',
+  'kitne photographers', 'kitne log aayenge', 'kitna cost', 'kitna charge',
+  'silver', 'golden', 'gold', 'premium', 'package', 'packages', 'pricing'
+];
+
+function isPackageQuery(message) {
+  if (typeof message !== 'string') return false;
+  const msg = message.toLowerCase().trim();
+  return PACKAGE_KEYWORDS.some(keyword => msg.includes(keyword));
+}
+
+function getPackageResponse(message) {
+  const msg = message.toLowerCase();
+  
+  // ============================================
+  // 📦 SILVER PACKAGE
+  // ============================================
+  if (msg.includes('silver')) {
+    return `**🥈 Silver Package**
+
+Our Silver package offers essential wedding photography coverage with professional quality.
+
+• Basic wedding coverage with professional photography
+• Edited digital photos with color correction
+• Online gallery for sharing with family and friends
+• Professional photographer for all ceremonies
+
+For detailed pricing and customization options, please contact our team:`;
+  }
+  
+  // ============================================
+  // 🥇 GOLDEN PACKAGE
+  // ============================================
+  if (msg.includes('golden') || msg.includes('gold')) {
+    return `**🥇 Golden Package**
+
+Our Golden package provides comprehensive wedding coverage with both photography and cinematography.
+
+• Professional photography covering all wedding events
+• Cinematography with cinematic storytelling
+• Professional editing and color grading
+• Premium photo album and online gallery
+• Pre-wedding shoot included
+
+For detailed pricing and customization options, please contact our team`;
+  }
+  
+  // ============================================
+  // 💎 PREMIUM PACKAGE
+  // ============================================
+  if (msg.includes('premium')) {
+    return `**💎 Premium Package**
+
+Our Premium package offers the ultimate wedding photography experience with luxury services.
+
+• Complete wedding coverage with multiple photographers
+• Cinematography with professional editing
+• Drone photography for stunning aerial shots
+• Premium leather album and all digital assets
+• Pre-wedding and post-wedding shoots included
+• Dedicated team for personalized service
+
+For detailed pricing and customization options, please contact our team:`;
+  }
+  
+  // ============================================
+  // 👥 TEAM / PHOTOGRAPHER COUNT
+  // ============================================
+  if (msg.includes('photographer') || msg.includes('team') || msg.includes('people') || 
+      msg.includes('log') || msg.includes('kitne') || msg.includes('how many')) {
+    return `**👥 Our Team**
+
+We have a talented team of 50+ dedicated professionals at Fotographiya!
+
+• Team includes photographers, cinematographers, editors, and support staff
+• 10+ technical experts handling AI, software, and technology
+• Each wedding gets a dedicated team based on your requirements
+
+For specific photographer count and package details, please contact us directly:`;
+  }
+  
+  // ============================================
+  // 💰 GENERAL PRICE / COST / PACKAGES
+  // ============================================
+  return `**📦 Our Wedding Packages**
+
+We offer three comprehensive wedding photography packages to suit every need:
+
+**🥈 Silver Package**
+Basic wedding coverage with professional photography and edited digital photos.
+
+**🥇 Golden Package**  
+Complete coverage with photography, cinematography, and premium album.
+
+**💎 Premium Package**
+Luxury experience with multiple photographers, drone coverage, and premium album.
+
+For detailed pricing and package inclusions, please contact our team:
+• 📞 Call: +91 9001110144
+• 💬 WhatsApp: https://wa.me/919001110144
+• 📧 Email: fotographiyaworld@gmail.com`;
+}
+
+// ============================================
 // ✅ OFF-TOPIC KEYWORDS
 // ============================================
 const ALLOWED_TOPICS = [
@@ -81,7 +191,11 @@ function wantsExamples(message) {
 }
 
 function getOffTopicResponse() {
-  return `⚠️ **Specialized Assistance Only**\n\nI'm a specialized AI assistant for Fotographiya - your premier wedding photography company. I can only help with topics related to our services.\n\n💡 What would you like to know about Fotographiya?`;
+  return `⚠️ **Specialized Assistance Only**
+
+I'm a specialized AI assistant for Fotographiya - your premier wedding photography company. I can only help with topics related to our services.
+
+💡 What would you like to know about Fotographiya?`;
 }
 
 // ============================================
@@ -122,10 +236,21 @@ router.post('/message', async (req, res) => {
       });
     }
     
-    // 🔥 STEP 3: Detect if user wants examples
+    // 🔥 STEP 3: Check for package/price questions
+    if (isPackageQuery(message)) {
+      return res.json({
+        success: true,
+        data: {
+          message: getPackageResponse(message),
+          timestamp: new Date().toISOString()
+        }
+      });
+    }
+    
+    // 🔥 STEP 4: Detect if user wants examples
     const wantsExamplesFlag = wantsExamples(message);
     
-    // 🔥 STEP 4: Build context from company data and get AI response
+    // 🔥 STEP 5: Build context from company data and get AI response
     const context = scraperService.buildContextForAI(message, wantsExamplesFlag);
     const reply = await getAIResponse(message, context, sessionId || 'default', wantsExamplesFlag);
     
