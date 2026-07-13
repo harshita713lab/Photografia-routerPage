@@ -3,126 +3,85 @@ const router = express.Router();
 const { getAIResponse } = require('./services/aiService');
 const scraperService = require('./services/scraperService');
 
-// ✅ Correctly import companyData from the relative path
-const companyData = require('./data/companyData');
 // ============================================
-// ✅ WEDDING KEYWORDS (CATEGORIZED)
+// ✅ OFF-TOPIC KEYWORDS
 // ============================================
-const CELEBRITY_WEDDING_KEYWORDS = [
-  'celebrity wedding', 'celebrity weddings', 'famous wedding', 'famous weddings',
-  'best wedding', 'best weddings', 'royal wedding', 'royal weddings',
-  'anubhav dubey', 'ayushi pandey', 'rahul sharma', 'priya singh',
-  'vikram mehta', 'ananya reddy', 'arjun kapoor', 'meera nair',
-  'karan malhotra', 'riya gupta', 'amit patel', 'sneha desai',
-];
-
-const FEATURED_WEDDING_KEYWORDS = [
-  'yash and sakshi', 'prabal and rani', 'rohan and kavya',
-  'siddharth and nisha', 'aditya and pooja', 'vivek and swati',
-  'yash sakshi', 'prabal rani', 'featured wedding',
-];
-
-const PRE_WEDDING_KEYWORDS = [
-  'harshita and nilanshi', 'harshita nilanshi', 'kunal and sana',
-  'ankit and divya', 'nikhil and anjali', 'raj and priyanka',
-  'manish and neha', 'pre wedding', 'pre-wedding', 'prewedding',
-  'pre wedding shoot', 'pre-wedding shoot', 'examples of pre wedding',
-];
-
-const DESTINATION_WEDDING_KEYWORDS = [
-  'divyanshu and kuntal', 'divyanshu kuntal', 'raja and rani',
-  'virat and anushka', 'dhruv and kashish', 'samarth and ishita',
-  'gaurav and megha', 'destination wedding', 'destination weddings',
-  'kumbhalgarh wedding', 'jaisalmer wedding', 'goa wedding', 'udaipur wedding', 
-  'jaipur wedding', 'destination wedding couples', 'where do you shoot for destination wedding',
-];
-
-const GENERAL_WEDDING_KEYWORDS = [
-  'wedding photography', 'wedding portfolio', 'our weddings',
-  'best wedding photographer', 'wedding gallery', 'wedding couple',
-  'we have done wedding', 'we shot wedding', 'wedding coverage', 'shaadi', 'marriage'
-];
-
-const TEAM_KEYWORDS = [
-  'employees', 'team', 'members', 'staff', 'how many members', 
-  'how many employees', 'your team', 'team members'
-];
-
-// ============================================
-// ✅ OFF-TOPIC KEYWORDS - SIRF EK BAAR
-// ============================================
-const OFF_TOPIC_KEYWORDS = [
-  'bts', 'kpop', 'ipl', 'cricket', 'movie', 'actor', 'singer', 'song',
-  'netflix', 'prime', 'hotstar', 'football', 'prime minister', 'president',
-  'modi', 'trump', 'china', 'pakistan', 'usa', 'uk', 'russia',
-  'anime', 'manga', 'game of thrones', 'marvel', 'dc', 'hollywood',
-  'bollywood', 'tiktok', 'instagram influencer', 'youtube'
-];
-
-// ============================================
-// ✅ INTERNATIONAL KEYWORDS - SIRF EK BAAR
-// ============================================
-const INTERNATIONAL_KEYWORDS = [
-  'bali', 'maldives', 'thailand', 'dubai', 'uae', 'usa', 'uk', 'europe',
-  'america', 'canada', 'australia', 'singapore', 'malaysia', 'international',
-  'outside india', 'abroad', 'foreign', 'overseas', 'international wedding',
-  'shoot outside india', 'photography outside india', 'do you shoot outside',
-  'outside country', 'foreign country', 'other country'
-];
-
-// ✅ NEW: ALLOWED TOPICS for comprehensive off-topic check
 const ALLOWED_TOPICS = [
   'fotographiya', 'photography', 'services', 'packages', 'goldenbox', 'academy',
   'wedding', 'pre-wedding', 'destination', 'celebrity', 'team', 'contact',
   'price', 'cost', 'budget', 'portfolio', 'gallery', 'about', 'founder',
   'maternity', 'birthday', 'roka', 'corporate', 'reviews', 'location',
   'instagram', 'facebook', 'youtube', 'linkedin', 'medium', 'reddit', 'pexels',
-  'social media', 'social accounts', 'all social', 'social platforms', 'all platforms', 'social links',
-  'silver package', 'golden package', 'premium package', 'all packages',
+  'social media', 'social accounts', 'all social', 'silver', 'golden', 'premium',
   'contact us', 'reach us', 'help', 'support', 'customer care',
-  'address', 'studio', 'kota', 'rajasthan', 'where is fotographiya', 'map', 'direction', 'google map',
-  'reviews', 'customer review', 'testimonial', 'feedback', 'what people say',
-  'golden box', 'qr photo', 'course', 'training', 'internship', 'work samples', 'our work', 'showcase'
+  'address', 'studio', 'kota', 'rajasthan', 'where is fotographiya',
+  'reviews', 'customer review', 'testimonial', 'feedback',
+  'golden box', 'qr photo', 'course', 'training', 'internship',
+  'example', 'examples', 'sample', 'samples', 'couples', 'couple',
+  'namaste', 'hello', 'hi', 'hey', 'how are you', 'good morning', 'good evening'
+];
+
+const OFF_TOPIC_KEYWORDS = [
+  'bts', 'kpop', 'ipl', 'cricket', 'movie', 'actor', 'singer', 'song',
+  'netflix', 'prime', 'hotstar', 'football', 'prime minister', 'president',
+  'modi', 'trump', 'china', 'pakistan', 'anime', 'manga',
+  'game of thrones', 'marvel', 'dc', 'hollywood', 'bollywood',
+  'tiktok', 'instagram influencer', 'youtube video', 'recipe', 'food',
+  'weather', 'news', 'politics', 'sports', 'cricket match'
+];
+
+const INTERNATIONAL_KEYWORDS = [
+  'bali', 'maldives', 'thailand', 'dubai', 'uae', 'usa', 'uk', 'europe',
+  'america', 'canada', 'australia', 'singapore', 'malaysia', 'international',
+  'outside india', 'abroad', 'foreign', 'overseas',
+  'shoot outside india', 'outside country', 'foreign country', 'other country'
 ];
 
 // ============================================
-// ✅ FUNCTIONS
+// ✅ EXAMPLES DETECTION KEYWORDS
+// ============================================
+const EXAMPLES_KEYWORDS = [
+  'example', 'examples', 'sample', 'samples', 'tell me some', 'show me some',
+  'list some', 'name some', 'couples you', 'couple you', 'you cover', 'you shoot',
+  'you have done', 'you did', 'portfolio examples', 'show me', 'tell me',
+  'what shoots', 'which shoots', 'destination wedding shoot', 'pre wedding shoot',
+  'wedding shoot', 'shoot that you cover'
+];
+
+// ============================================
+// ✅ HELPER FUNCTIONS
 // ============================================
 function checkKeywords(message, keywords) {
-  // Ensure message is a string before calling toLowerCase
   if (typeof message !== 'string') {
-    console.warn('checkKeywords received non-string message:', message);
     return false;
   }
   const msg = message.toLowerCase();
   return keywords.some(keyword => msg.includes(keyword));
 }
 
-function getWeddingResponseType(message) {
-  if (typeof message !== 'string') return null;
-  if (checkKeywords(message, CELEBRITY_WEDDING_KEYWORDS)) {
-    return 'celebrity';
-  }
-  if (checkKeywords(message, DESTINATION_WEDDING_KEYWORDS)) {
-    return 'destination';
-  }
-  if (checkKeywords(message, PRE_WEDDING_KEYWORDS)) {
-    return 'pre-wedding';
-  }
-  if (checkKeywords(message, FEATURED_WEDDING_KEYWORDS) || checkKeywords(message, GENERAL_WEDDING_KEYWORDS)) {
-    return 'general';
-  }
-  return null;
-}
-
 function isOffTopic(message) {
-  const msg = message.toLowerCase();
-  return OFF_TOPIC_KEYWORDS.some(keyword => msg.includes(keyword));
+  const msgLower = message.toLowerCase().trim();
+  
+  const isAllowed = ALLOWED_TOPICS.some(topic => msgLower.includes(topic));
+  if (isAllowed) return false;
+  
+  return OFF_TOPIC_KEYWORDS.some(kw => msgLower.includes(kw));
 }
 
 function isInternationalQuestion(message) {
-  const msg = message.toLowerCase();
+  if (typeof message !== 'string') return false;
+  const msg = message.toLowerCase().trim();
   return INTERNATIONAL_KEYWORDS.some(keyword => msg.includes(keyword));
+}
+
+function wantsExamples(message) {
+  if (typeof message !== 'string') return false;
+  const msg = message.toLowerCase().trim();
+  return EXAMPLES_KEYWORDS.some(keyword => msg.includes(keyword));
+}
+
+function getOffTopicResponse() {
+  return `⚠️ **Specialized Assistance Only**\n\nI'm a specialized AI assistant for Fotographiya - your premier wedding photography company. I can only help with topics related to our services.\n\n💡 What would you like to know about Fotographiya?`;
 }
 
 // ============================================
@@ -139,9 +98,9 @@ router.post('/message', async (req, res) => {
       });
     }
 
-    console.log(`📩 Message: ${message}`);
+    console.log(`📩 Message: ${message} | Session: ${sessionId || 'N/A'}`);
 
-    // 🔥 STEP 1: Check if it's about international services
+    // 🔥 STEP 1: Check for international question
     if (isInternationalQuestion(message)) {
       return res.json({
         success: true,
@@ -152,41 +111,23 @@ router.post('/message', async (req, res) => {
       });
     }
 
-    // 🔥 NEW: Check for team/employee questions
-    if (checkKeywords(message, TEAM_KEYWORDS)) {
-      const teamData = companyData.team || {};
-      const responseText = `👥 **Our Team**\n\nFotographiya has a team of ${teamData.total || '50+'} dedicated professionals working together to deliver exceptional photography services.\n\n` +
-      `• **Production Team:** ${teamData.roles?.length > 0 ? 'Includes Lead Photographers, Cinematographers, and Editors.' : '10+ members'}\n` +
-      `• **Tech Team:** ${teamData.roles?.some(r => r.includes('AI')) ? 'Includes AI Engineers and Software Developers for innovations like GoldenBox.' : '10+ members'}\n` +
-      `• **Operations & Management:** Ensures smooth project execution and client satisfaction.\n\n` +
-      `💡 Would you like to know more about our founder or the services we offer?`;
-
-      return res.json({
-        success: true,
-        data: {
-          message: responseText,
-          timestamp: new Date().toISOString()
-        }
-      });
-    }
-
     // 🔥 STEP 2: Check if it's an off-topic question
     if (isOffTopic(message)) {
       return res.json({
         success: true,
         data: {
-          message: getOffTopicResponse(), // Use the function
+          message: getOffTopicResponse(),
           timestamp: new Date().toISOString()
         }
       });
     }
     
-    // 🔥 STEP 3: Determine context for AI (including wedding type if detected)
-    const weddingType = getWeddingResponseType(message); // Detect wedding type
-    const context = scraperService.buildContextForAI(message, weddingType); // Pass weddingType to context builder
+    // 🔥 STEP 3: Detect if user wants examples
+    const wantsExamplesFlag = wantsExamples(message);
     
-    // 🔥 STEP 4: Get AI response
-    const reply = await getAIResponse(message, context);
+    // 🔥 STEP 4: Build context from company data and get AI response
+    const context = scraperService.buildContextForAI(message, wantsExamplesFlag);
+    const reply = await getAIResponse(message, context, sessionId || 'default', wantsExamplesFlag);
     
     res.json({ 
       success: true, 

@@ -199,8 +199,8 @@ const LINK_CONFIG = {
   // ============================================
   reviews: {
     keywords: ['review', 'reviews', 'customer review', 'customer reviews', 'testimonial', 'testimonials', 'feedback', 'what people say'],
-    link: 'https://www.fotographiya.com/about',
-    label: '⭐ Customer Reviews',
+    link: 'https://www.fotographiya.com/',
+    label: 'Customer Reviews',
     icon: '⭐'
   },
 
@@ -210,7 +210,7 @@ const LINK_CONFIG = {
   portfolio: {
     keywords: ['portfolio', 'gallery', 'work samples', 'our work', 'showcase'],
     link: 'https://www.fotographiya.com/portfolio',
-    label: '🖼️ Portfolio Gallery',
+    label: 'Portfolio Gallery',
     icon: '🖼️'
   },
 
@@ -220,7 +220,7 @@ const LINK_CONFIG = {
   goldenbox: {
     keywords: ['golden box', 'goldenbox', 'qr photo'],
     link: 'https://www.fotographiya.com/goldenbox',
-    label: '✨ GoldenBox',
+    label: 'GoldenBox',
     icon: '✨'
   },
 
@@ -230,7 +230,7 @@ const LINK_CONFIG = {
   academy: {
     keywords: ['academy', 'course', 'training', 'internship'],
     link: 'https://www.fotographiya.com/fotographiya-academy',
-    label: '🎓 Fotographiya Academy',
+    label: 'Fotographiya Academy',
     icon: '🎓'
   }
 };

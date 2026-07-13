@@ -1,6 +1,5 @@
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 const axios = require("axios");
-const companyData = require("../data/companyData");
 
 // ============================================
 // ✅ CONFIGURATION
@@ -27,14 +26,57 @@ class Config {
 }
 
 // ============================================
+// ✅ CONVERSATION MEMORY (SESSION-BASED)
+// ============================================
+class ConversationMemory {
+  constructor() {
+    this.sessions = new Map();
+    this.maxMessages = 10; // Keep last 10 messages per session
+  }
+
+  add(sessionId, role, content) {
+    if (!sessionId) return;
+    
+    if (!this.sessions.has(sessionId)) {
+      this.sessions.set(sessionId, []);
+    }
+    
+    const messages = this.sessions.get(sessionId);
+    messages.push({ role, content, timestamp: Date.now() });
+    
+    // Keep only recent N messages
+    if (messages.length > this.maxMessages) {
+      messages.splice(0, messages.length - this.maxMessages);
+    }
+  }
+
+  get(sessionId) {
+    if (!sessionId) return [];
+    return this.sessions.get(sessionId) || [];
+  }
+
+  getHistoryForAI(sessionId) {
+    const messages = this.get(sessionId);
+    // Format as conversation history for AI context
+    return messages.map(m => `${m.role === 'user' ? 'USER' : 'ASSISTANT'}: ${m.content}`).join('\n');
+  }
+
+  clear(sessionId) {
+    if (sessionId) {
+      this.sessions.delete(sessionId);
+    }
+  }
+}
+
+// ============================================
 // ✅ AI PROVIDER BASE CLASS
 // ============================================
 class AIProvider {
   constructor(apiKey) {
     this.apiKey = apiKey;
     this.timeout = 30000;
-    this.temperature = 0.2;
-    this.maxTokens = 200;
+    this.temperature = 0.3;
+    this.maxTokens = 300;
   }
 
   async getResponse(userMessage, systemPrompt) {
@@ -216,75 +258,40 @@ class GeminiProvider extends AIProvider {
 }
 
 // ============================================
-// ✅ PROMPT BUILDER - NO LINKS
+// ✅ PROMPT BUILDER - DATA-DRIVEN, NO HARDCODE
 // ============================================
 class PromptBuilder {
-  static buildSystemPrompt(context) {
-    return `
-You are Fotographiya's official AI photography assistant.
+  static buildSystemPrompt(context, conversationHistory, wantsExamples) {
+    return `You are Fotographiya's official AI photography assistant.
 
-🚨 **IMPORTANT RULES:**
-1. NEVER include any links in your responses
-2. Just provide helpful text information
-3. DO NOT use any external knowledge or information not explicitly provided in this COMPANY CONTEXT. If you don't have the information, state that you don't know or cannot help with that specific query.
-3. Keep responses clear and professional
-4. Use emojis for visual appeal.
+🚨 **CRITICAL RULES:**
+1. Answer ONLY from COMPANY DATA provided below. NO outside knowledge, NO made-up info.
+2. If COMPANY DATA doesn't have the answer, say: "I don't have that information. Let me connect you with our team."
+3. Answer length: **MINIMUM 2-3 lines, MAXIMUM 4-5 lines**. Always give a complete response.
+4. NO markdown links, NO "Learn More", NO URLs.
+5. Do NOT list examples/couples unless the user explicitly asks for them.
+6. For greetings (hello, hi, hey, namaste) - respond with the SAME greeting only (e.g., "Hello!" for hello, "Namaste!" for namaste).
+7. For "how are you" - respond with "I'm doing well! How can I help you with Fotographiya today?"
+8. Use emojis naturally.
 
-🚨 **WEDDING EXAMPLES RULE:**
-When asked about wedding examples (celebrity, destination, etc.), ONLY use the couple names and details provided in the COMPANY CONTEXT. DO NOT invent or use any other names like "Deepika Padukone" or "Ranveer Singh". Stick strictly to the provided data.
+🎯 **SPECIFIC BEHAVIOR RULES:**
+1. **PREVIOUS QUESTION CONTEXT:** Always keep the conversation context. Your answer must be related to what was previously discussed. Don't change the topic suddenly.
+2. **PRE-WEDDING EXAMPLES:** When giving pre-wedding examples, do NOT mention the location/place/city. Only mention the couple name and style (e.g., "Harshita & Nilanshi - Urban & Contemporary style"). If the user specifically asks "where was this shoot done?" or "place/batao/kahan hua", then only you can tell the location.
+3. **DESTINATION WEDDING EXAMPLES:** Always mention the place/location and venue when giving destination wedding examples (e.g., "Divyanshu & Kuntal at Kumbhalgarh Fort, Rajasthan").
+4. **Answer length:** Each response must be at least 2-3 lines and at most 4-5 lines.
 
-🎯 **NEW, CONCISE RESPONSE STRUCTURE:**
-[Emoji] **Title**
+CONVERSATION HISTORY (Previous conversation ke saath relate karo):
+${conversationHistory || 'No previous conversation.'}
 
-[A short, 1-2 sentence summary.]
-
-• **Point 1:** [Brief and informative]
-• **Point 2:** [Brief and informative]
-• **Point 3:** [Brief and informative]
-
-💡 [Follow-up question]
-
-========================================
-❌ **WRONG - NEVER DO THIS:**
-========================================
-• [Facebook](https://facebook.com) ← NO LINKS!
-• [Instagram](https://instagram.com) ← NO LINKS!
-• "Learn More:" with a link ← NO LINKS!
-• Any markdown links [text](url) ← NO LINKS!
-
-========================================
-📌 **WHAT TO INCLUDE INSTEAD OF LINKS:**
-========================================
-
-SOCIAL MEDIA - just mention platform names:
-• "Follow us on Facebook, Instagram, YouTube, Pexels, Reddit, LinkedIn, and Medium"
-
-SERVICES - just mention service names:
-• "We offer Wedding Photography, Pre-Wedding Photography, Destination Wedding, and Corporate Photography"
-
-CONTACT - just mention contact methods:
-• "You can reach us via WhatsApp, phone call, or email"
-
-PACKAGES - just mention package names:
-• "We offer Silver, Golden, and Premium packages"
-
-PAGES - just mention page names:
-• "Visit our About Us, Portfolio, Academy, and GoldenBox pages"
-
-⚠️ **REMEMBER:**
-- NO markdown links [text](url)
-- NO "Learn More:" with links
-- NO clickable links at all
-- Just plain text with emojis and bullet points
-
-COMPANY CONTEXT:
+COMPANY DATA:
 ${context}
-`;
+
+${wantsExamples ? 'NOTE: User is asking for examples. Provide relevant examples from COMPANY DATA only.' : 'NOTE: Do NOT list examples unless explicitly asked.'}`;
   }
 }
 
 // ============================================
-// ✅ RESPONSE FORMATTER - REMOVES ALL LINKS
+// ✅ RESPONSE FORMATTER
 // ============================================
 class ResponseFormatter {
   static formatResponse(text) {
@@ -292,382 +299,15 @@ class ResponseFormatter {
     
     let cleanText = text;
     
-    // ===== STEP 1: REMOVE ALL MARKDOWN LINKS =====
-    cleanText = this._removeAllLinks(cleanText);
+    // Remove all markdown links
+    cleanText = cleanText.replace(/\[([^\]]+)\]\([^)]+\)/g, '$1');
     
-    // ===== STEP 2: REMOVE DUPLICATE HEADERS =====
-    cleanText = this._removeDuplicateHeaders(cleanText);
-    
-    // ===== STEP 3: CLEAN UP EXTRA SEPARATORS =====
-    cleanText = this._cleanSeparators(cleanText);
-    
-    // ===== STEP 4: REMOVE "Learn More:" sections =====
-    cleanText = this._removeLearnMoreSections(cleanText);
-    
-    // ===== STEP 5: CLEAN EXTRA SPACES =====
-    cleanText = this._cleanExtraSpaces(cleanText);
+    // Clean up extra spaces
+    cleanText = cleanText.replace(/\n{3,}/g, '\n\n');
+    cleanText = cleanText.replace(/[ \t]+\n/g, '\n');
+    cleanText = cleanText.replace(/\n[ \t]+/g, '\n');
     
     return cleanText.trim();
-  }
-
-  // ✅ Remove ALL markdown links
-  static _removeAllLinks(text) {
-    // Remove [text](url) patterns - replace with just the text
-    return text.replace(/\[([^\]]+)\]\([^)]+\)/g, (match, text) => {
-      return text;
-    });
-  }
-
-  // ✅ Remove "Learn More:" sections completely
-  static _removeLearnMoreSections(text) {
-    const lines = text.split('\n');
-    const result = [];
-    let skipNextLine = false;
-    
-    for (let i = 0; i < lines.length; i++) {
-      const line = lines[i];
-      const trimmed = line.trim();
-      
-      // Skip "Learn More:" lines
-      if (trimmed === '**Learn More:**' || trimmed === 'Learn More:' || 
-          trimmed.startsWith('**Learn More:**') || trimmed.startsWith('Learn More:')) {
-        skipNextLine = true;
-        continue;
-      }
-      
-      // Skip the line after "Learn More:" (usually a link)
-      if (skipNextLine) {
-        skipNextLine = false;
-        continue;
-      }
-      
-      result.push(line);
-    }
-    
-    return result.join('\n');
-  }
-
-  // ✅ Remove duplicate headers
-  static _removeDuplicateHeaders(text) {
-    const lines = text.split('\n');
-    const result = [];
-    const seenHeaders = new Set();
-    
-    for (const line of lines) {
-      const trimmed = line.trim();
-      
-      if (result.length === 0 && trimmed === '') continue;
-      
-      // Handle Key Points
-      if (/^\s*[*#]*\s*Key Points:?\s*$/i.test(trimmed)) {
-        if (seenHeaders.has('keypoints')) continue;
-        seenHeaders.add('keypoints');
-        result.push('**Key Points:**');
-        continue;
-      }
-      
-      result.push(line);
-    }
-    
-    return result.join('\n');
-  }
-
-  // ✅ Clean up extra separators
-  static _cleanSeparators(text) {
-    return text
-      .split('\n')
-      .filter(line => {
-        const trimmed = line.trim();
-        return trimmed !== '---' && 
-               trimmed !== '===' && 
-               trimmed !== '--' && 
-               !/^[\-=\*]{3,}$/.test(trimmed);
-      })
-      .join('\n');
-  }
-
-  // ✅ Clean extra spaces and empty lines
-  static _cleanExtraSpaces(text) {
-    return text
-      .replace(/\n{3,}/g, '\n\n')
-      .replace(/[ \t]+\n/g, '\n')
-      .replace(/\n[ \t]+/g, '\n');
-  }
-}
-
-// ============================================
-// ✅ FALLBACK RESPONSES - NO LINKS
-// ============================================
-class FallbackResponse {
-  static getResponse(userMessage, context) { // Added context parameter
-  const msg = userMessage.toLowerCase().trim();
-  
-  if (this._isGreeting(msg)) return this._getGreetingResponse(msg);
-  if (this._isFarewell(msg)) return this._getFarewellResponse();
-  const serviceResponse = this._getServiceResponse(msg, context); // Pass context to service response
-  if (serviceResponse) return serviceResponse;
-  
-  return this._getDefaultResponse();
-}
-
-  static _isGreeting(msg) {
-    const greetings = ['hello', 'hi', 'hey', 'helloo', 'how are you', 'how r u', 'how are u'];
-    return greetings.some(g => msg.includes(g) || msg === g);
-  }
-
-  static _getGreetingResponse(msg) {
-    if (msg.includes('how are you') || msg.includes('how r u') || msg.includes('how are u')) {
-      return `I am doing well, thank you for asking! 😊 How can I assist you with Fotographiya today?`;
-    }
-    return `Hello! 👋 Welcome to Fotographiya. I'm your AI assistant. How may I help you today?`;
-  }
-
-  static _isFarewell(msg) {
-    return msg.includes('bye') || msg.includes('goodbye');
-  }
-
-  static _getFarewellResponse() {
-    return `Thank you for visiting Fotographiya! 👋 Have a wonderful day. Feel free to reach out anytime.`;
-  }
-
-  static _getServiceResponse(msg, context) {
-    const serviceMap = [
-      // Note: Many of these can now be handled by AI if context is rich enough.
-      // This fallback is for when AI fails or if these are very common direct questions.
-      {
-        keywords: ['social', 'all social', 'platforms', 'channels', 'social media'],
-        response: `📱 **Fotographiya's Social Media Accounts**
-
-Stay connected with us across all platforms to explore our photography services, behind-the-scenes content, and creative insights.
-
-**Key Points:**
-• Follow us on Facebook, Instagram, YouTube, Pexels, Reddit, LinkedIn, and Medium
-• Engage with our community of 100+ happy couples
-• Access exclusive content and photography tips
-
-💡 Which platform would you like to connect with us on?`
-      },
-      {
-        keywords: ['package', 'pricing', 'cost', 'budget', 'price', 'rate', 'charges', 'silver', 'golden', 'premium'],
-        response: `📦 **Our Photography Packages**
-
-We offer three comprehensive photography packages to suit every couple's needs and budget.
-
-**Key Points:**
-• Silver Package: Basic wedding coverage with professional photography, edited digital photos, and online gallery
-• Golden Package: Comprehensive coverage with photography and cinematography, professional editing, album, and online gallery
-• Premium Package: Premium coverage with photography, cinematography, drone shots, premium album, and all digital assets
-
-💡 Which package interests you the most?`
-      },
-      {
-      keywords: ['birthday', 'cake smash', 'kids birthday', 'birthday party', 'birthday celebration'],
-      response: `🎂 **Birthday Photography Services**
-
-We capture the joy, laughter, and love that fills the air on your special day. From the first slice of cake to the last dance, we freeze those moments forever.
-
-**Key Points:**
-• Professional birthday photography covering every moment
-• Fun cake smash sessions for kids and adults
-• Beautiful portraits capturing personality
-• Complete party coverage from start to finish
-• Premium printed albums and digital frames
-
-💡 Would you like to know about our birthday photography packages?`
-    },
-
-    // 🆕 ROKA
-    {
-      keywords: ['roka', 'pre engagement', 'tilak', 'ring ceremony', 'roka ritual'],
-      response: `💍 **Roka Ceremony Photography**
-
-The Roka ceremony is one of the most cherished pre-wedding rituals in Indian culture. We capture every ritual, emotion, and sacred moment of this beautiful tradition.
-
-**Key Points:**
-• Professional photography covering all rituals
-• Cinematic videography available
-• Candid photography capturing real emotions
-• Traditional coverage of tilak, ring exchange, and blessings
-• Premium leather albums and canvas prints
-
-💡 Would you like to know more about our Roka photography packages?`
-    },
-      {
-        keywords: ['wedding'],
-        response: `💍 **Wedding Photography Services**
-
-We provide comprehensive wedding photography covering all ceremonies - from pre-wedding rituals to the reception, with professional editing and creative storytelling.
-
-**Key Points:**
-• Candid and traditional photography
-• Cinematic videography
-• Full-day coverage with professional editing
-
-💡 Would you like to see our wedding portfolio?`
-      },
-      {
-        keywords: ['pre wedding', 'prewedding'],
-        response: `📸 **Pre-Wedding Photography Services**
-
-We offer professional pre-wedding photography services for couples. Our team captures romantic moments at scenic locations with expert editing and creative direction.
-
-**Key Points:**
-• Available at multiple scenic locations
-• Professional editing and retouching
-• Customized packages for every couple
-
-💡 Would you like to see our portfolio?`
-      },
-      {
-        keywords: ['destination'],
-        response: `🏖️ **Destination Wedding Photography**
-
-We offer professional destination wedding photography services across India. Our team covers all major Indian destinations including Rajasthan, Goa, Kerala, and Himachal Pradesh.
-
-**Key Points:**
-• Available in Rajasthan, Goa, Kerala, and Himachal Pradesh
-• Professional photography and cinematography
-• Customized packages with travel and accommodation arrangements
-
-💡 Would you like to know more about our destination wedding packages?`
-      },
-      {
-        keywords: ['contact', 'phone', 'call', 'email'],
-        response: `📞 **Contact Fotographiya**
-
-You can reach us through multiple channels for inquiries, bookings, and consultations.
-
-**Key Points:**
-• WhatsApp: +91 9001110144
-• Phone Call: +91 9001110144
-• Email: fotographiyaworld@gmail.com
-• Office: Kota, Rajasthan
-
-💡 How can we assist you today?`
-      },
-      {
-        keywords: ['facebook', 'fb', 'facebootk'],
-        response: `📘 **Follow us on Facebook**
-
-Stay connected with us on Facebook to see client testimonials, wedding highlights, and company updates.
-
-💡 Would you like to follow us on other platforms too?`
-      },
-      {
-        keywords: ['instagram', 'insta', 'ig'],
-        response: `📸 **Follow us on Instagram**
-
-Stay connected with us on Instagram to see our latest wedding highlights, behind-the-scenes content, and client testimonials.
-
-💡 Would you like to follow us on other platforms too?`
-      },
-      {
-        keywords: ['youtube', 'yt', 'you tube'],
-        response: `🎬 **Follow us on YouTube**
-
-Subscribe to our YouTube channel to watch cinematic wedding films, event highlights, and behind-the-scenes videos.
-
-💡 Would you like to follow us on other platforms too?`
-      },
-      {
-        keywords: ['linkedin', 'in'],
-        response: `💼 **Follow us on LinkedIn**
-
-Connect with us on LinkedIn for professional updates, company news, and career opportunities.
-
-💡 Would you like to follow us on other platforms too?`
-      },
-      {
-        keywords: ['goldenbox', 'golden box', 'qr'],
-        response: `✨ **GoldenBox - AI Photo Delivery System**
-
-GoldenBox is our innovative AI-powered system that delivers high-quality event photos instantly to attendees without requiring internet or app downloads.
-
-**Key Points:**
-• No internet required
-• No app download needed
-• 3-second instant download with AI-enhanced premium quality
-
-💡 Would you like to know more about GoldenBox?`
-      },
-      {
-        keywords: ['academy', 'course', 'learn', 'training'],
-        response: `🎓 **Fotographiya Academy**
-
-Fotographiya Academy offers professional photography and videography courses with paid internships and industry-recognized certification.
-
-**Key Points:**
-• 8 comprehensive courses available
-• 4-month paid internship
-• Industry-recognized certificate
-• Top performer wins a camera
-
-💡 Would you like to explore our course offerings?`
-      },
-      {
-        keywords: ['about', 'history', 'founder', 'established'],
-        response: `🏢 **About Fotographiya**
-
-Fotographiya was founded in 2023 by Mohit Barthunia in Kota, Rajasthan, India. We blend traditional artistry with modern technology to create timeless memories.
-
-**Key Points:**
-• Founded in 2023
-• Based in Kota, Rajasthan
-• 100+ happy couples served
-• 50+ dedicated team members
-
-💡 Would you like to know more about our journey?`
-      },
-      {
-        keywords: ['portfolio', 'gallery'],
-        response: `🖼️ **Portfolio Gallery**
-
-Our portfolio showcases 100+ weddings and events we've captured with creativity, passion, and professional excellence.
-
-**Key Points:**
-• 100+ weddings covered
-• Premium photo and video galleries
-• Cinematic storytelling with professional editing
-
-💡 Want to see more of our work?`
-      },
-      {
-        keywords: ['team', 'employee', 'staff'],
-        response: `👥 **Our Team**
-
-Fotographiya has a team of 50+ dedicated professionals across multiple departments, working together to deliver exceptional photography services.
-
-**Key Points:**
-• Production Team: 10+ members
-• Tech Team: 10+ members
-• Operations Team: 20+ members
-• Management: 5+ members
-
-💡 Would you like to learn more about our team?`
-      }
-    ];
-
-    for (const service of serviceMap) {
-      if (service.keywords.some(kw => msg.includes(kw))) {
-        return service.response;
-      }
-    }
-    
-    return null;
-  }
-
-  static _getDefaultResponse() {
-    return `📸 **Welcome to Fotographiya**
-
-I'm your professional AI photography assistant. I can provide information about our photography services, packages, GoldenBox technology, and academy.
-
-**Key Points:**
-• Wedding and Pre-Wedding Photography
-• Corporate and Event Photography
-• GoldenBox AI Technology
-• Fotographiya Academy
-
-💡 How can I assist you with Fotographiya today?`;
   }
 }
 
@@ -682,26 +322,37 @@ class AIResponseHandler {
       CerebrasProvider,
       GeminiProvider
     ];
+    this.memory = new ConversationMemory();
   }
 
-  async getAIResponse(userMessage, context) {
-    const systemPrompt = PromptBuilder.buildSystemPrompt(context);
+  async getAIResponse(userMessage, context, sessionId, wantsExamples) {
+    const conversationHistory = this.memory.getHistoryForAI(sessionId);
+    const systemPrompt = PromptBuilder.buildSystemPrompt(context, conversationHistory, wantsExamples);
+    
+    // Store user message in memory
+    this.memory.add(sessionId, 'user', userMessage);
     
     for (const ProviderClass of this.providerClasses) {
       try {
         const provider = new ProviderClass();
         const response = await provider.getResponse(userMessage, systemPrompt);
         if (response) {
-          console.log(`✅ ${ProviderClass.name} responded successfully!`);
-          return ResponseFormatter.formatResponse(response);
+          const cleanResponse = ResponseFormatter.formatResponse(response);
+          // Store AI response in memory
+          this.memory.add(sessionId, 'assistant', cleanResponse);
+          return cleanResponse;
         }
       } catch (error) {
         console.log(`⚠️ ${ProviderClass.name} failed:`, error.message);
       }
     }
     
-    console.log("⚠️ All providers failed, using fallback");
-    return FallbackResponse.getResponse(userMessage);
+    console.log("⚠️ All providers failed");
+    // If all AI providers fail, return a generic response based on data available
+    if (context.includes('Fotographiya') || context.includes('fotographiya')) {
+      return `I'm having trouble processing your request right now. Please try again or contact us at +91 9001110144.`;
+    }
+    return `I'm having trouble processing your request. Please try again.`;
   }
 }
 
@@ -709,8 +360,8 @@ class AIResponseHandler {
 // ✅ EXPORTS
 // ============================================
 module.exports = { 
-  getAIResponse: (userMessage, context) => {
+  getAIResponse: (userMessage, context, sessionId, wantsExamples) => {
     const handler = new AIResponseHandler();
-    return handler.getAIResponse(userMessage, context);
+    return handler.getAIResponse(userMessage, context, sessionId, wantsExamples);
   }
 };

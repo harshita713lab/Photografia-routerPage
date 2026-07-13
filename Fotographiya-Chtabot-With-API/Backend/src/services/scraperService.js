@@ -232,13 +232,9 @@ class ScraperService {
   // ================================================
   // 🔍 SEARCH IN LIVE DATA
   // ================================================
-  // scraperService.js - searchInScrapedData() FIXED
 searchInScrapedData(query) {
   const queryLower = query.toLowerCase();
   const results = [];
-  
-  // Golden Box special check (already hai)
-  // ...
   
   for (const [key, data] of Object.entries(this.scrapedData)) {
     if (!data.success) continue;
@@ -265,11 +261,9 @@ searchInScrapedData(query) {
     if (matches.length > 0) {
       results.push({
         page: key,
-        // ❌ HATAO: url: data.url,
         title: data.title || key,
         source: "LIVE (Scraped)",
         matches: matches.slice(0, 5)
-        // ✅ URL NAHI DEGA
       });
     }
   }
@@ -309,7 +303,6 @@ searchInScrapedData(query) {
 
       return [{
         page: "goldenbox",
-        url: companyData.company?.website || "https://www.fotographiya.com",
         title: "GoldenBox - AI Photo Delivery System",
         source: "HARDCODED (Golden Box Direct)",
         matches: [{
@@ -382,7 +375,6 @@ searchInScrapedData(query) {
 
         results.push({
           page: "hardcoded",
-          url: companyData.company?.website || "https://www.fotographiya.com",
           title: `Fotographiya - ${categoryNames[category] || category}`,
           source: "HARDCODED (Fallback)",
           matches: matches.slice(0, 5).map((m) => ({
@@ -399,14 +391,12 @@ searchInScrapedData(query) {
   // ================================================
   // 🎯 HYBRID SEARCH
   // ================================================
-  // scraperService.js - searchHybrid() FIXED
 searchHybrid(query) {
   let liveResults = this.searchInScrapedData(query);
   
-  // ✅ URLs hata do
+  // Remove URLs
   for (const result of liveResults) {
-    delete result.url; // URL hatao
-    // Ya: result.url = "Website page" // Text mein convert karo
+    delete result.url;
   }
   
   if (liveResults.length > 0) {
@@ -416,7 +406,7 @@ searchHybrid(query) {
   
   let hardcodedResults = this.searchInHardcodedData(query);
   
-  // ✅ URLs hata do
+  // Remove URLs
   for (const result of hardcodedResults) {
     delete result.url;
   }
@@ -425,130 +415,133 @@ searchHybrid(query) {
 }
 
   // ================================================
-  // 🧠 BUILD AI CONTEXT - FIXED
+  // 🧠 BUILD AI CONTEXT - DATA-DRIVEN, NO HARDCODE
   // ================================================
-buildContextForAI(userMessage, weddingType = null) {
-  const query = userMessage.toLowerCase();
-  const contextParts = [];
-  
-  // ===== PART 1: HARDCODED DATA - SIRF TEXT =====
-  const c = companyData.company || {};
-  contextParts.push(`🏢 COMPANY: ${c.name || 'Fotographiya'}`);
-  contextParts.push(`📍 Location: ${c.location || 'Kota, Rajasthan, India'}`);
-  contextParts.push(`📞 Phone: ${c.phone || '+91 9001110144'}`);
-  contextParts.push(`📧 Email: ${c.email || 'fotographiyaworld@gmail.com'}`);
-  contextParts.push(`👤 Founder: ${c.founder || 'Mohit Barthunia'}`);
-  
-  // ===== PART 2: SERVICES - SIRF TEXT =====
-  const services = companyData.services || {};
-  contextParts.push("\n🎯 SERVICES:");
-  if (services.wedding) contextParts.push(`• Wedding: ${services.wedding.description}`);
-  if (services.prewedding) contextParts.push(`• Pre-Wedding: ${services.prewedding.description}`);
-  if (services.destination) contextParts.push(`• Destination: ${services.destination.description}`);
-  
-  // ===== PART 3: PACKAGES - SIRF TEXT =====
-  const packages = companyData.packages || {};
-  contextParts.push("\n📦 PACKAGES:");
-  if (packages.silver) contextParts.push(`• Silver: ${packages.silver.includes}`);
-  if (packages.golden) contextParts.push(`• Golden: ${packages.golden.includes}`);
-  if (packages.premium) contextParts.push(`• Premium: ${packages.premium.includes}`);
-  
-  // ===== PART 4: WEDDING DATA BASED ON TYPE (if provided) =====
-  if (weddingType) {
-    const weddings = companyData.weddings || {};
-    let weddingExamples = [];
-
-    if (weddingType === 'celebrity' && weddings.celebrity?.featured) {
-      weddingExamples = weddings.celebrity.featured;
-      contextParts.push("\n🌟 CELEBRITY WEDDINGS WE'VE CAPTURED:");
-    } else if (weddingType === 'destination' && weddings.destination) {
-      weddingExamples = weddings.destination;
-      contextParts.push("\n🏖️ DESTINATION WEDDINGS WE'VE CAPTURED:");
-    } else if (weddingType === 'pre-wedding' && weddings.prewedding) {
-      weddingExamples = weddings.prewedding;
-      contextParts.push("\n💕 PRE-WEDDING SHOOTS WE'VE CAPTURED:");
-    } else if (weddingType === 'general') {
-      // For general, include a mix of all wedding types
-      if (weddings.celebrity?.featured) weddingExamples.push(...weddings.celebrity.featured);
-      if (weddings.featured) weddingExamples.push(...weddings.featured);
-      if (weddings.destination) weddingExamples.push(...weddings.destination);
-      if (weddings.prewedding) weddingExamples.push(...weddings.prewedding);
-      contextParts.push("\n💍 WEDDINGS WE'VE CAPTURED:");
+  buildContextForAI(userMessage, wantsExamples) {
+    const query = userMessage.toLowerCase();
+    const contextParts = [];
+    
+    // ===== PART 1: COMPANY INFO (ALWAYS INCLUDED) =====
+    const c = companyData.company || {};
+    contextParts.push(`🏢 COMPANY: ${c.name || 'Fotographiya'}`);
+    contextParts.push(`📍 Location: ${c.location || 'Kota, Rajasthan, India'}`);
+    contextParts.push(`📞 Phone: ${c.phone || '+91 9001110144'}`);
+    contextParts.push(`📧 Email: ${c.email || 'fotographiyaworld@gmail.com'}`);
+    contextParts.push(`👤 Founder: ${c.founder || 'Mohit Barthunia'}`);
+    contextParts.push(`📅 Established: ${c.established || '2023'}`);
+    contextParts.push(`⭐ Rating: ${c.rating || '4.6/5'}`);
+    contextParts.push(`👫 Customers: ${c.customers || '100+ Happy Couples'}`);
+    
+    // ===== PART 2: SERVICES (ALWAYS INCLUDED) =====
+    const services = companyData.services || {};
+    contextParts.push("\n🎯 SERVICES:");
+    if (services.wedding) contextParts.push(`• Wedding Photography: ${services.wedding.description}`);
+    if (services.prewedding) contextParts.push(`• Pre-Wedding Photography: ${services.prewedding.description}`);
+    if (services.destination) contextParts.push(`• Destination Wedding: ${services.destination.description}`);
+    if (services.corporate) contextParts.push(`• Corporate Photography: ${services.corporate.description}`);
+    if (services.maternity) contextParts.push(`• Maternity Photography: ${services.maternity.description}`);
+    if (services.birthday) contextParts.push(`• Birthday Photography: ${services.birthday.description}`);
+    if (services.roka) contextParts.push(`• Roka Ceremony Photography: ${services.roka.description}`);
+    
+    // ===== PART 3: PACKAGES (ALWAYS INCLUDED) =====
+    const packages = companyData.packages || {};
+    contextParts.push("\n📦 PACKAGES:");
+    if (packages.silver) contextParts.push(`• Silver: ${packages.silver.includes}`);
+    if (packages.golden) contextParts.push(`• Golden: ${packages.golden.includes}`);
+    if (packages.premium) contextParts.push(`• Premium: ${packages.premium.includes}`);
+    
+    // ===== PART 4: GOLDEN BOX (ALWAYS INCLUDED) =====
+    const goldenBox = companyData.goldenBox || {};
+    if (Object.keys(goldenBox).length > 0) {
+      contextParts.push("\n✨ GOLDENBOX:");
+      contextParts.push(`Description: ${goldenBox.description}`);
+      if (goldenBox.features) {
+        contextParts.push(`Features: ${goldenBox.features.join(", ")}`);
+      }
+      if (goldenBox.aiPowered) {
+        contextParts.push(`AI: ${goldenBox.aiPowered}`);
+      }
     }
 
-    // Add all examples to context
-    weddingExamples.forEach(w => { // Modified logic for wedding examples
-      if (weddingType === 'pre-wedding') {
-        // For pre-wedding, only show couple names
-        contextParts.push(`• Couple: ${w.couple}`);
-      } else if (weddingType === 'destination') {
-        // For destination, show couple, location, and description
-        contextParts.push(`• Couple: ${w.couple}, Location: ${w.location}, Description: ${w.description || 'N/A'}`);
-      } else {
-        // For celebrity, featured, or general, show couple and description (no location)
-        contextParts.push(`• Couple: ${w.couple}, Description: ${w.description || 'N/A'}`);
+    // ===== PART 5: ACADEMY (ALWAYS INCLUDED) =====
+    const academy = companyData.academy || {};
+    if (Object.keys(academy).length > 0) {
+      contextParts.push("\n🎓 ACADEMY:");
+      contextParts.push(`Tagline: ${academy.tagline || ''}`);
+      contextParts.push(`Description: ${academy.description}`);
+      if (academy.courses) {
+        contextParts.push(`Courses: ${academy.courses.join(", ")}`);
       }
-    });
-  }
+    }
 
-  // ===== PART 4: LIVE DATA - SIRF CONTENT, NO URLS =====
-  contextParts.push("\n📄 WEBSITE CONTENT:");
-  
-  // 🔍 Search in scraped data
-  const searchResults = this.searchHybrid(query);
-  
-  if (searchResults && searchResults.length > 0) {
-    for (const result of searchResults.slice(0, 3)) {
-      // ❌ HATAO: contextParts.push(`URL: ${result.url}`);
+    // ===== PART 6: TEAM INFO (ALWAYS INCLUDED) =====
+    const team = companyData.team || {};
+    if (Object.keys(team).length > 0) {
+      contextParts.push("\n👥 TEAM:");
+      contextParts.push(`Total: ${team.total || '50+'} members`);
+      if (team.roles) {
+        contextParts.push(`Roles: ${team.roles.join(", ")}`);
+      }
+    }
+
+    // ===== PART 7: SOCIAL MEDIA (ALWAYS INCLUDED) =====
+    const socialMedia = companyData.socialMedia || {};
+    if (Object.keys(socialMedia).length > 0) {
+      contextParts.push("\n📱 SOCIAL MEDIA:");
+      for (const [key, value] of Object.entries(socialMedia)) {
+        contextParts.push(`• ${value.platform}: available on ${key}`);
+      }
+    }
+
+    // ===== PART 8: EXAMPLES DATA (ONLY IF USER ASKS FOR EXAMPLES) =====
+    if (wantsExamples) {
+      const weddings = companyData.weddings || {};
       
-      // ✅ SIRF CONTENT DO:
-      if (result.title) {
-        contextParts.push(`📌 ${result.title}`);
+      // Celebrity weddings
+      if (weddings.celebrity?.featured) {
+        contextParts.push("\n🌟 CELEBRITY WEDDINGS WE'VE CAPTURED:");
+        weddings.celebrity.featured.forEach(w => {
+          contextParts.push(`• ${w.couple} - ${w.location} (${w.date})`);
+        });
       }
       
-      if (result.matches && Array.isArray(result.matches)) {
-        for (const match of result.matches.slice(0, 3)) {
-          // Sirf text content
-          if (match.type === 'heading') {
-            contextParts.push(`📌 ${match.snippet}`);
-          } else if (match.type === 'list') {
-            contextParts.push(`• ${match.snippet}`);
-          } else {
-            contextParts.push(`📝 ${match.snippet}`);
-          }
-        }
+      // Featured weddings
+      if (weddings.featured) {
+        contextParts.push("\n💍 FEATURED WEDDINGS:");
+        weddings.featured.forEach(w => {
+          contextParts.push(`• ${w.couple} - ${w.location} at ${w.venue}`);
+        });
+      }
+      
+      // Pre-wedding shoots (NO location mentioned - only if user asks)
+      if (weddings.prewedding) {
+        contextParts.push("\n💕 PRE-WEDDING SHOOTS (IMPORTANT: Do NOT mention location/place in response unless user specifically asks for it):");
+        weddings.prewedding.forEach(w => {
+          contextParts.push(`• ${w.couple} - Style: ${w.style}`);
+        });
+      }
+      
+      // Destination weddings
+      if (weddings.destination) {
+        contextParts.push("\n🏖️ DESTINATION WEDDINGS:");
+        weddings.destination.forEach(w => {
+          contextParts.push(`• ${w.couple} - ${w.location} at ${w.venue}`);
+        });
       }
     }
-  } else {
-    // Agar kuch nahi mila toh generic info do
-    contextParts.push("• Wedding Photography services available");
-    contextParts.push("• Pre-Wedding and Destination Wedding packages");
-    contextParts.push("• GoldenBox AI technology for instant photo delivery");
-    contextParts.push("• Fotographiya Academy for professional courses");
-  }
-  
-  // ===== PART 6: GOLDEN BOX - SIRF TEXT =====
-  const goldenBox = companyData.goldenBox || {};
-  if (Object.keys(goldenBox).length > 0) {
-    contextParts.push("\n✨ GOLDENBOX:");
-    contextParts.push(`Description: ${goldenBox.description}`);
-    if (goldenBox.features) {
-      contextParts.push(`Features: ${goldenBox.features.join(", ")}`);
+    
+    // ===== PART 9: PORTFOLIO (ALWAYS INCLUDED - SUMMARY ONLY) =====
+    const portfolio = companyData.portfolio || {};
+    if (portfolio.description) {
+      contextParts.push("\n🖼️ PORTFOLIO:");
+      contextParts.push(`${portfolio.description}`);
+      if (portfolio.couplesCount) {
+        contextParts.push(`Total couples: ${portfolio.couplesCount}`);
+      }
     }
-  }
 
-  // ===== PART 7: ACADEMY - SIRF TEXT =====
-  const academy = companyData.academy || {};
-  if (Object.keys(academy).length > 0) {
-    contextParts.push("\n🎓 ACADEMY:");
-    contextParts.push(`Description: ${academy.description}`);
-    if (academy.courses) {
-      contextParts.push(`Courses: ${academy.courses.join(", ")}`);
-    }
+    return contextParts.join("\n");
   }
-  
-  return contextParts.join("\n");
-}
 
   // ===== STATUS =====
   getStatus() {
