@@ -122,7 +122,7 @@ const ALLOWED_TOPICS = [
   'price', 'cost', 'budget', 'portfolio', 'gallery', 'about', 'founder',
   'maternity', 'birthday', 'roka', 'corporate', 'reviews', 'location',
   'instagram', 'facebook', 'youtube', 'linkedin', 'medium', 'reddit', 'pexels',
-  'social media', 'social accounts', 'all social', 'silver', 'golden', 'premium',
+  'social media', 'social accounts', 'all social', 'silver', 'golden', 'premium', 
   'contact us', 'reach us', 'help', 'support', 'customer care',
   'address', 'studio', 'kota', 'rajasthan', 'where is fotographiya',
   'reviews', 'customer review', 'testimonial', 'feedback',

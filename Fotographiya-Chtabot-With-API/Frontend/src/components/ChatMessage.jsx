@@ -180,7 +180,7 @@ const LINK_CONFIG = {
       'map', 'direction', 'google map', 'find us', 'come to'
     ],
     link: 'https://www.google.com/maps/search/?api=1&query=F3%2C+Ballabh+Bari%2C+Electricity+Board+Area%2C+Kota%2C+Rajasthan+324007',
-    label: '📍 View on Google Maps',
+    label: 'View on Google Maps',
     icon: '📍'
   },
 
