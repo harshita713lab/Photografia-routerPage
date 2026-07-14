@@ -443,14 +443,25 @@ searchHybrid(query) {
     if (services.birthday) contextParts.push(`• Birthday Photography: ${services.birthday.description}`);
     if (services.roka) contextParts.push(`• Roka Ceremony Photography: ${services.roka.description}`);
     
-    // ===== PART 3: PACKAGES (ALWAYS INCLUDED) =====
+    // ===== PART 3: DIVERSE LOCATIONS GUIDE (ALWAYS INCLUDED FOR CONTEXT) =====
+    const weddingsData = companyData.weddings || {};
+    const topLoc = weddingsData.topLocations || {};
+    contextParts.push("\n📍 TOP INDIAN DESTINATIONS (Suggest Rajasthan cities FIRST when users ask about wedding locations):");
+    if (topLoc.rajasthan) contextParts.push("🔥 Rajasthan (Top): " + topLoc.rajasthan.join(", "));
+    if (topLoc.northIndia) contextParts.push("🏔️ North India: " + topLoc.northIndia.join(", "));
+    if (topLoc.westIndia) contextParts.push("🌊 West India: " + topLoc.westIndia.join(", "));
+    if (topLoc.southIndia) contextParts.push("🌴 South India: " + topLoc.southIndia.join(", "));
+    if (topLoc.eastNortheast) contextParts.push("🌿 East & Northeast: " + topLoc.eastNortheast.join(", "));
+    if (topLoc.note) contextParts.push("📌 Note: " + topLoc.note);
+    
+    // ===== PART 4: PACKAGES (ALWAYS INCLUDED) =====
     const packages = companyData.packages || {};
     contextParts.push("\n📦 PACKAGES:");
     if (packages.silver) contextParts.push(`• Silver: ${packages.silver.includes}`);
     if (packages.golden) contextParts.push(`• Golden: ${packages.golden.includes}`);
     if (packages.premium) contextParts.push(`• Premium: ${packages.premium.includes}`);
     
-    // ===== PART 4: GOLDEN BOX (ALWAYS INCLUDED) =====
+    // ===== PART 5: GOLDEN BOX (ALWAYS INCLUDED) =====
     const goldenBox = companyData.goldenBox || {};
     if (Object.keys(goldenBox).length > 0) {
       contextParts.push("\n✨ GOLDENBOX:");
@@ -463,7 +474,7 @@ searchHybrid(query) {
       }
     }
 
-    // ===== PART 5: ACADEMY (ALWAYS INCLUDED) =====
+    // ===== PART 6: ACADEMY (ALWAYS INCLUDED) =====
     const academy = companyData.academy || {};
     if (Object.keys(academy).length > 0) {
       contextParts.push("\n🎓 ACADEMY:");
@@ -474,7 +485,7 @@ searchHybrid(query) {
       }
     }
 
-    // ===== PART 6: TEAM INFO (ALWAYS INCLUDED) =====
+    // ===== PART 7: TEAM INFO (ALWAYS INCLUDED) =====
     const team = companyData.team || {};
     if (Object.keys(team).length > 0) {
       contextParts.push("\n👥 TEAM:");
@@ -484,7 +495,7 @@ searchHybrid(query) {
       }
     }
 
-    // ===== PART 7: SOCIAL MEDIA (ALWAYS INCLUDED) =====
+    // ===== PART 8: SOCIAL MEDIA (ALWAYS INCLUDED) =====
     const socialMedia = companyData.socialMedia || {};
     if (Object.keys(socialMedia).length > 0) {
       contextParts.push("\n📱 SOCIAL MEDIA:");
@@ -493,7 +504,7 @@ searchHybrid(query) {
       }
     }
 
-    // ===== PART 8: EXAMPLES DATA (ONLY IF USER ASKS FOR EXAMPLES) =====
+    // ===== PART 9: EXAMPLES DATA (ONLY IF USER ASKS FOR EXAMPLES) =====
     if (wantsExamples) {
       const weddings = companyData.weddings || {};
       
@@ -530,7 +541,7 @@ searchHybrid(query) {
       }
     }
     
-    // ===== PART 9: PORTFOLIO (ALWAYS INCLUDED - SUMMARY ONLY) =====
+    // ===== PART 10: PORTFOLIO (ALWAYS INCLUDED - SUMMARY ONLY) =====
     const portfolio = companyData.portfolio || {};
     if (portfolio.description) {
       contextParts.push("\n🖼️ PORTFOLIO:");

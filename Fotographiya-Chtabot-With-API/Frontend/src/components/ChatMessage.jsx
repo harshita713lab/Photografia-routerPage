@@ -3,6 +3,7 @@
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import '../styles/ChatBot.css';
+//import { keywords } from '../../../Backend/src/data/companyData';
 
 // ============================================
 // ✅ MASTER KEYWORD TO LINK MAPPING (COMPLETE)
@@ -54,6 +55,12 @@ const LINK_CONFIG = {
     label: 'Pexels',
     icon: '🖼️'
   },
+  whatsapp: {
+  keywords: ['whatsapp', 'wa', 'message', 'chat', 'text'],  // ← UNIQUE
+  link: 'https://wa.me/919001110144',
+  label: 'WhatsApp',
+  icon: '💬'
+},
   
   // ============================================
   // 📌 SOCIAL MEDIA - ALL (GROUP)
@@ -160,16 +167,14 @@ const LINK_CONFIG = {
   // ============================================
   // 📌 CONTACT
   // ============================================
-  contact: {
-    keywords: ['contact', 'contact us', 'reach us', 'help', 'support', 'customer care'],
-    links: [
-      { label: '📞 Call Us', link: 'tel:+919001110144' },
-      { label: '💬 WhatsApp', link: 'https://wa.me/919001110144' },
-      { label: '📧 Email', link: 'mailto:fotographiyaworld@gmail.com' },
-      { label: '📝 Contact Page', link: 'https://www.fotographiya.com/contact' }
-    ]
-  },
-
+contact: {
+  keywords: ['contact', 'contact us', 'reach us', 'help', 'support', 'customer care', 'call', 'phone', 'whatsapp', 'email', 'complaint'],
+  links: [
+    { label: '📞 Call Us', link: 'tel:+919001110144' },
+    { label: '💬 WhatsApp', link: 'https://wa.me/919001110144' },
+    { label: '📧 Email', link: 'mailto:fotographiyaworld@gmail.com' }
+  ]
+},
   // ============================================
   // 📌 LOCATION - MAP LINK
   // ============================================
@@ -208,7 +213,7 @@ const LINK_CONFIG = {
   // 📌 PORTFOLIO
   // ============================================
   portfolio: {
-    keywords: ['portfolio', 'gallery', 'work samples', 'our work', 'showcase'],
+    keywords: ['portfolio', 'gallery', 'work samples', 'our work', 'showcase', 'projects', 'photos'],
     link: 'https://www.fotographiya.com/portfolio',
     label: 'Portfolio Gallery',
     icon: '🖼️'
@@ -253,18 +258,26 @@ function findMatchingLinks(userMessage) {
     contact: ['contact', 'contact us', 'reach us', 'help', 'support', 'customer care']
   };
   
-  for (const [key, keywords] of Object.entries(groupKeywords)) {
+   for (const [key, keywords] of Object.entries(groupKeywords)) {
     if (keywords.some(kw => lowerText.includes(kw))) {
       const config = LINK_CONFIG[key];
       if (config) {
-        // Return only the group match
-        return [config];
+        // Return only the group match with proper type
+        if (config.links) {
+          return [{
+            type: 'multiple',
+            links: config.links,
+            key: key
+          }];
+        } else {
+          return [config];
+        }
       }
     }
   }
   
   // 🔥 STEP 2: Check individual social media first (highest priority for social)
-  const socialKeys = ['instagram', 'facebook', 'youtube', 'linkedin', 'medium', 'reddit', 'pexels'];
+  const socialKeys = ['instagram', 'facebook', 'youtube', 'linkedin', 'medium', 'reddit', 'pexels', 'whatsapp'];
   
   for (const key of socialKeys) {
     const config = LINK_CONFIG[key];

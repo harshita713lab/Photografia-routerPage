@@ -17,7 +17,7 @@ const companyData = {
     whatsapp: "https://api.whatsapp.com/send/?phone=9001110144",
     founder: "Mohit Barthunia",
     established: "2023",
-    rating: "4.6/5",
+    rating: "4.9/5",
     customers: "100+ Happy Couples"
   },
 
@@ -40,60 +40,26 @@ const companyData = {
     ]
   },
   weddings: {
+
     // ============================================
-    // 🌟 CELEBRITY WEDDINGS (6 COUPLES)
+    // 🌟 CELEBRITY WEDDINGS
     // ============================================
     celebrity: {
       title: "Celebrity Weddings",
       description: "We have had the privilege of capturing some of the most beautiful celebrity weddings.",
       featured: [
         {
-          couple: "Anubhav Dubey & Ayushi Pandey",
+          couple: "Anubhav & Ayushi",
           location: "Delhi, India",
           date: "December 2024",
           description: "A grand celebrity wedding filled with love, laughter, and royal traditions.",
           highlights: ["Pre-wedding shoot in Delhi", "Traditional Hindu ceremonies", "Lavish reception with 500+ guests"]
-        },
-        {
-          couple: "Rahul Sharma & Priya Singh",
-          location: "Mumbai, India",
-          date: "November 2024",
-          description: "A star-studded wedding with Bollywood celebrities and extravagant decor.",
-          highlights: ["Bollywood theme", "Celebrity performances", "Luxury venue"]
-        },
-        {
-          couple: "Vikram Mehta & Ananya Reddy",
-          location: "Hyderabad, India",
-          date: "October 2024",
-          description: "A royal South Indian wedding with traditional rituals and modern elegance.",
-          highlights: ["South Indian traditions", "Temple ceremony", "Grand reception"]
-        },
-        {
-          couple: "Arjun Kapoor & Meera Nair",
-          location: "Kerala, India",
-          date: "September 2024",
-          description: "A beautiful beach wedding in Kerala with intimate celebrations.",
-          highlights: ["Beach wedding", "Intimate gathering", "Natural photography"]
-        },
-        {
-          couple: "Karan Malhotra & Riya Gupta",
-          location: "Jaipur, Rajasthan",
-          date: "August 2024",
-          description: "A lavish Rajasthani wedding at a heritage palace.",
-          highlights: ["Palace venue", "Rajasthani folk music", "Royal theme"]
-        },
-        {
-          couple: "Amit Patel & Sneha Desai",
-          location: "Ahmedabad, Gujarat",
-          date: "July 2024",
-          description: "A vibrant Gujarati wedding with colorful traditions and festivities.",
-          highlights: ["Garba night", "Traditional Gujarati rituals", "Colorful decor"]
         }
       ]
     },
 
     // ============================================
-    // 💍 FEATURED WEDDINGS (6 COUPLES)
+    // 💍 FEATURED WEDDINGS
     // ============================================
     featured: [
       {
@@ -147,124 +113,80 @@ const companyData = {
     ],
 
     // ============================================
-    // 💕 PRE-WEDDING SHOOTS (6 COUPLES)
+    // 💕 PRE-WEDDING SHOOTS
     // ============================================
     prewedding: [
       {
-        couple: "Harshita & Nilanshi",
-        location: "Delhi, India",
-        date: "December 2024",
-        description: "A vibrant pre-wedding photoshoot capturing love in the beautiful streets of Delhi.",
-        style: "Urban & Contemporary",
-        highlights: ["Delhi heritage locations", "Candid moments", "Artistic portraits"],
-        venue: "Lodhi Garden, Delhi"
-      },
-      {
-        couple: "Kunal & Sana",
-        location: "Jaipur, Rajasthan",
-        date: "November 2024",
-        description: "A royal pre-wedding shoot at majestic palaces of Jaipur.",
+        couple: "Shubham & Neha",
         style: "Royal & Traditional",
-        highlights: ["Amber Fort", "Pink City vibes", "Royal attire"],
-        venue: "Amber Fort, Jaipur"
+        highlights: ["Heritage palaces", "Candid moments", "Artistic portraits"]
       },
       {
-        couple: "Ankit & Divya",
-        location: "Goa, India",
-        date: "October 2024",
-        description: "A fun and romantic pre-wedding shoot by the beaches of Goa.",
-        style: "Beach & Bohemian",
-        highlights: ["Beach sunset", "Candid moments", "Colorful outfits"],
-        venue: "Calangute Beach, Goa"
+        couple: "Yash & Sakhi",
+        style: "Urban & Contemporary",
+        highlights: ["City locations", "Candid moments", "Artistic portraits"]
       },
       {
-        couple: "Nikhil & Anjali",
-        location: "Udaipur, Rajasthan",
-        date: "September 2024",
-        description: "A dreamy pre-wedding shoot on the lakes of Udaipur.",
+        couple: "Mrithunjay & Ayushi",
         style: "Romantic & Dreamy",
-        highlights: ["Lake Pichola", "Boat ride", "Sunset photography"],
-        venue: "Lake Pichola, Udaipur"
+        highlights: ["Lake Pichola", "Boat ride", "Sunset photography"]
       },
       {
-        couple: "Raj & Priyanka",
-        location: "Agra, Uttar Pradesh",
-        date: "August 2024",
-        description: "A majestic pre-wedding shoot at the Taj Mahal.",
-        style: "Iconic & Timeless",
-        highlights: ["Taj Mahal backdrop", "Cultural outfits", "Sunrise shoot"],
-        venue: "Taj Mahal, Agra"
+        couple: "Praduman & Vinita",
+        style: "Royal & Traditional",
+        highlights: ["Amber Fort", "Pink City vibes", "Royal attire"]
       },
       {
-        couple: "Manish & Neha",
-        location: "Manali, Himachal Pradesh",
-        date: "July 2024",
-        description: "An adventurous pre-wedding shoot in the Himalayas.",
-        style: "Adventure & Nature",
-        highlights: ["Snow mountains", "Coffee with a view", "Winter outfits"],
-        venue: "Rohtang Pass, Manali"
+        couple: "Gourav & Anjali",
+        style: "Romantic & Dreamy",
+        highlights: ["Lake views", "Sunset shoot", "Royal backdrop"]
       }
     ],
 
     // ============================================
-    // 🏖️ DESTINATION WEDDINGS (6 COUPLES)
+    // 🏖️ DESTINATION WEDDINGS
     // ============================================
     destination: [
       {
-        couple: "Divyanshu & Kuntal",
-        location: "Kumbhalgarh, Rajasthan",
+        couple: "Shubham & Vishakha",
+        location: "Haryana, India",
         date: "December 2024",
-        description: "A dream destination wedding at the majestic Kumbhalgarh fort.",
-        venue: "Kumbhalgarh Fort",
-        style: "Royal & Historic",
-        highlights: ["Fort backdrop", "Royal theme", "Traditional Rajasthani decor"]
+        description: "A beautiful destination wedding in Haryana with traditional ceremonies and grandeur.",
+        venue: "Haryana Farmhouse",
+        style: "Traditional & Grand",
+        highlights: ["Traditional rituals", "Farmhouse venue", "Grand celebration"]
       },
       {
-        couple: "Raja & Rani",
-        location: "Delhi NCR, India",
-        date: "November 2024",
-        description: "A grand destination-style wedding in Delhi with royal themes.",
-        venue: "The Lodhi, New Delhi",
-        style: "Royal & Grand",
-        highlights: ["Traditional rituals", "Royal themed decor", "Cinematic coverage"]
-      },
-      {
-        couple: "Virat & Anushka",
+        couple: "Shubham & Neha",
         location: "Jaipur, Rajasthan",
-        date: "October 2024",
-        description: "A royal destination wedding at a heritage palace in Jaipur.",
+        date: "November 2024",
+        description: "A royal destination wedding in the Pink City of Jaipur.",
         venue: "Rambagh Palace, Jaipur",
-        style: "Royal & Vintage",
-        highlights: ["Palace wedding", "Vintage cars", "Royal banquet"]
+        style: "Royal & Traditional",
+        highlights: ["Palace wedding", "Royal Rajasthani decor", "Grand festivities"]
       },
       {
-        couple: "Dhruv & Kashish",
-        location: "Goa, India",
-        date: "September 2024",
-        description: "A beautiful destination wedding with beach views and sunset vows.",
-        venue: "Taj Exotica, Goa",
-        style: "Beach & Tropical",
-        highlights: ["Beach ceremony", "Tropical decor", "Sunset photography"]
-      },
-      {
-        couple: "Samarth & Ishita",
-        location: "Udaipur, Rajasthan",
-        date: "August 2024",
-        description: "A fairy-tale destination wedding on the lakes of Udaipur.",
-        venue: "The Leela Palace, Udaipur",
-        style: "Royal & Romantic",
-        highlights: ["Lake views", "Boat entry", "Royal decor"]
-      },
-      {
-        couple: "Gaurav & Megha",
-        location: "Jaisalmer, Rajasthan",
-        date: "July 2024",
-        description: "A majestic destination wedding in the golden city of Jaisalmer.",
-        venue: "Jaisalmer Fort",
-        style: "Royal & Desert",
-        highlights: ["Desert wedding", "Camel rides", "Golden sunset"]
+        couple: "Karan & Bhavna",
+        location: "Delhi, India",
+        date: "October 2024",
+        description: "A luxurious destination wedding in the capital city of Delhi.",
+        venue: "The Leela Palace, Delhi",
+        style: "Luxury & Grand",
+        highlights: ["Luxury venue", "Grand decor", "Celebrity performances"]
       }
-    ]
+    ],
+
+    // ============================================
+    // 📍 TOP INDIAN DESTINATIONS
+    // ============================================
+    topLocations: {
+      rajasthan: ["Udaipur", "Jaipur", "Jodhpur", "Jaisalmer", "Ajmer", "Kumbhalgarh", "Mount Abu", "Ranthambore"],
+      northIndia: ["Delhi", "Shimla (Himachal)", "Manali (Himachal)", "Rishikesh (Uttarakhand)", "Srinagar (J&K)", "Pahalgam (J&K)"],
+      westIndia: ["Goa", "Mumbai (Maharashtra)", "Lonavala (Maharashtra)", "Alibaug (Maharashtra)", "Rann of Kutch (Gujarat)"],
+      southIndia: ["Munnar (Kerala)", "Coorg (Karnataka)", "Mysore (Karnataka)", "Ooty (Tamil Nadu)", "Pondicherry", "Andaman Islands"],
+      eastNortheast: ["Shillong (Meghalaya)", "Gangtok (Sikkim)", "Agra (UP)", "Orchha (MP)"],
+      note: "We cover wedding photography across ALL of India. From royal palaces of Rajasthan to beaches of Goa, from Himalayan mountains to South Indian temples — we shoot everywhere in India."
+    }
   },
 
   socialMedia: {
@@ -336,7 +258,7 @@ const companyData = {
       description: "We offer professional pre-wedding photography services for couples. Our team captures romantic moments at scenic locations with expert editing and creative direction."
     },
     destination: {
-      description: "We offer professional destination wedding photography services across India. Our team covers all major Indian destinations including Rajasthan, Goa, Kerala, and Himachal Pradesh."
+      description: "We offer professional destination wedding photography services across India. Top Rajasthan cities include Udaipur, Jaipur, Ajmer, and Kumbhalgarh. We cover all over India — from Kashmir to Kanyakumari, from Gujarat to Meghalaya."
     },
     corporate: {
       description: "Professional corporate photography services for events, conferences, team photos, and brand imagery."
