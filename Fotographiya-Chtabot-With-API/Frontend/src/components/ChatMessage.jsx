@@ -103,13 +103,13 @@ const LINK_CONFIG = {
     icon: '📸'
   },
   wedding: {
-    keywords: ['wedding', 'marriage', 'shaadi'],
+    keywords: ['wedding', 'marriage', 'shaadi', 'haldi', 'mehendi', 'Sangeet', 'Reception', 'Bride entry', 'Groom entry', 'Baraat', 'Vidaai', 'Family portraits'],
     link: 'https://www.fotographiya.com/services/wedding-photography',
     label: 'Wedding Photography',
     icon: '💍'
   },
   destination: {
-    keywords: ['destination wedding', 'destination'],
+    keywords: ['destination wedding', 'destination', 'Reception', 'Bride entry', 'Groom entry', 'Baraat', 'vidaai', 'family portraits'],
     link: 'https://www.fotographiya.com/services/destination-wedding',
     label: 'Destination Wedding',
     icon: '🏖️'
@@ -147,31 +147,46 @@ const LINK_CONFIG = {
   // 📌 Reels
   // ============================================
   allReels: {
-    keywords: ['social media', 'social accounts', 'all social', 'social platforms', 'all platforms', 'social links'],
+    keywords: [
+      'reels', 'reel', 'instagram reels', 'ig reels',
+      'video', 'videos', 'short video', 'instagram video',
+      'reels link', 'reels example', 'reels sample',
+      'show reels', 'see reels', 'watch reels',
+      'reels video', 'reels collection', 'our reels',
+      'fotographiya reels', 'reel video'
+    ],
     links: [
-      { label: 'Reels', link: 'https://www.instagram.com/reel/DaxHv6SjXIJ/?igsh=OHMwcG53OTN1OTF2' },
-      { label: 'Reels', link: 'https://www.instagram.com/reel/DZ1MtfkjMpu/?igsh=MXJ5Nm8xaGNsNDkybw%3D%3D' },
-      { label: 'Reels', link: 'https://www.instagram.com/reel/DZsMEFTiIVS/?igsh=eGJhMGl5Z2hsMGl4' },
-      { label: 'Reels', link: 'https://www.instagram.com/reel/DaXCUpZlHuf/?igsh=MXM2YzVjeHFpeWl1OA%3D%3D' },
+      { label: '🎬 Reel 1', link: 'https://www.instagram.com/reel/DaxHv6SjXIJ/?igsh=OHMwcG53OTN1OTF2' },
+      { label: '🎬 Reel 2', link: 'https://www.instagram.com/reel/DZ1MtfkjMpu/?igsh=MXJ5Nm8xaGNsNDkybw%3D%3D' },
+      { label: '🎬 Reel 3', link: 'https://www.instagram.com/reel/DZsMEFTiIVS/?igsh=eGJhMGl5Z2hsMGl4' },
+      { label: '🎬 Reel 4', link: 'https://www.instagram.com/reel/DaXCUpZlHuf/?igsh=MXM2YzVjeHFpeWl1OA%3D%3D' },
     ]
   },
 
+
+  // ============================================
+  // 📌 PHOTOS - ✅ FIXED KEYWORDS
+  // ============================================
   allPhotos: {
-    keywords: ['phots', 'pichures', 'pics', 'printrest'],
+    keywords: [
+      'photos', 'photo', 'pictures', 'pics', 'images', 'portfolio photos', 'gallery photos',
+      'show photos', 'see photos', 'view photos',
+      'sample photos', 'photo gallery', 'image gallery',
+      'pinterest', 'wedding photos', 'couple photos'
+    ],
     links: [
-      { label: 'Photos', link: 'https://in.pinterest.com/pin/967288826241112251/' },
-      { label: 'Photos', link: 'https://in.pinterest.com/pin/967288826220643904/' },
-      { label: 'Photos', link: 'https://in.pinterest.com/pin/967288826241559570/' },
-      { label: 'Photos', link: 'https://in.pinterest.com/pin/967288826217356685/' },
+      { label: '🖼️ Photo 1', link: 'https://in.pinterest.com/pin/967288826241112251/' },
+      { label: '🖼️ Photo 2', link: 'https://in.pinterest.com/pin/967288826220643904/' },
+      { label: '🖼️ Photo 3', link: 'https://in.pinterest.com/pin/967288826241559570/' },
+      { label: '🖼️ Photo 4', link: 'https://in.pinterest.com/pin/967288826217356685/' },
     ]
   },
-
 
   // ============================================
   // 📌 CONTACT
   // ============================================
 contact: {
-  keywords: ['contact', 'contact us', 'reach us', 'help', 'support', 'customer care', 'call', 'phone', 'whatsapp', 'email', 'complaint'],
+  keywords: ['contact', 'contact us', 'reach us', 'help', 'support', 'customer care', 'call', 'phone', 'whatsapp', 'email', 'complaint', 'discount', 'booking', 'payment', 'editors', 'EMI', 'Refund policy', 'refund', 'Cancellation charges', 'Cancellation', 'date', 'contract', 'book', 'booking'],
   links: [
     { label: '📞 Call Us', link: 'tel:+919001110144' },
     { label: '💬 WhatsApp', link: 'https://wa.me/919001110144' },
@@ -216,7 +231,7 @@ contact: {
   // 📌 PORTFOLIO
   // ============================================
   portfolio: {
-    keywords: ['portfolio', 'gallery', 'work samples', 'our work', 'showcase', 'projects', 'photos'],
+    keywords: ['portfolio', 'gallery', 'work samples', 'our work', 'showcase', 'projects', 'photos', 'pictures', 'images', 'fotographiya', 'raw', 'shoot'],
     link: 'https://www.fotographiya.com/portfolio',
     label: 'Portfolio Gallery',
     icon: '🖼️'
@@ -302,6 +317,25 @@ function findMatchingLinks(userMessage) {
       }
     }
   }
+
+
+  // In findMatchingLinks() function - Add after socialKeys check
+
+// 🔥 STEP 2.5: Check Contact
+const contactConfig = LINK_CONFIG.contact;
+if (contactConfig && !matchedKeys.has('contact')) {
+  for (const keyword of contactConfig.keywords) {
+    if (lowerText.includes(keyword.toLowerCase())) {
+      matchedKeys.add('contact');
+      matches.push({
+        type: 'multiple',
+        links: contactConfig.links,
+        key: 'contact'
+      });
+      break;
+    }
+  }
+}
   
   // 🔥 STEP 3: Check services with PRIORITY ORDER
   const servicePriority = [
@@ -369,6 +403,48 @@ function findMatchingLinks(userMessage) {
       }
     }
   }
+
+  // ✅ NEW: STEP 2.6: Check REELS
+  const reelsConfig = LINK_CONFIG.allReels;
+  if (reelsConfig && !matchedKeys.has('allReels')) {
+    let isReelsMatch = false;
+    for (const keyword of reelsConfig.keywords) {
+      if (lowerText.includes(keyword.toLowerCase())) {
+        isReelsMatch = true;
+        break;
+      }
+    }
+    if (isReelsMatch) {
+      matchedKeys.add('allReels');
+      matches.push({
+        type: 'multiple',
+        links: reelsConfig.links,
+        key: 'allReels'
+      });
+    }
+  }
+
+
+   // ✅ NEW: STEP 2.7: Check PHOTOS
+  const photosConfig = LINK_CONFIG.allPhotos;
+  if (photosConfig && !matchedKeys.has('allPhotos')) {
+    let isPhotosMatch = false;
+    for (const keyword of photosConfig.keywords) {
+      if (lowerText.includes(keyword.toLowerCase())) {
+        isPhotosMatch = true;
+        break;
+      }
+    }
+    if (isPhotosMatch) {
+      matchedKeys.add('allPhotos');
+      matches.push({
+        type: 'multiple',
+        links: photosConfig.links,
+        key: 'allPhotos'
+      });
+    }
+  }
+
   
   // 🔥 STEP 6: Check portfolio
   const portfolioConfig = LINK_CONFIG.portfolio;
