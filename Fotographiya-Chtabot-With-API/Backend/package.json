@@ -3,9 +3,11 @@
   "version": "1.0.0",
   "description": "Backend for Fotographiya ChatBot",
   "main": "server.js",
+ 
   "scripts": {
     "dev": "nodemon --max-old-space-size=4096 server.js",
-    "start": "node --max-old-space-size=4096 server.js"
+    "start": "node --max-old-space-size=4096 server.js",
+    "scrape": "node -e \"require('./src/services/scraperService').scrapeAllPages().then(() => console.log('Scraping done')).catch(console.error)\""
   },
   "dependencies": {
     "@google/generative-ai": "^0.21.0",

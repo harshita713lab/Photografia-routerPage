@@ -121,7 +121,8 @@ router.post('/message', async (req, res) => {
         success: true,
         data: {
           message: "We only operate within India. We do not provide photography services outside India.",
-          timestamp: new Date().toISOString()
+          timestamp: new Date().toISOString(),
+          dataSource: 'CACHED' // ✅ ADDED
         }
       });
     }
@@ -132,7 +133,8 @@ router.post('/message', async (req, res) => {
         success: true,
         data: {
           message: "I'm a specialized AI assistant for Fotographiya - your premier photography company. I can only help with topics related to our services.",
-          timestamp: new Date().toISOString()
+          timestamp: new Date().toISOString(),
+          dataSource: 'CACHED' // ✅ ADDED
         }
       });
     }
@@ -146,11 +148,19 @@ router.post('/message', async (req, res) => {
     const context = scraperService.buildContextForAI(message, false, shootType);
     const reply = await getAIResponse(message, context, sessionId || 'default', false, shootType, wantsPrice, wantsPackage);
     
+    // ✅ NEW: Get data source from scraper service
+    const dataSource = scraperService.dataSource || 'UNKNOWN';
+
+    
+    // ✅ Log data source for debugging
+    console.log(`📊 Data source: ${dataSource}`);
+    
     res.json({ 
       success: true, 
       data: { 
         message: reply,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
+        dataSource: dataSource // ✅ ADDED - Tells frontend if data is LIVE or CACHED
       } 
     });
     
@@ -159,6 +169,78 @@ router.post('/message', async (req, res) => {
     res.status(500).json({
       success: false,
       message: 'Failed to process your request.'
+    });
+  }
+});
+
+// ============================================
+// ✅ NEW: SCRAPING STATUS ENDPOINT
+// ============================================
+router.get('/scrape-status', async (req, res) => {
+  try {
+    const status = scraperService.getStatus ? scraperService.getStatus() : { 
+      message: 'Status method not available' 
+    };
+    
+    const dataSource = scraperService.dataSource || 'UNKNOWN';
+
+    
+    res.json({
+      success: true,
+      data: {
+        dataSource: dataSource,
+        status: status,
+        lastScrape: scraperService.lastScrapeTime || null,
+        isScraping: scraperService.isScraping || false,
+        pagesScraped: Object.keys(scraperService.scrapedData || {}).length
+      }
+    });
+  } catch (error) {
+    console.error('Status error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to get scrape status'
+    });
+  }
+});
+
+// ============================================
+// ✅ NEW: FORCE SCRAPE ENDPOINT
+// ============================================
+router.post('/force-scrape', async (req, res) => {
+  try {
+    console.log('🔄 Force scraping triggered...');
+    
+    // Check if already scraping
+    if (scraperService.isScraping) {
+      return res.json({
+        success: false,
+        message: 'Scraping already in progress. Please wait.'
+      });
+    }
+    
+    // Start scraping
+    const results = await scraperService.scrapeAllPages();
+    
+    const successCount = Object.values(results).filter(r => r.success).length;
+    const totalCount = Object.keys(results).length;
+    
+    res.json({
+      success: true,
+      message: `Scraping completed: ${successCount}/${totalCount} pages scraped successfully`,
+      data: {
+        totalPages: totalCount,
+        successPages: successCount,
+        failedPages: totalCount - successCount,
+        dataSource: scraperService.dataSource || 'UNKNOWN',
+        scrapedAt: new Date().toISOString()
+      }
+    });
+  } catch (error) {
+    console.error('Force scrape error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Force scraping failed: ' + error.message
     });
   }
 });

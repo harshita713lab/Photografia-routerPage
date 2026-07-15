@@ -132,7 +132,9 @@ class ScraperService {
         content: "",
       };
     }
+    
   }
+  
 
   // ===== SAARE PAGES SCRAPE KARO =====
   async scrapeAllPages() {
@@ -421,9 +423,43 @@ searchHybrid(query) {
     const query = userMessage.toLowerCase();
     const contextParts = [];
     
+    // ============================================
+    // 🆕 STEP 0: SCRAPED DATA SEARCH (LIVE CONTENT)
+    // ============================================
+    console.log(`🔍 Searching scraped data for: "${userMessage}"`);
+    
+    try {
+        // Scraped data mein search karo
+        const scrapedResults = this.searchHybrid(userMessage);
+        
+        if (scrapedResults && scrapedResults.length > 0) {
+            console.log(`✅ Found ${scrapedResults.length} results in scraped data`);
+            
+            // Scraped results ko context mein add karo
+            contextParts.push(`\n📄 **LIVE DATA FROM WEBSITE (Scraped):**`);
+            for (const result of scrapedResults) {
+                contextParts.push(`\n📌 **${result.title}** (Source: ${result.source || 'Scraped'}):`);
+                let matchCount = 0;
+                for (const match of result.matches) {
+                    if (matchCount >= 3) break; // Max 3 matches per page
+                    let snippet = match.snippet || '';
+                    if (snippet.length > 300) snippet = snippet.substring(0, 300) + '...';
+                    contextParts.push(`  ${snippet}`);
+                    matchCount++;
+                }
+            }
+        } else {
+            console.log(`⚠️ No scraped results found, using hardcoded fallback`);
+        }
+    } catch (error) {
+        console.log(`⚠️ Scraped search failed: ${error.message}`);
+    }
+    
+    // ============================================
     // ===== PART 1: COMPANY INFO (ALWAYS INCLUDED) =====
+    // ============================================
     const c = companyData.company || {};
-    contextParts.push(`🏢 COMPANY: ${c.name || 'Fotographiya'}`);
+    contextParts.push(`\n🏢 COMPANY: ${c.name || 'Fotographiya'}`);
     contextParts.push(`📍 Location: ${c.location || 'Kota, Rajasthan, India'}`);
     contextParts.push(`📞 Phone: ${c.phone || '+91 9001110144'}`);
     contextParts.push(`📧 Email: ${c.email || 'fotographiyaworld@gmail.com'}`);
@@ -432,7 +468,9 @@ searchHybrid(query) {
     contextParts.push(`⭐ Rating: ${c.rating || '4.9/5'}`);
     contextParts.push(`👫 Customers: ${c.customers || '100+ Happy Couples'}`);
     
+    // ============================================
     // ===== PART 2: SERVICES (ALWAYS INCLUDED) =====
+    // ============================================
     const services = companyData.services || {};
     contextParts.push("\n🎯 SERVICES:");
     if (services.wedding) contextParts.push(`• Wedding Photography: ${services.wedding.description}`);
@@ -443,7 +481,9 @@ searchHybrid(query) {
     if (services.birthday) contextParts.push(`• Birthday Photography: ${services.birthday.description}`);
     if (services.roka) contextParts.push(`• Roka Ceremony Photography: ${services.roka.description}`);
     
+    // ============================================
     // ===== PART 3: DIVERSE LOCATIONS GUIDE (ALWAYS INCLUDED FOR CONTEXT) =====
+    // ============================================
     const weddingsData = companyData.weddings || {};
     const topLoc = weddingsData.topLocations || {};
     contextParts.push("\n📍 TOP INDIAN DESTINATIONS (Suggest Rajasthan cities FIRST when users ask about wedding locations):");
@@ -454,120 +494,129 @@ searchHybrid(query) {
     if (topLoc.eastNortheast) contextParts.push("🌿 East & Northeast: " + topLoc.eastNortheast.join(", "));
     if (topLoc.note) contextParts.push("📌 Note: " + topLoc.note);
     
+    // ============================================
     // ===== PART 4: PACKAGES (ALWAYS INCLUDED) =====
+    // ============================================
     const packages = companyData.packages || {};
     contextParts.push("\n📦 PACKAGES:");
     if (packages.silver) contextParts.push(`• Silver: ${packages.silver.includes}`);
     if (packages.golden) contextParts.push(`• Golden: ${packages.golden.includes}`);
     if (packages.premium) contextParts.push(`• Premium: ${packages.premium.includes}`);
     
+    // ============================================
     // ===== PART 5: GOLDEN BOX (ALWAYS INCLUDED) =====
+    // ============================================
     const goldenBox = companyData.goldenBox || {};
     if (Object.keys(goldenBox).length > 0) {
-      contextParts.push("\n✨ GOLDENBOX:");
-      contextParts.push(`Description: ${goldenBox.description}`);
-      if (goldenBox.features) {
-        contextParts.push(`Features: ${goldenBox.features.join(", ")}`);
-      }
-      if (goldenBox.aiPowered) {
-        contextParts.push(`AI: ${goldenBox.aiPowered}`);
-      }
+        contextParts.push("\n✨ GOLDENBOX:");
+        contextParts.push(`Description: ${goldenBox.description}`);
+        if (goldenBox.features) {
+            contextParts.push(`Features: ${goldenBox.features.join(", ")}`);
+        }
+        if (goldenBox.aiPowered) {
+            contextParts.push(`AI: ${goldenBox.aiPowered}`);
+        }
     }
 
+    // ============================================
     // ===== PART 6: ACADEMY (ALWAYS INCLUDED) =====
+    // ============================================
     const academy = companyData.academy || {};
     if (Object.keys(academy).length > 0) {
-      contextParts.push("\n🎓 ACADEMY:");
-      contextParts.push(`Tagline: ${academy.tagline || ''}`);
-      contextParts.push(`Description: ${academy.description}`);
-      if (academy.courses) {
-        contextParts.push(`Courses: ${academy.courses.join(", ")}`);
-      }
+        contextParts.push("\n🎓 ACADEMY:");
+        contextParts.push(`Tagline: ${academy.tagline || ''}`);
+        contextParts.push(`Description: ${academy.description}`);
+        if (academy.courses) {
+            contextParts.push(`Courses: ${academy.courses.join(", ")}`);
+        }
     }
 
+    // ============================================
     // ===== PART 7: TEAM INFO (ALWAYS INCLUDED) =====
+    // ============================================
     const team = companyData.team || {};
     if (Object.keys(team).length > 0) {
-      contextParts.push("\n👥 TEAM:");
-      contextParts.push(`Total: ${team.total || '50+'} members`);
-      if (team.roles) {
-        contextParts.push(`Roles: ${team.roles.join(", ")}`);
-      }
+        contextParts.push("\n👥 TEAM:");
+        contextParts.push(`Total: ${team.total || '50+'} members`);
+        if (team.roles) {
+            contextParts.push(`Roles: ${team.roles.join(", ")}`);
+        }
     }
 
+    // ============================================
     // ===== PART 8: SOCIAL MEDIA (ALWAYS INCLUDED) =====
+    // ============================================
     const socialMedia = companyData.socialMedia || {};
     if (Object.keys(socialMedia).length > 0) {
-      contextParts.push("\n📱 SOCIAL MEDIA:");
-      for (const [key, value] of Object.entries(socialMedia)) {
-        contextParts.push(`• ${value.platform}: available on ${key}`);
-      }
+        contextParts.push("\n📱 SOCIAL MEDIA:");
+        for (const [key, value] of Object.entries(socialMedia)) {
+            contextParts.push(`• ${value.platform}: available on ${key}`);
+        }
     }
 
+    // ============================================
     // ===== PART 9: EXAMPLES DATA (ONLY IF USER ASKS FOR EXAMPLES) =====
+    // ============================================
     if (wantsExamples) {
-      const weddings = companyData.weddings || {};
-      
-      // Celebrity weddings
-      if (weddings.celebrity?.featured) {
-        contextParts.push("\n🌟 CELEBRITY WEDDINGS WE'VE CAPTURED:");
-        weddings.celebrity.featured.forEach(w => {
-          contextParts.push(`• ${w.couple} - ${w.location} (${w.date})`);
-        });
-      }
-      
-      // Featured weddings
-      if (weddings.featured) {
-        contextParts.push("\n💍 FEATURED WEDDINGS:");
-        weddings.featured.forEach(w => {
-          contextParts.push(`• ${w.couple} - ${w.location} at ${w.venue}`);
-        });
-      }
-      
-      // Pre-wedding shoots (NO location mentioned - only if user asks)
-      if (weddings.prewedding) {
-        contextParts.push("\n💕 PRE-WEDDING SHOOTS (IMPORTANT: Do NOT mention location/place in response unless user specifically asks for it):");
-        weddings.prewedding.forEach(w => {
-          contextParts.push(`• ${w.couple} - Style: ${w.style}`);
-        });
-      }
-      
-      // Destination weddings
-      if (weddings.destination) {
-        contextParts.push("\n🏖️ DESTINATION WEDDINGS:");
-        weddings.destination.forEach(w => {
-          contextParts.push(`• ${w.couple} - ${w.location} at ${w.venue}`);
-        });
-      }
+        const weddings = companyData.weddings || {};
+        
+        // Celebrity weddings
+        if (weddings.celebrity?.featured) {
+            contextParts.push("\n🌟 CELEBRITY WEDDINGS WE'VE CAPTURED:");
+            weddings.celebrity.featured.forEach(w => {
+                contextParts.push(`• ${w.couple} - ${w.location} (${w.date})`);
+            });
+        }
+        
+        // Featured weddings
+        if (weddings.featured) {
+            contextParts.push("\n💍 FEATURED WEDDINGS:");
+            weddings.featured.forEach(w => {
+                contextParts.push(`• ${w.couple} - ${w.location} at ${w.venue}`);
+            });
+        }
+        
+        // Pre-wedding shoots (NO location mentioned - only if user asks)
+        if (weddings.prewedding) {
+            contextParts.push("\n💕 PRE-WEDDING SHOOTS (IMPORTANT: Do NOT mention location/place in response unless user specifically asks for it):");
+            weddings.prewedding.forEach(w => {
+                contextParts.push(`• ${w.couple} - Style: ${w.style}`);
+            });
+        }
+        
+        // Destination weddings
+        if (weddings.destination) {
+            contextParts.push("\n🏖️ DESTINATION WEDDINGS:");
+            weddings.destination.forEach(w => {
+                contextParts.push(`• ${w.couple} - ${w.location} at ${w.venue}`);
+            });
+        }
     }
     
+    // ============================================
     // ===== PART 10: PORTFOLIO (ALWAYS INCLUDED - SUMMARY ONLY) =====
+    // ============================================
     const portfolio = companyData.portfolio || {};
     if (portfolio.description) {
-      contextParts.push("\n🖼️ PORTFOLIO:");
-      contextParts.push(`${portfolio.description}`);
-      if (portfolio.couplesCount) {
-        contextParts.push(`Total couples: ${portfolio.couplesCount}`);
-      }
+        contextParts.push("\n🖼️ PORTFOLIO:");
+        contextParts.push(`${portfolio.description}`);
+        if (portfolio.couplesCount) {
+            contextParts.push(`Total couples: ${portfolio.couplesCount}`);
+        }
     }
 
+    // ============================================
+    // 🆕 FINAL: SCRAPING STATUS INFO
+    // ============================================
+    const scrapedDataCount = Object.keys(this.scrapedData).length;
+    const scrapedSuccessCount = Object.values(this.scrapedData).filter(r => r.success).length;
+    contextParts.push(`\n📊 SCRAPING STATUS: ${scrapedSuccessCount}/${scrapedDataCount} pages scraped successfully`);
+    if (this.lastScrapeTime) {
+        contextParts.push(`🕐 Last Scrape: ${this.lastScrapeTime.toLocaleString()}`);
+    }
+
+    console.log(`📊 Context built with ${contextParts.length} lines of data`);
     return contextParts.join("\n");
-  }
-
-  // ===== STATUS =====
-  getStatus() {
-    const total = Object.keys(this.scrapedData).length;
-    const success = Object.values(this.scrapedData).filter(
-      (r) => r.success,
-    ).length;
-    return {
-      totalPages: total,
-      successPages: success,
-      failedPages: total - success,
-      lastScrape: this.lastScrapeTime,
-      isScraping: this.isScraping,
-    };
-  }
 }
-
+};
 module.exports = new ScraperService();

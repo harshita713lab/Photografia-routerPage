@@ -56,6 +56,8 @@ app.get('/', (req, res) => {
     status: 'Running',
     endpoints: {
       sendMessage: 'POST /api/chat/message',
+      scrapeStatus: 'GET /api/chat/scrape-status',
+      forceScrape: 'POST /api/chat/force-scrape',
       health: 'GET /health'
     }
   });
@@ -75,7 +77,48 @@ app.use((err, req, res, next) => {
   });
 });
 
-// ===== START =====
+// ============================================
+// 🔄 AUTO-SCRAPE ON STARTUP
+// ============================================
+// ============================================
+// 🔄 AUTO-SCRAPE ON STARTUP
+// ============================================
+const scraperService = require('./src/services/scraperService');
+
+// ✅ DEBUG - Check what's available
+console.log('🔍 scraperService.getDataSource type:', typeof scraperService.getDataSource);
+console.log('🔍 scraperService.scrapeAllPages type:', typeof scraperService.scrapeAllPages);
+console.log('🔍 scraperService.dataSource value:', scraperService.dataSource);
+
+// Scrape immediately on startup
+setTimeout(async () => {
+  console.log('🔄 Starting initial website scrape...');
+  try {
+    await scraperService.scrapeAllPages();
+    // ✅ FIX: Use dataSource directly instead of getDataSource()
+    console.log(`✅ Initial scrape completed! Data source: ${scraperService.dataSource || 'UNKNOWN'}`);
+  } catch (error) {
+    console.error('❌ Initial scrape failed:', error.message);
+    console.log('⚠️ Using fallback data until next scrape...');
+  }
+}, 3000);
+
+// Schedule periodic scraping (every 6 hours)
+setInterval(async () => {
+  console.log('🔄 Scheduled scrape starting...');
+  try {
+    await scraperService.scrapeAllPages();
+    console.log(`✅ Scheduled scrape completed. Source: ${scraperService.dataSource || 'UNKNOWN'}`);
+  } catch (error) {
+    console.error('❌ Scheduled scrape failed:', error.message);
+  }
+}, 6 * 60 * 60 * 1000);
+
+console.log('📊 Scraping scheduled: Initial in 3s, then every 6 hours');
+
+// ============================================
+// 🚀 START SERVER (ONLY ONCE!)
+// ============================================
 app.listen(PORT, () => {
   console.log(`🚀 Server running on http://localhost:${PORT}`);
   console.log(`📡 Chat API: http://localhost:${PORT}/api/chat`);
