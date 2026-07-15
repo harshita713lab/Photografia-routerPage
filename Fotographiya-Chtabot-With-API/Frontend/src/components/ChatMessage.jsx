@@ -14,13 +14,13 @@ const LINK_CONFIG = {
   // 📌 SOCIAL MEDIA - INDIVIDUAL
   // ============================================
   instagram: {
-    keywords: ['instagram', 'insta', 'ig'],
+    keywords: ['instagram', 'insta', 'ig', 'social'],
     link: 'https://www.instagram.com/fotographiya_official/',
     label: 'Instagram',
     icon: '📸'
   },
   facebook: {
-    keywords: ['facebook', 'fb', 'facebootk', 'fsbuk'],
+    keywords: ['facebook', 'fb', 'facebootk', 'fsbuk', 'social'],
     link: 'https://www.facebook.com/people/Fotographiya-Wedphotography/100092454265642/',
     label: 'Facebook',
     icon: '📘'
@@ -60,7 +60,16 @@ const LINK_CONFIG = {
   link: 'https://wa.me/919001110144',
   label: 'WhatsApp',
   icon: '💬'
-},
+  },
+  Pinterest: {
+    keywords: ['pinterest', 'pin', 'pins'],
+    link: 'https://in.pinterest.com/fotographiya_thewedphotography/?invite_code=93a6af9d4e644a7890acaebef80d2e3d&sender=1152569867044695903',
+    label: 'Pinterest',
+    icon: '🖼️'
+
+  },
+
+
   
   // ============================================
   // 📌 SOCIAL MEDIA - ALL (GROUP)
@@ -82,7 +91,7 @@ const LINK_CONFIG = {
   // 📌 SERVICES
   // ============================================
   maternity: {
-    keywords: ['maternity', 'pregnancy', 'baby bump', 'motherhood'],
+    keywords: ['maternity', 'pregnancy', 'baby bump', 'motherhood', 'baby shower', 'baby'],
     link: 'https://www.fotographiya.com/services/maternity-photography',
     label: 'Maternity Photography',
     icon: '👶'
@@ -112,13 +121,13 @@ const LINK_CONFIG = {
     icon: '🎂'
   },
   roka: {
-    keywords: ['roka', 'tilak', 'ring ceremony'],
+    keywords: ['roka', 'tilak', 'ring ceremony', 'engagement ceremony', 'roka ceremony', 'ring ceremony', 'engagement ceremony'],
     link: 'https://www.fotographiya.com/services/roka-photography',
     label: 'Roka Ceremony',
     icon: '💍'
   },
   corporate: {
-    keywords: ['corporate', 'event photography', 'corporate event'],
+    keywords: ['corporate', 'event photography', 'corporate event', 'bussiness photography', 'corporate photography', 'bussiness', 'event'],
     link: 'https://www.fotographiya.com/services/corporate-photography',
     label: 'Corporate Photography',
     icon: '🏢'
@@ -135,27 +144,28 @@ const LINK_CONFIG = {
   },
   
   // ============================================
-  // 📌 PACKAGES
+  // 📌 Reels
   // ============================================
-  silver: {
-    keywords: ['silver package', 'silver pack'],
-    link: 'https://www.fotographiya.com/packages/silver',
-    label: 'Silver Package',
-    icon: '🥈'
+  allReels: {
+    keywords: ['social media', 'social accounts', 'all social', 'social platforms', 'all platforms', 'social links'],
+    links: [
+      { label: 'Reels', link: 'https://www.instagram.com/reel/DaxHv6SjXIJ/?igsh=OHMwcG53OTN1OTF2' },
+      { label: 'Reels', link: 'https://www.instagram.com/reel/DZ1MtfkjMpu/?igsh=MXJ5Nm8xaGNsNDkybw%3D%3D' },
+      { label: 'Reels', link: 'https://www.instagram.com/reel/DZsMEFTiIVS/?igsh=eGJhMGl5Z2hsMGl4' },
+      { label: 'Reels', link: 'https://www.instagram.com/reel/DaXCUpZlHuf/?igsh=MXM2YzVjeHFpeWl1OA%3D%3D' },
+    ]
   },
-  golden: {
-    keywords: ['golden package', 'golden pack'],
-    link: 'https://www.fotographiya.com/packages/golden',
-    label: 'Golden Package',
-    icon: '🥇'
+
+  allPhotos: {
+    keywords: ['phots', 'pichures', 'pics', 'printrest'],
+    links: [
+      { label: 'Photos', link: 'https://in.pinterest.com/pin/967288826241112251/' },
+      { label: 'Photos', link: 'https://in.pinterest.com/pin/967288826220643904/' },
+      { label: 'Photos', link: 'https://in.pinterest.com/pin/967288826241559570/' },
+      { label: 'Photos', link: 'https://in.pinterest.com/pin/967288826217356685/' },
+    ]
   },
-  premium: {
-    keywords: ['premium package', 'premium pack'],
-    link: 'https://www.fotographiya.com/packages/premium',
-    label: 'Premium Package',
-    icon: '💎'
-  },
-  
+
 
   // ============================================
   // 📌 CONTACT
@@ -217,7 +227,7 @@ contact: {
   // ============================================
   goldenbox: {
     keywords: ['golden box', 'goldenbox', 'qr photo'],
-    link: 'https://www.fotographiya.com/goldenbox',
+    link: 'https://www.fotographiya.com/',
     label: 'GoldenBox',
     icon: '✨'
   },
