@@ -429,7 +429,7 @@ searchHybrid(query) {
     contextParts.push(`📧 Email: ${c.email || 'fotographiyaworld@gmail.com'}`);
     contextParts.push(`👤 Founder: ${c.founder || 'Mohit Barthunia'}`);
     contextParts.push(`📅 Established: ${c.established || '2023'}`);
-    contextParts.push(`⭐ Rating: ${c.rating || '4.6/5'}`);
+    contextParts.push(`⭐ Rating: ${c.rating || '4.9/5'}`);
     contextParts.push(`👫 Customers: ${c.customers || '100+ Happy Couples'}`);
     
     // ===== PART 2: SERVICES (ALWAYS INCLUDED) =====

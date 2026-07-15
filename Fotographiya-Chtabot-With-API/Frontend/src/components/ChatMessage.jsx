@@ -128,7 +128,7 @@ const LINK_CONFIG = {
   // 📌 SERVICES - GENERAL
   // ============================================
   allServices: {
-    keywords: ['services', 'offerings', 'what do you do', 'what services do you provide'],
+    keywords: ['services', 'offerings', 'what do you do', 'what services do you provide', ''],
     link: 'https://www.fotographiya.com/services',
     label: 'All Services',
     icon: '🎯'
@@ -175,7 +175,7 @@ contact: {
     keywords: [
       'location', 'address', 'studio', 'kota', 'rajasthan', 
       'where is fotographiya', 'where is studio', 'how can i find location',
-      'map', 'direction', 'google map', 'find us', 'come to'
+      'map', 'direction', 'google map', 'find us', 'come to', 'office'
     ],
     link: 'https://www.google.com/maps/search/?api=1&query=F3%2C+Ballabh+Bari%2C+Electricity+Board+Area%2C+Kota%2C+Rajasthan+324007',
     label: 'View on Google Maps',
