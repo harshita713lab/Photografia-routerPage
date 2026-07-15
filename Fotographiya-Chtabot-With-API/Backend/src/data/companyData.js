@@ -8,7 +8,7 @@ const companyData = {
   company: {
     name: "Fotographiya",
     tagline: "Integrating technology in the art of wedding photography",
-    description: "Fotographiya is a premium wedding photography and cinematography company based in Kota, Rajasthan, India. We blend traditional artistry with modern technology to create timeless memories.",
+    description: "Fotographiya is a premium wedding photography and cinematography company based in Kota, Rajasthan, India. Fotographiya blends traditional artistry with modern technology to create timeless memories.",
     location: "Kota, Rajasthan, India",
     officeAddress: "Kota, Rajasthan",
     phone: "+91 9001110144",
@@ -18,7 +18,7 @@ const companyData = {
     founder: "Mohit Barthunia",
     established: "2023",
     rating: "4.9/5",
-    customers: "100+ Happy Couples"
+    customers: "200+ Happy Couples"
   },
 
   team: {
@@ -46,13 +46,13 @@ const companyData = {
     // ============================================
     celebrity: {
       title: "Celebrity Weddings",
-      description: "We have had the privilege of capturing some of the most beautiful celebrity weddings.",
+      description: "Fotographiya has had the privilege of capturing some of the most beautiful celebrity weddings.",
       featured: [
         {
           couple: "Anubhav & Ayushi",
           location: "Delhi, India",
           date: "December 2024",
-          description: "A grand celebrity wedding filled with love, laughter, and royal traditions.",
+          description: "Fotographiya has had the privilege of capturing some of the most beautiful celebrity weddings.",
           highlights: ["Pre-wedding shoot in Delhi", "Traditional Hindu ceremonies", "Lavish reception with 500+ guests"]
         }
       ]
@@ -252,15 +252,15 @@ const companyData = {
 
   services: {
     wedding: {
-      description: "We provide comprehensive wedding photography covering all ceremonies - from pre-wedding rituals to the reception, with professional editing and creative storytelling.",
+      description: "Fotographiya provides comprehensive wedding photography covering all ceremonies - from pre-wedding rituals to the reception, with professional editing and creative storytelling.",      
       page: "https://www.fotographiya.com/services/wedding-photography"
     },
     prewedding: {
-      description: "We offer professional pre-wedding photography services for couples. Our team captures romantic moments at scenic locations with expert editing and creative direction.",
+      description: "Fotographiya offers professional pre-wedding photography services for couples. The Fotographiya team captures romantic moments at scenic locations with expert editing and creative direction.",
       page: "https://www.fotographiya.com/services/prewedding-photography"
     },
     destination: {
-      description: "We offer professional destination wedding photography services across India. Top Rajasthan cities include Udaipur, Jaipur, Ajmer, and Kumbhalgarh. We cover all over India — from Kashmir to Kanyakumari, from Gujarat to Meghalaya.",
+      description: "Fotographiya offers professional destination wedding photography services across India. Top Rajasthan cities include Udaipur, Jaipur, Ajmer, and Kumbhalgarh. Fotographiya also covers major cities like Delhi, Mumbai, and Noida, along with all over India — from Gujarat to Maharashtra, and from Rajasthan to Uttar Pradesh.",
       page: "https://www.fotographiya.com/services/destination-wedding"
     },
     corporate: {
@@ -268,7 +268,7 @@ const companyData = {
       page: "https://www.fotographiya.com/services/corporate-photography"
     },
     maternity: {
-      description: "Professional maternity photography celebrating the beauty of pregnancy. We capture the glow, the love, and the anticipation of expecting mothers.",
+      description: "Professional maternity photography celebrating the beauty of pregnancy. Fotographiya captures the glow, the love, and the anticipation of expecting mothers.",
       page: "https://www.fotographiya.com/services/maternity-photography"
     },
     birthday: {
@@ -290,19 +290,60 @@ const companyData = {
   },
 
   packages: {
-    silver: {
-      name: "Silver Package",
-      includes: "Basic wedding coverage with professional photography, edited digital photos, and online gallery."
-    },
-    golden: {
-      name: "Golden Package",
-      includes: "Comprehensive wedding coverage with photography and cinematography, professional editing, album, and online gallery."
-    },
-    premium: {
-      name: "Premium Package",
-      includes: "Premium wedding coverage with photography, cinematography, drone shots, premium album, and all digital assets."
-    }
+  pearl: {
+    name: "Pearl Package",
+    includes: [
+      "Still Photography + Videography",
+      "Candid Photography",
+      "Cinematic Coverage",
+      "Drone Shoot"
+    ],
+    description: "Essential wedding coverage with professional photography, videography, candid moments, cinematic style, and drone shots."
   },
+  gold: {
+    name: "Gold Package",
+    includes: [
+      "Still Photography + Videography",
+      "Candid Photography",
+      "Cinematic Coverage",
+      "Drone Shoot",
+      "QR Instant Photography (1 Day)",
+      "Reels Shoot"
+    ],
+    description: "Comprehensive wedding coverage with photography, videography, candid moments, cinematic style, drone shots, QR instant photos, and social media reels."
+  },
+  platinum: {
+    name: "Platinum Package",
+    includes: [
+      "Still Photography + Videography",
+      "Candid Photography",
+      "Cinematic Coverage",
+      "Drone Shoot",
+      "QR Instant Photography (2 Days)",
+      "Reels Shoot",
+      "Gate Photography",
+      "Content Shoot for Instagram Page",
+      "Pre-Wedding Photography (1 Day, Kota)"
+    ],
+    description: "Premium wedding coverage with photography, videography, candid moments, cinematic style, drone shots, QR instant photos, reels, gate photography, Instagram content, and pre-wedding shoot."
+  },
+  diamond: {
+    name: "Diamond Package",
+    includes: [
+      "Still Photography + Videography",
+      "Candid Photography",
+      "Cinematic Videography",
+      "Drone Shoot + FPV Drone",
+      "QR Instant Photography",
+      "Reels Shoot",
+      "Gate Photography",
+      "Content Shoot for Instagram Page",
+      "Pre-Wedding Photography + Videography",
+      "Documentary Shoot (2 Days)"
+    ],
+    description: "Ultimate luxury wedding coverage with photography, videography, candid moments, cinematic videography, drone + FPV drone shots, QR instant photos, reels, gate photography, Instagram content, pre-wedding shoot, and 2-day documentary."
+  }
+},
 
   goldenBox: {
     description: "GoldenBox is our innovative AI-powered system that delivers high-quality event photos instantly to attendees without requiring internet or app downloads.",
@@ -339,7 +380,7 @@ const companyData = {
   },
 
   portfolio: {
-    description: "Our portfolio showcases 100+ weddings and events we've captured with creativity, passion, and professional excellence.",
+    description: "Fotographiya's portfolio showcases 100+ weddings and events captured with creativity, passion, and professional excellence.",
     couplesCount: "100+"
   },
 
