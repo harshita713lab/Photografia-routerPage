@@ -6,7 +6,27 @@
 const axios = require("axios");
 const cheerio = require("cheerio");
 const companyData = require("../data/companyData");
-const puppeteerScraper = require("./puppeteerScraper");
+
+// ✅ FIX: Load puppeteer with error handling
+// ✅ FIX: Load puppeteer with error handling
+let puppeteerScraper = null;
+try {
+  console.log("🔍 Attempting to load puppeteerScraper...");
+  const loaded = require("./puppeteerScraper");
+  console.log("🔍 loaded type:", typeof loaded);
+  console.log("🔍 loaded keys:", Object.keys(loaded));
+  console.log("🔍 has scrapeAllPages:", typeof loaded.scrapeAllPages);
+  
+  if (loaded && typeof loaded === 'object' && loaded.scrapeAllPages) {
+    puppeteerScraper = loaded;
+    console.log("✅ Puppeteer scraper loaded successfully");
+  } else {
+    console.log("⚠️ Puppeteer loaded but scrapeAllPages not found");
+    console.log("🔍 Available methods:", Object.getOwnPropertyNames(loaded));
+  }
+} catch (error) {
+  console.log("⚠️ Failed to load puppeteer scraper:", error.message);
+}
 
 // ✅ DEBUG - Check if companyData loaded
 console.log("📦 companyData loaded in scraperService:", !!companyData);
@@ -17,6 +37,14 @@ class ScraperService {
     this.scrapedData = {};
     this.isScraping = false;
     this.lastScrapeTime = null;
+    this.dataSource = 'CACHED';
+  }
+
+  // ================================================
+  // ✅ Get data source (LIVE or CACHED)
+  // ================================================
+  getDataSource() {
+    return this.dataSource;
   }
 
   // ================================================
@@ -132,9 +160,7 @@ class ScraperService {
         content: "",
       };
     }
-    
   }
-  
 
   // ===== SAARE PAGES SCRAPE KARO =====
   async scrapeAllPages() {
@@ -143,30 +169,37 @@ class ScraperService {
       return this.scrapedData;
     }
 
-    // 🔥 TRY PUPPETEER FIRST
+    // 🔥 TRY PUPPETEER FIRST (ONLY IF AVAILABLE)
     console.log("🔄 Trying Puppeteer scraper...");
-    try {
-      const puppeteerResults = await puppeteerScraper.scrapeAllPages();
+    
+    if (puppeteerScraper && typeof puppeteerScraper.scrapeAllPages === 'function') {
+      try {
+        console.log("✅ Using Puppeteer scraper...");
+        const puppeteerResults = await puppeteerScraper.scrapeAllPages();
 
-      const successCount = Object.values(puppeteerResults).filter(
-        (r) => r.success === true,
-      ).length;
+        const successCount = Object.values(puppeteerResults).filter(
+          (r) => r.success === true,
+        ).length;
 
-      if (successCount > 0) {
-        console.log(`✅ Puppeteer scraped ${successCount} pages successfully!`);
-        this.scrapedData = puppeteerResults;
-        this.lastScrapeTime = new Date();
-        this.isScraping = false;
-        return this.scrapedData;
-      } else {
-        console.log("⚠️ Puppeteer scraped 0 pages, falling back to Cheerio...");
+        if (successCount > 0) {
+          console.log(`✅ Puppeteer scraped ${successCount} pages successfully!`);
+          this.scrapedData = puppeteerResults;
+          this.lastScrapeTime = new Date();
+          this.isScraping = false;
+          this.dataSource = 'LIVE';
+          return this.scrapedData;
+        } else {
+          console.log("⚠️ Puppeteer scraped 0 pages, falling back to Cheerio...");
+        }
+      } catch (error) {
+        console.log("⚠️ Puppeteer failed:", error.message);
+        console.log("🔄 Falling back to Cheerio...");
       }
-    } catch (error) {
-      console.log("⚠️ Puppeteer failed:", error.message);
-      console.log("🔄 Falling back to Cheerio...");
+    } else {
+      console.log("⚠️ Puppeteer scraper not available, using Cheerio directly");
     }
 
-    // 🟡 FALLBACK: Purana Cheerio scraper use karo
+    // 🟡 FALLBACK: Cheerio scraper
     console.log("🔄 Starting Cheerio website scrape (fallback)...");
 
     this.isScraping = true;
@@ -192,6 +225,8 @@ class ScraperService {
     console.log(
       `✅ Cheerio scraped ${successCount}/${Object.keys(results).length} pages successfully!`,
     );
+    
+    this.dataSource = successCount > 0 ? 'LIVE' : 'CACHED';
 
     return results;
   }
@@ -234,44 +269,42 @@ class ScraperService {
   // ================================================
   // 🔍 SEARCH IN LIVE DATA
   // ================================================
-searchInScrapedData(query) {
-  const queryLower = query.toLowerCase();
-  const results = [];
-  
-  for (const [key, data] of Object.entries(this.scrapedData)) {
-    if (!data.success) continue;
+  searchInScrapedData(query) {
+    const queryLower = query.toLowerCase();
+    const results = [];
     
-    const matches = [];
-    
-    // Content search
-    if (data.content && this.textMatchesQuery(data.content, query)) {
-      const idx = data.content.toLowerCase().indexOf(queryLower);
-      const snippet = data.content.substring(
-        Math.max(0, idx - 60),
-        Math.min(data.content.length, idx + 120)
-      );
-      matches.push({ type: "content", snippet: snippet.trim() });
-    }
-    
-    // Headings search
-    for (const heading of data.headings || []) {
-      if (this.textMatchesQuery(heading, query)) {
-        matches.push({ type: "heading", snippet: heading });
+    for (const [key, data] of Object.entries(this.scrapedData)) {
+      if (!data.success) continue;
+      
+      const matches = [];
+      
+      if (data.content && this.textMatchesQuery(data.content, query)) {
+        const idx = data.content.toLowerCase().indexOf(queryLower);
+        const snippet = data.content.substring(
+          Math.max(0, idx - 60),
+          Math.min(data.content.length, idx + 120)
+        );
+        matches.push({ type: "content", snippet: snippet.trim() });
+      }
+      
+      for (const heading of data.headings || []) {
+        if (this.textMatchesQuery(heading, query)) {
+          matches.push({ type: "heading", snippet: heading });
+        }
+      }
+      
+      if (matches.length > 0) {
+        results.push({
+          page: key,
+          title: data.title || key,
+          source: "LIVE (Scraped)",
+          matches: matches.slice(0, 5)
+        });
       }
     }
     
-    if (matches.length > 0) {
-      results.push({
-        page: key,
-        title: data.title || key,
-        source: "LIVE (Scraped)",
-        matches: matches.slice(0, 5)
-      });
-    }
+    return results;
   }
-  
-  return results;
-}
 
   // ================================================
   // 📦 SEARCH IN HARDCODED DATA
@@ -281,7 +314,6 @@ searchInScrapedData(query) {
     const results = [];
     const allMatches = [];
 
-    // Golden Box special check
     const goldenBoxKeywords = [
       "golden box", "goldenbox", "gb", "qr photo", "instant photo"
     ];
@@ -314,7 +346,6 @@ searchInScrapedData(query) {
       }, ];
     }
 
-    // RECURSIVE SEARCH
     function searchInObject(obj, path = "") {
       if (!obj) return;
 
@@ -393,55 +424,48 @@ searchInScrapedData(query) {
   // ================================================
   // 🎯 HYBRID SEARCH
   // ================================================
-searchHybrid(query) {
-  let liveResults = this.searchInScrapedData(query);
-  
-  // Remove URLs
-  for (const result of liveResults) {
-    delete result.url;
+  searchHybrid(query) {
+    let liveResults = this.searchInScrapedData(query);
+    
+    for (const result of liveResults) {
+      delete result.url;
+    }
+    
+    if (liveResults.length > 0) {
+      console.log(`✅ Found ${liveResults.length} results in LIVE data`);
+      return liveResults;
+    }
+    
+    let hardcodedResults = this.searchInHardcodedData(query);
+    
+    for (const result of hardcodedResults) {
+      delete result.url;
+    }
+    
+    return hardcodedResults;
   }
-  
-  if (liveResults.length > 0) {
-    console.log(`✅ Found ${liveResults.length} results in LIVE data`);
-    return liveResults;
-  }
-  
-  let hardcodedResults = this.searchInHardcodedData(query);
-  
-  // Remove URLs
-  for (const result of hardcodedResults) {
-    delete result.url;
-  }
-  
-  return hardcodedResults;
-}
 
   // ================================================
-  // 🧠 BUILD AI CONTEXT - DATA-DRIVEN, NO HARDCODE
+  // 🧠 BUILD AI CONTEXT
   // ================================================
   buildContextForAI(userMessage, wantsExamples, shootType) {
     const query = userMessage.toLowerCase();
     const contextParts = [];
     
-    // ============================================
-    // 🆕 STEP 0: SCRAPED DATA SEARCH (LIVE CONTENT)
-    // ============================================
     console.log(`🔍 Searching scraped data for: "${userMessage}"`);
     
     try {
-        // Scraped data mein search karo
         const scrapedResults = this.searchHybrid(userMessage);
         
         if (scrapedResults && scrapedResults.length > 0) {
             console.log(`✅ Found ${scrapedResults.length} results in scraped data`);
             
-            // Scraped results ko context mein add karo
             contextParts.push(`\n📄 **LIVE DATA FROM WEBSITE (Scraped):**`);
             for (const result of scrapedResults) {
                 contextParts.push(`\n📌 **${result.title}** (Source: ${result.source || 'Scraped'}):`);
                 let matchCount = 0;
                 for (const match of result.matches) {
-                    if (matchCount >= 3) break; // Max 3 matches per page
+                    if (matchCount >= 3) break;
                     let snippet = match.snippet || '';
                     if (snippet.length > 300) snippet = snippet.substring(0, 300) + '...';
                     contextParts.push(`  ${snippet}`);
@@ -455,9 +479,6 @@ searchHybrid(query) {
         console.log(`⚠️ Scraped search failed: ${error.message}`);
     }
     
-    // ============================================
-    // ===== PART 1: COMPANY INFO (ALWAYS INCLUDED) =====
-    // ============================================
     const c = companyData.company || {};
     contextParts.push(`\n🏢 COMPANY: ${c.name || 'Fotographiya'}`);
     contextParts.push(`📍 Location: ${c.location || 'Kota, Rajasthan, India'}`);
@@ -468,9 +489,6 @@ searchHybrid(query) {
     contextParts.push(`⭐ Rating: ${c.rating || '4.9/5'}`);
     contextParts.push(`👫 Customers: ${c.customers || '100+ Happy Couples'}`);
     
-    // ============================================
-    // ===== PART 2: SERVICES (ALWAYS INCLUDED) =====
-    // ============================================
     const services = companyData.services || {};
     contextParts.push("\n🎯 SERVICES:");
     if (services.wedding) contextParts.push(`• Wedding Photography: ${services.wedding.description}`);
@@ -481,12 +499,9 @@ searchHybrid(query) {
     if (services.birthday) contextParts.push(`• Birthday Photography: ${services.birthday.description}`);
     if (services.roka) contextParts.push(`• Roka Ceremony Photography: ${services.roka.description}`);
     
-    // ============================================
-    // ===== PART 3: DIVERSE LOCATIONS GUIDE (ALWAYS INCLUDED FOR CONTEXT) =====
-    // ============================================
     const weddingsData = companyData.weddings || {};
     const topLoc = weddingsData.topLocations || {};
-    contextParts.push("\n📍 TOP INDIAN DESTINATIONS (Suggest Rajasthan cities FIRST when users ask about wedding locations):");
+    contextParts.push("\n📍 TOP INDIAN DESTINATIONS:");
     if (topLoc.rajasthan) contextParts.push("🔥 Rajasthan (Top): " + topLoc.rajasthan.join(", "));
     if (topLoc.northIndia) contextParts.push("🏔️ North India: " + topLoc.northIndia.join(", "));
     if (topLoc.westIndia) contextParts.push("🌊 West India: " + topLoc.westIndia.join(", "));
@@ -494,18 +509,12 @@ searchHybrid(query) {
     if (topLoc.eastNortheast) contextParts.push("🌿 East & Northeast: " + topLoc.eastNortheast.join(", "));
     if (topLoc.note) contextParts.push("📌 Note: " + topLoc.note);
     
-    // ============================================
-    // ===== PART 4: PACKAGES (ALWAYS INCLUDED) =====
-    // ============================================
     const packages = companyData.packages || {};
     contextParts.push("\n📦 PACKAGES:");
     if (packages.silver) contextParts.push(`• Silver: ${packages.silver.includes}`);
     if (packages.golden) contextParts.push(`• Golden: ${packages.golden.includes}`);
     if (packages.premium) contextParts.push(`• Premium: ${packages.premium.includes}`);
     
-    // ============================================
-    // ===== PART 5: GOLDEN BOX (ALWAYS INCLUDED) =====
-    // ============================================
     const goldenBox = companyData.goldenBox || {};
     if (Object.keys(goldenBox).length > 0) {
         contextParts.push("\n✨ GOLDENBOX:");
@@ -518,9 +527,6 @@ searchHybrid(query) {
         }
     }
 
-    // ============================================
-    // ===== PART 6: ACADEMY (ALWAYS INCLUDED) =====
-    // ============================================
     const academy = companyData.academy || {};
     if (Object.keys(academy).length > 0) {
         contextParts.push("\n🎓 ACADEMY:");
@@ -531,9 +537,6 @@ searchHybrid(query) {
         }
     }
 
-    // ============================================
-    // ===== PART 7: TEAM INFO (ALWAYS INCLUDED) =====
-    // ============================================
     const team = companyData.team || {};
     if (Object.keys(team).length > 0) {
         contextParts.push("\n👥 TEAM:");
@@ -543,9 +546,6 @@ searchHybrid(query) {
         }
     }
 
-    // ============================================
-    // ===== PART 8: SOCIAL MEDIA (ALWAYS INCLUDED) =====
-    // ============================================
     const socialMedia = companyData.socialMedia || {};
     if (Object.keys(socialMedia).length > 0) {
         contextParts.push("\n📱 SOCIAL MEDIA:");
@@ -554,21 +554,16 @@ searchHybrid(query) {
         }
     }
 
-    // ============================================
-    // ===== PART 9: EXAMPLES DATA (ONLY IF USER ASKS FOR EXAMPLES) =====
-    // ============================================
     if (wantsExamples) {
         const weddings = companyData.weddings || {};
         
-        // Celebrity weddings
         if (weddings.celebrity?.featured) {
-            contextParts.push("\n🌟 CELEBRITY WEDDINGS WE'VE CAPTURED:");
+            contextParts.push("\n🌟 CELEBRITY WEDDINGS:");
             weddings.celebrity.featured.forEach(w => {
                 contextParts.push(`• ${w.couple} - ${w.location} (${w.date})`);
             });
         }
         
-        // Featured weddings
         if (weddings.featured) {
             contextParts.push("\n💍 FEATURED WEDDINGS:");
             weddings.featured.forEach(w => {
@@ -576,15 +571,13 @@ searchHybrid(query) {
             });
         }
         
-        // Pre-wedding shoots (NO location mentioned - only if user asks)
         if (weddings.prewedding) {
-            contextParts.push("\n💕 PRE-WEDDING SHOOTS (IMPORTANT: Do NOT mention location/place in response unless user specifically asks for it):");
+            contextParts.push("\n💕 PRE-WEDDING SHOOTS:");
             weddings.prewedding.forEach(w => {
                 contextParts.push(`• ${w.couple} - Style: ${w.style}`);
             });
         }
         
-        // Destination weddings
         if (weddings.destination) {
             contextParts.push("\n🏖️ DESTINATION WEDDINGS:");
             weddings.destination.forEach(w => {
@@ -593,9 +586,6 @@ searchHybrid(query) {
         }
     }
     
-    // ============================================
-    // ===== PART 10: PORTFOLIO (ALWAYS INCLUDED - SUMMARY ONLY) =====
-    // ============================================
     const portfolio = companyData.portfolio || {};
     if (portfolio.description) {
         contextParts.push("\n🖼️ PORTFOLIO:");
@@ -605,18 +595,17 @@ searchHybrid(query) {
         }
     }
 
-    // ============================================
-    // 🆕 FINAL: SCRAPING STATUS INFO
-    // ============================================
     const scrapedDataCount = Object.keys(this.scrapedData).length;
     const scrapedSuccessCount = Object.values(this.scrapedData).filter(r => r.success).length;
     contextParts.push(`\n📊 SCRAPING STATUS: ${scrapedSuccessCount}/${scrapedDataCount} pages scraped successfully`);
     if (this.lastScrapeTime) {
         contextParts.push(`🕐 Last Scrape: ${this.lastScrapeTime.toLocaleString()}`);
     }
+    contextParts.push(`📌 Data Source: ${this.dataSource}`);
 
     console.log(`📊 Context built with ${contextParts.length} lines of data`);
     return contextParts.join("\n");
+  }
 }
-};
+
 module.exports = new ScraperService();
