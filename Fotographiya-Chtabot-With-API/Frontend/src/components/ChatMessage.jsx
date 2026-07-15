@@ -155,14 +155,7 @@ const LINK_CONFIG = {
     label: 'Premium Package',
     icon: '💎'
   },
-  allPackages: {
-    keywords: ['packages', 'pricing', 'budget', 'cost', 'price'],
-    links: [
-      { label: '🥈 Silver Package', link: 'https://www.fotographiya.com/packages/silver' },
-      { label: '🥇 Golden Package', link: 'https://www.fotographiya.com/packages/golden' },
-      { label: '💎 Premium Package', link: 'https://www.fotographiya.com/packages/premium' }
-    ]
-  },
+  
 
   // ============================================
   // 📌 CONTACT

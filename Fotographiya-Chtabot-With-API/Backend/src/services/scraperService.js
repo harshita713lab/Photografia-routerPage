@@ -417,7 +417,7 @@ searchHybrid(query) {
   // ================================================
   // 🧠 BUILD AI CONTEXT - DATA-DRIVEN, NO HARDCODE
   // ================================================
-  buildContextForAI(userMessage, wantsExamples) {
+  buildContextForAI(userMessage, wantsExamples, shootType) {
     const query = userMessage.toLowerCase();
     const contextParts = [];
     

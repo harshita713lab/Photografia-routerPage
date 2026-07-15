@@ -7,10 +7,10 @@ dotenv.config();
 // ✅ DEBUG: Check API Keys
 console.log('========================================');
 console.log('🔑 API Keys Status:');
-console.log(`   GEMINI_API_KEY: ${process.env.GEMINI_API_KEY ? '✅ Found' : '❌ Not found'}`);
-console.log(`   GROQ_API_KEY: ${process.env.GROQ_API_KEY ? '✅ Found' : '❌ Not found'}`);
-console.log(`   MISTRAL_API_KEY: ${process.env.MISTRAL_API_KEY ? '✅ Found' : '❌ Not found'}`);
-console.log(`   CEREBRAS_API_KEY: ${process.env.CEREBRAS_API_KEY ? '✅ Found' : '❌ Not found'}`);
+console.log(`GEMINI_API_KEY: ${process.env.GEMINI_API_KEY ? '✅ Found' : '❌ Not found'}`);
+console.log(`GROQ_API_KEY: ${process.env.GROQ_API_KEY ? '✅ Found' : '❌ Not found'}`);
+console.log(`MISTRAL_API_KEY: ${process.env.MISTRAL_API_KEY ? '✅ Found' : '❌ Not found'}`);
+console.log(`CEREBRAS_API_KEY: ${process.env.CEREBRAS_API_KEY ? '✅ Found' : '❌ Not found'}`);
 console.log('========================================');
 
 // ============================================

@@ -252,26 +252,41 @@ const companyData = {
 
   services: {
     wedding: {
-      description: "We provide comprehensive wedding photography covering all ceremonies - from pre-wedding rituals to the reception, with professional editing and creative storytelling."
+      description: "We provide comprehensive wedding photography covering all ceremonies - from pre-wedding rituals to the reception, with professional editing and creative storytelling.",
+      page: "https://www.fotographiya.com/services/wedding-photography"
     },
     prewedding: {
-      description: "We offer professional pre-wedding photography services for couples. Our team captures romantic moments at scenic locations with expert editing and creative direction."
+      description: "We offer professional pre-wedding photography services for couples. Our team captures romantic moments at scenic locations with expert editing and creative direction.",
+      page: "https://www.fotographiya.com/services/prewedding-photography"
     },
     destination: {
-      description: "We offer professional destination wedding photography services across India. Top Rajasthan cities include Udaipur, Jaipur, Ajmer, and Kumbhalgarh. We cover all over India — from Kashmir to Kanyakumari, from Gujarat to Meghalaya."
+      description: "We offer professional destination wedding photography services across India. Top Rajasthan cities include Udaipur, Jaipur, Ajmer, and Kumbhalgarh. We cover all over India — from Kashmir to Kanyakumari, from Gujarat to Meghalaya.",
+      page: "https://www.fotographiya.com/services/destination-wedding"
     },
     corporate: {
-      description: "Professional corporate photography services for events, conferences, team photos, and brand imagery."
+      description: "Professional corporate photography services for events, conferences, team photos, and brand imagery.",
+      page: "https://www.fotographiya.com/services/corporate-photography"
     },
     maternity: {
-    description: "Professional maternity photography celebrating the beauty of pregnancy. We capture the glow, the love, and the anticipation of expecting mothers."
-  },
-  birthday: {
-    description: "Professional birthday photography capturing the joy, laughter, and love of your special day from cake smash to celebration."
-  },
-  roka: {
-    description: "Professional Roka ceremony photography capturing every ritual, emotion, and sacred moment of this cherished pre-wedding tradition."
-  }
+      description: "Professional maternity photography celebrating the beauty of pregnancy. We capture the glow, the love, and the anticipation of expecting mothers.",
+      page: "https://www.fotographiya.com/services/maternity-photography"
+    },
+    birthday: {
+      description: "Professional birthday photography capturing the joy, laughter, and love of your special day from cake smash to celebration.",
+      page: "https://www.fotographiya.com/services/birthday-photography"
+    },
+    roka: {
+      description: "Professional Roka ceremony photography capturing every ritual, emotion, and sacred moment of this cherished pre-wedding tradition.",
+      page: "https://www.fotographiya.com/services/roka-photography"
+    },
+    baby: {
+      description: "Professional baby and newborn photography capturing precious moments of your little one. From newborn shoots to monthly milestones, we create beautiful memories.",
+      page: "https://www.fotographiya.com/services/baby-photography"
+    },
+    anniversary: {
+      description: "Professional anniversary photography celebrating your love story. Romantic couple portraits and celebration coverage for your special milestone.",
+      page: "https://www.fotographiya.com/services/anniversary-photography"
+    }
   },
 
   packages: {
