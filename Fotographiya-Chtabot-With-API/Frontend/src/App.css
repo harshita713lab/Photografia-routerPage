@@ -14,3 +14,106 @@ body {
   min-height: 100vh;
   position: relative;
 }
+/* ========================================
+   GREETING LINKS - INLINE/HORIZONTAL
+   ======================================== */
+
+.greeting-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+  width: 100%;
+  justify-content: flex-start;
+}
+
+.greeting-links .chat-inline-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: #ffffff;
+  color: #1a1a1a !important;
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.3;
+  text-align: center;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+  min-height: 36px;
+  word-break: break-word;
+  position: relative;
+  background-clip: padding-box;
+  border: 0.2px solid rgb(223, 222, 222);
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  flex: 0 1 auto; /* Don't stretch, size based on content */
+}
+
+/* Gradient border effect for greeting links */
+.greeting-links .chat-inline-link::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #d0d0d0, #f0f0f0, #d0d0d0);
+  z-index: -1;
+  transition: all 0.4s ease;
+}
+
+.greeting-links .chat-inline-link::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #ffffff;
+  border-radius: 7px;
+  z-index: -1;
+}
+
+.greeting-links .chat-inline-link:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(8, 8, 8, 0.08);
+}
+
+.greeting-links .chat-inline-link:hover::before {
+  background: linear-gradient(135deg, #343435, #414241, #0b0209);
+}
+
+.greeting-links .chat-inline-link:active {
+  transform: translateY(0px);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+/* Mobile responsive */
+@media (max-width: 480px) {
+  .greeting-links {
+    gap: 6px;
+  }
+  
+  .greeting-links .chat-inline-link {
+    font-size: 11px;
+    padding: 6px 10px;
+    min-height: 30px;
+  }
+  
+  .greeting-links .chat-inline-link::before {
+    top: -1.5px;
+    left: -1.5px;
+    right: -1.5px;
+    bottom: -1.5px;
+    border-radius: 7px;
+  }
+  
+  .greeting-links .chat-inline-link::after {
+    border-radius: 5px;
+  }
+}

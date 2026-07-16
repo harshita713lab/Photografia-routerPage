@@ -393,4 +393,4 @@ const companyData = {
   }
 };
 
-module.exports = companyData;
+export default companyData;

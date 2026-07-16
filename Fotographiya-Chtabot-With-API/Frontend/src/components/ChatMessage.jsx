@@ -273,7 +273,7 @@ function findMatchingLinks(userMessage) {
   const groupKeywords = {
     allSocial: ['social media', 'social accounts', 'all social', 'social platforms', 'all platforms', 'social links'],
     allPackages: ['packages', 'pricing', 'budget', 'cost', 'price'],
-    contact: ['contact', 'contact us', 'reach us', 'help', 'support', 'customer care']
+    contact: ['contact', 'contact us', 'reach us', 'help', 'support', 'customer care', 'contect', 'call', 'phone', 'whatsapp', 'email', 'complaint']
   };
   
    for (const [key, keywords] of Object.entries(groupKeywords)) {
