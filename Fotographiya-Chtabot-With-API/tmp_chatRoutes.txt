@@ -330,12 +330,7 @@ router.post("/message", async (req, res) => {
     const wantsPrice = isPriceQuery(message);
     const wantsPackage = isPackageQuery(message);
 
-    // 🔥 STEP 4: Ensure live scraped data is available before building context
-    if (scraperService.dataSource !== "LIVE" && !scraperService.isScraping) {
-      console.log("🔄 No LIVE data yet, fetching live website content before answering...");
-      await scraperService.scrapeAllPages();
-    }
-
+    // 🔥 STEP 4: Build context from company data and get AI response
     const context = scraperService.buildContextForAI(message, false, shootType);
     const reply = await getAIResponse(
       message,

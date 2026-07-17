@@ -393,4 +393,5 @@ const companyData = {
   }
 };
 
-export default companyData;
+// ✅ FIX: Use CommonJS export for require() compatibility
+module.exports = companyData;

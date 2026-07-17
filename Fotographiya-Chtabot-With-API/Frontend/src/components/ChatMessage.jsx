@@ -33,25 +33,25 @@ const LINK_CONFIG = {
   },
   linkedin: {
     keywords: ['linkedin', 'linked in'],
-    link: 'https://www.linkedin.com/company/fotographiya',
+    link: 'https://www.linkedin.com/company/fotographiya-the-wedding-photography/posts/?feedView=all',
     label: 'LinkedIn',
     icon: '💼'
   },
   medium: {
     keywords: ['medium'],
-    link: 'https://medium.com/@fotographiya',
+    link: 'https://medium.com/@fotographiyaworld',
     label: 'Medium',
     icon: '📝'
   },
   reddit: {
     keywords: ['reddit'],
-    link: 'https://www.reddit.com/r/fotographiya',
+    link: 'https://www.reddit.com/user/Foreign-Barracuda340/',
     label: 'Reddit',
     icon: '🤖'
   },
   pexels: {
     keywords: ['pexels', 'pixel', 'pixels'],
-    link: 'https://www.pexels.com/@fotographiya',
+    link: 'https://www.pexels.com/@fotographiya-wedding-photography-823737813/',
     label: 'Pexels',
     icon: '🖼️'
   },
@@ -80,10 +80,10 @@ const LINK_CONFIG = {
       { label: '📸 Instagram', link: 'https://www.instagram.com/fotographiya_official/' },
       { label: '📘 Facebook', link: 'https://www.facebook.com/people/Fotographiya-Wedphotography/100092454265642/' },
       { label: '🎬 YouTube', link: 'https://www.youtube.com/@Fotographiya_official' },
-      { label: '💼 LinkedIn', link: 'https://www.linkedin.com/company/fotographiya' },
-      { label: '📝 Medium', link: 'https://medium.com/@fotographiya' },
-      { label: '🤖 Reddit', link: 'https://www.reddit.com/r/fotographiya' },
-      { label: '🖼️ Pexels', link: 'https://www.pexels.com/@fotographiya' }
+      { label: '💼 LinkedIn', link: 'https://www.linkedin.com/company/fotographiya-the-wedding-photography/posts/?feedView=all' },
+      { label: '📝 Medium', link: 'https://medium.com/@fotographiyaworld' },
+      { label: '🤖 Reddit', link: 'https://www.reddit.com/user/Foreign-Barracuda340/' },
+      { label: '🖼️ Pexels', link: 'https://www.pexels.com/@fotographiya-wedding-photography-823737813/' }
     ]
   },
 
@@ -177,8 +177,8 @@ const LINK_CONFIG = {
     links: [
       { label: '🖼️ Photo 1', link: 'https://in.pinterest.com/pin/967288826241112251/' },
       { label: '🖼️ Photo 2', link: 'https://in.pinterest.com/pin/967288826220643904/' },
-      { label: '🖼️ Photo 3', link: 'https://in.pinterest.com/pin/967288826241559570/' },
-      { label: '🖼️ Photo 4', link: 'https://in.pinterest.com/pin/967288826217356685/' },
+      { label: '🖼️ Photo 3', link: 'https://i.pinimg.com/736x/dd/04/df/dd04df71da4dbd3531bd5dc9a9bd3dd4.jpg' },
+      { label: '🖼️ Photo 4', link: 'https://i.pinimg.com/736x/b1/ae/00/b1ae00c4563b599ee5a662d538c35188.jpg' },
     ]
   },
 

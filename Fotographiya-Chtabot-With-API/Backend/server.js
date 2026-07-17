@@ -98,9 +98,9 @@ setTimeout(async () => {
     // ✅ FIX: Use dataSource directly instead of getDataSource()
     console.log(`✅ Initial scrape completed! Data source: ${scraperService.dataSource || 'UNKNOWN'}`);
   } catch (error) {
-    console.error('❌ Initial scrape failed:', error.message);
+    console.error(error);
     console.log('⚠️ Using fallback data until next scrape...');
-  }
+}
 }, 3000);
 
 // Schedule periodic scraping (every 6 hours)

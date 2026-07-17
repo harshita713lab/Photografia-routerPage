@@ -1,4 +1,4 @@
-﻿const { GoogleGenerativeAI } = require("@google/generative-ai");
+const { GoogleGenerativeAI } = require("@google/generative-ai");
 const axios = require("axios");
 
 const scraperService = require('./scraperService');
@@ -97,8 +97,8 @@ class AIProvider {
   constructor(apiKey) {
     this.apiKey = apiKey;
     this.timeout = 30000;
-    this.temperature = 0.7;
-    this.maxTokens = 900;
+    this.temperature = 0.3;
+    this.maxTokens = 250;
   }
 
   async getResponse(userMessage, systemPrompt) {
@@ -251,7 +251,7 @@ class GeminiProvider extends AIProvider {
   constructor() {
     super(Config.GEMINI_API_KEY);
     this.model = "gemini-2.0-flash";
-    this.maxTokens = 900;
+    this.maxTokens = 250;
   }
 
   async getResponse(userMessage, systemPrompt) {
@@ -332,7 +332,13 @@ CRITICAL RULE: NEVER say "I don't know", "sorry", "cannot", "unable", "not avail
 • "Fotographiya offers customized packages. Contact the Fotographiya team for pricing."
 • "Photo delivery varies by package. Contact the Fotographiya team for details."
 
-📝 **ANSWER STYLE:**\n• Answer in full sentences and natural paragraphs whenever possible.\n• Use longer, richer responses instead of only short phrases.\n• When the user asks for details, provide 2-4 sentences or more.\n• Vary your wording and avoid repeating the same phrasing for repeated questions.\n• Use live website data naturally and cite it when relevant.\n• Only use bullet points when the user specifically requests a short summary.\n\n📌 **BRANDING RULES:**
+📏 **RESPONSE LENGTH: MAXIMUM 5-6 LINES**
+• Start with bold heading (max 5-6 words)
+• 1-2 sentence summary
+• Max 3 bullet points
+• End with redirect if needed
+
+📌 **BRANDING RULES:**
 • Always use "Fotographiya" (NEVER "we", "our", "us")
 • Always use "the Fotographiya team" (NEVER "our team")
 • NEVER say "I don't know" - always redirect positively
@@ -347,11 +353,6 @@ ${conversationHistory || "No previous conversation."}
 🏢 **COMPANY DATA**
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ${context}
-
-• If the context contains LIVE WEBSITE DATA, use that information first.
-• If no LIVE WEBSITE DATA is available, use the fallback company data only when necessary to answer the user.
-• Do NOT use hardcoded fallback company data unless the live website data does not answer the user question.
-• If no LIVE WEBSITE DATA is available, use the fallback company data carefully.
 
 ${wantsExamples ? "• User wants EXAMPLES - provide from COMPANY DATA only" : "• Do NOT list examples unless asked"}`;
 
@@ -425,7 +426,7 @@ class ResponseFormatter {
 
     // ✅ Remove any negative responses - force positive redirect
     const negativePatterns = [
-    /I (don't|do not) know/i,
+      /I (don't|do not) know/i,
       /I (can't|cannot|can not)/i,
       /I'm (not|unable)/i,
       /sorry/i,
@@ -453,22 +454,7 @@ class ResponseFormatter {
     cleanText = cleanText.replace(/[ \t]+\n/g, "\n");
     cleanText = cleanText.replace(/\n[ \t]+/g, "\n");
 
-    // Enforce short response length: 2-5 lines
-    const sentences = cleanText
-      .replace(/\s+\n/g, " ")
-      .split(/(?<=[.!?])\s+/)
-      .map(s => s.trim())
-      .filter(Boolean);
-
-    let chosen = sentences.slice(0, 5);
-    if (chosen.length < 2) {
-      // Ensure at least 2 short sentences
-      chosen.push("Contact the Fotographiya team for more details.");
-    }
-
-    // Present one sentence per line (keeps 2-5 lines as requested)
-    const finalText = chosen.join("\n");
-    return finalText.trim();
+    return cleanText.trim();
   }
 
   static ensurePositiveResponse(text) {
@@ -549,7 +535,8 @@ class AIResponseHandler {
       }
     }
 
-    console.log("⚠️ All providers failed. Returning positive fallback response.");
+    console.log("⚠️ All providers failed, using positive fallback");
+    // ✅ ALWAYS POSITIVE FALLBACK - No negative responses ever
     return `**📸 Fotographiya Photography Services**
 Fotographiya offers premium photography and cinematography services across India.
 • Wedding, pre-wedding, maternity, birthday, roka, and corporate photography
@@ -586,4 +573,3 @@ module.exports = {
     );
   },
 };
-
