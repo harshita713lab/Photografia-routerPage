@@ -79,17 +79,9 @@ function isPriceQuery(message) {
   if (typeof message !== "string") return false;
   const msg = message.toLowerCase().trim();
   const priceKeywords = [
-    "price",
-    "cost",
-    "budget",
-    "how much",
-    "charges",
-    "fees",
-    "kitna",
-    "pricing",
-    "rate",
-    "rates",
-    "amount",
+    "price", "cost", "budget", "how much", "charges", 
+    "fees", "kitna", "pricing", "rate", "rates", "amount",
+    "package price", "package cost"
   ];
   return priceKeywords.some((keyword) => msg.includes(keyword));
 }
@@ -97,19 +89,17 @@ function isPriceQuery(message) {
 function isPackageQuery(message) {
   if (typeof message !== "string") return false;
   const msg = message.toLowerCase().trim();
+  
+  // Check for specific package names
+  const specificPackages = ["pearl", "gold", "platinum", "diamond", "silver", "premium", "golden"];
+  for (const pkg of specificPackages) {
+    if (msg.includes(pkg)) return true;
+  }
+  
+  // Check for general package keywords
   const packageKeywords = [
-    "silver package",
-    "golden package",
-    "premium package",
-    "silver pack",
-    "golden pack",
-    "premium pack",
-    "silver",
-    "golden",
-    "gold",
-    "premium",
-    "package",
-    "packages",
+    "package", "packages", "what packages", "which packages",
+    "tell me about", "details about", "what's included"
   ];
   return packageKeywords.some((keyword) => msg.includes(keyword));
 }

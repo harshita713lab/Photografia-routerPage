@@ -417,35 +417,16 @@ ${wantsExamples ? "• User wants EXAMPLES - provide from COMPANY DATA only" : "
 // ============================================
 // ✅ RESPONSE FORMATTER
 // ============================================
+// ============================================
+// ✅ RESPONSE FORMATTER - ENFORCES 2-5 LINES
+// ============================================
 class ResponseFormatter {
   static formatResponse(text) {
     if (!text) return text;
 
     let cleanText = text;
 
-    // ✅ Remove any negative responses - force positive redirect
-    const negativePatterns = [
-    /I (don't|do not) know/i,
-      /I (can't|cannot|can not)/i,
-      /I'm (not|unable)/i,
-      /sorry/i,
-      /unable to/i,
-      /not available/i,
-      /no information/i,
-    ];
-
-    for (const pattern of negativePatterns) {
-      if (pattern.test(cleanText)) {
-        // Replace negative response with positive redirect
-        cleanText = cleanText.replace(pattern, "The Fotographiya team");
-        cleanText = cleanText.replace(
-          /(?:I)(?:'m)? (?:don't|do not|can't|cannot|can not|am not|have no|do not have) .*?\./gi,
-          "The Fotographiya team can provide detailed information about this."
-        );
-      }
-    }
-
-    // Remove all markdown links
+    // Remove markdown links
     cleanText = cleanText.replace(/\[([^\]]+)\]\([^)]+\)/g, "$1");
 
     // Clean up extra spaces
@@ -453,28 +434,47 @@ class ResponseFormatter {
     cleanText = cleanText.replace(/[ \t]+\n/g, "\n");
     cleanText = cleanText.replace(/\n[ \t]+/g, "\n");
 
-    // Enforce short response length: 2-5 lines
+    // Split into sentences
     const sentences = cleanText
       .replace(/\s+\n/g, " ")
       .split(/(?<=[.!?])\s+/)
       .map(s => s.trim())
       .filter(Boolean);
 
+    // ✅ ENFORCE 2-5 LINES
     let chosen = sentences.slice(0, 5);
+    
+    // ✅ Ensure at least 2 sentences
     if (chosen.length < 2) {
-      // Ensure at least 2 short sentences
-      chosen.push("Contact the Fotographiya team for more details.");
+      // Try to split longer sentences
+      const combined = chosen.join(" ");
+      if (combined.length > 60) {
+        const parts = combined.match(/.{1,60}(?:\s|$)/g) || [combined];
+        chosen = parts.slice(0, 5).map(p => p.trim());
+      } else {
+        chosen.push("Contact the Fotographiya team for more details.");
+      }
     }
 
-    // Present one sentence per line (keeps 2-5 lines as requested)
-    const finalText = chosen.join("\n");
+    // ✅ If too many sentences, take first 5
+    if (chosen.length > 5) {
+      chosen = chosen.slice(0, 5);
+    }
+
+    // Present one sentence per line (2-5 lines)
+    let finalText = chosen.join("\n");
+    
+    // ✅ Ensure it ends with proper punctuation
+    if (finalText && !/[.!?]$/.test(finalText)) {
+      finalText += ".";
+    }
+
     return finalText.trim();
   }
 
   static ensurePositiveResponse(text) {
     if (!text) return null;
 
-    // Check if response is negative or empty
     const negativeChecks = [
       /^I (don't|do not) know/i,
       /^sorry/i,
@@ -486,7 +486,7 @@ class ResponseFormatter {
     for (const pattern of negativeChecks) {
       if (pattern.test(text.trim())) {
         console.log("⚠️ Negative response detected, replacing with positive");
-        return null; // Will trigger fallback
+        return null;
       }
     }
 

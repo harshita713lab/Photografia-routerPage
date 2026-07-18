@@ -1,18 +1,19 @@
 ﻿// Backend/src/services/scraperService.js
 // ========================================
-// HYBRID SCRAPER - LIVE DATA + DIRECT URLs
+// HYBRID SCRAPER - LIVE DATA + HARDCODED FALLBACK
 // ========================================
 
 const axios = require("axios");
 const cheerio = require("cheerio");
 const companyData = require("../data/companyData");
+
 function normalizeText(text) {
     if (!text) return "";
     return text
         .toString()
         .toLowerCase()
         .replace(/[â€œâ€Â«Â»â€žâ€Ÿ]/g, '"')
-        .replace(/[â€™â€˜']/g, "'" )
+        .replace(/[â€™â€˜']/g, "'")
         .replace(/[^a-z0-9]+/g, " ")
         .trim()
         .replace(/\s+/g, " ");
@@ -81,21 +82,19 @@ function isFuzzyMatch(query, text) {
     return distance <= threshold;
 }
 
-
-// âœ… FIXED: Simple require with correct path
+// Load puppeteer
 let puppeteerScraper = null;
 try {
-    console.log("ðŸ” Attempting to load puppeteerScraper...");
-    // âœ… Use correct relative path (same folder)
+    console.log("🔍 Attempting to load puppeteerScraper...");
     const loaded = require('./puppeteerScraper');
     if (loaded && typeof loaded === "object" && loaded.scrapeAllPages) {
         puppeteerScraper = loaded;
-        console.log("âœ… Puppeteer scraper loaded successfully");
+        console.log("✅ Puppeteer scraper loaded successfully");
     } else {
-        console.log("âš ï¸ Puppeteer loaded but scrapeAllPages not found");
+        console.log("⚠️ Puppeteer loaded but scrapeAllPages not found");
     }
 } catch (error) {
-    console.log("âš ï¸ Puppeteer scraper not available: " + error.message);
+    console.log("⚠️ Puppeteer scraper not available: " + error.message);
 }
 
 class ScraperService {
@@ -114,9 +113,6 @@ class ScraperService {
         return this.scrapedData;
     }
 
-    // ================================================
-    // âœ… DIRECT URLs - NO external files needed!
-    // ================================================
     getAllPageUrls() {
         return [
             { key: 'home', url: 'https://www.fotographiya.com' },
@@ -139,7 +135,7 @@ class ScraperService {
     // ===== Cheerio Fallback Scraper =====
     async scrapePage(url, key) {
         try {
-            console.log(`ðŸŒ Scraping with Cheerio: ${key} - ${url}`);
+            console.log(`🌐 Scraping with Cheerio: ${key} - ${url}`);
 
             const response = await axios.get(url, {
                 headers: {
@@ -192,7 +188,7 @@ class ScraperService {
                 scrapedAt: new Date().toISOString(),
             };
         } catch (error) {
-            console.error(`âŒ Error scraping ${key}:`, error.message);
+            console.error(`❌ Error scraping ${key}:`, error.message);
             return {
                 key,
                 url,
@@ -211,19 +207,19 @@ class ScraperService {
     // ===== SCRAPE ALL PAGES =====
     async scrapeAllPages() {
         if (this.isScraping) {
-            console.log("â³ Scraping already in progress...");
+            console.log("⏳ Scraping already in progress...");
             return this.scrapedData;
         }
 
         this.isScraping = true;
         let finalResults = {};
 
-        // ðŸ”¥ TRY PUPPETEER FIRST
-        console.log("ðŸ”„ Trying Puppeteer scraper for LIVE data...");
+        // TRY PUPPETEER FIRST
+        console.log("🔧 Trying Puppeteer scraper for LIVE data...");
 
         if (puppeteerScraper && typeof puppeteerScraper.scrapeAllPages === "function") {
             try {
-                console.log("âœ… Using Puppeteer scraper...");
+                console.log("✅ Using Puppeteer scraper...");
                 const puppeteerResults = await puppeteerScraper.scrapeAllPages();
 
                 const successCount = Object.values(puppeteerResults).filter(
@@ -231,7 +227,7 @@ class ScraperService {
                 ).length;
 
                 if (successCount > 0) {
-                    console.log(`âœ… Puppeteer scraped ${successCount} pages successfully!`);
+                    console.log(`✅ Puppeteer scraped ${successCount} pages successfully!`);
                     finalResults = puppeteerResults;
                     this.scrapedData = finalResults;
                     this.lastScrapeTime = new Date();
@@ -239,17 +235,17 @@ class ScraperService {
                     this.dataSource = "LIVE";
                     return this.scrapedData;
                 } else {
-                    console.log("âš ï¸ Puppeteer scraped 0 pages with content. Falling back...");
+                    console.log("⚠️ Puppeteer scraped 0 pages with content. Falling back...");
                 }
             } catch (error) {
-                console.log("âš ï¸ Puppeteer failed:", error.message);
+                console.log("⚠️ Puppeteer failed:", error.message);
             }
         } else {
-            console.log("âš ï¸ Puppeteer scraper not available, using Cheerio");
+            console.log("⚠️ Puppeteer scraper not available, using Cheerio");
         }
 
-        // ðŸŸ¡ FALLBACK: Cheerio scraper
-        console.log("ðŸ”„ Starting Cheerio website scrape...");
+        // FALLBACK: Cheerio scraper
+        console.log("🔧 Starting Cheerio website scrape...");
 
         const pageUrls = this.getAllPageUrls();
         const results = {};
@@ -264,11 +260,11 @@ class ScraperService {
         ).length;
 
         if (cheerioSuccessCount > 0) {
-            console.log(`âœ… Cheerio scraped ${cheerioSuccessCount} pages with content!`);
+            console.log(`✅ Cheerio scraped ${cheerioSuccessCount} pages with content!`);
             finalResults = results;
             this.dataSource = "LIVE";
         } else {
-            console.log("âš ï¸ No content from any scraper. Using CACHED data.");
+            console.log("⚠️ No content from any scraper. Using CACHED data.");
             this.dataSource = "CACHED";
         }
 
@@ -280,7 +276,7 @@ class ScraperService {
     }
 
     // ================================================
-    // ðŸ” SEARCH FUNCTIONS
+    // 🔍 SEARCH FUNCTIONS
     // ================================================
     searchInScrapedData(query) {
         const results = [];
@@ -345,50 +341,185 @@ class ScraperService {
     searchHybrid(query) {
         const liveResults = this.searchInScrapedData(query);
         if (liveResults.length > 0) {
-            console.log(`âœ… Found ${liveResults.length} results in LIVE data`);
+            console.log(`✅ Found ${liveResults.length} results in LIVE data`);
             return liveResults;
         }
-        console.log("âš ï¸ No LIVE data found");
+        console.log("⚠️ No LIVE data found");
         return [];
     }
 
+    // ================================================
+    // 📌 GET HARDCODED DATA FOR PACKAGES & COUPLES
+    // ================================================
+    getHardcodedPackages() {
+        return companyData.packages || {};
+    }
+
+    getHardcodedCouples() {
+        const couples = [];
+        
+        // Featured weddings
+        if (companyData.weddings && companyData.weddings.featured) {
+            for (const wedding of companyData.weddings.featured) {
+                couples.push({
+                    name: wedding.couple || wedding.couple,
+                    location: wedding.location || '',
+                    description: wedding.description || '',
+                    venue: wedding.venue || ''
+                });
+            }
+        }
+        
+        // Pre-wedding shoots
+        if (companyData.weddings && companyData.weddings.prewedding) {
+            for (const shoot of companyData.weddings.prewedding) {
+                couples.push({
+                    name: shoot.couple || '',
+                    style: shoot.style || '',
+                    highlights: shoot.highlights || []
+                });
+            }
+        }
+        
+        // Celebrity weddings
+        if (companyData.weddings && companyData.weddings.celebrity && companyData.weddings.celebrity.featured) {
+            for (const celeb of companyData.weddings.celebrity.featured) {
+                couples.push({
+                    name: celeb.couple || '',
+                    location: celeb.location || '',
+                    description: celeb.description || '',
+                    highlights: celeb.highlights || []
+                });
+            }
+        }
+        
+        return couples;
+    }
+
+    // ================================================
+    // 📌 BUILD AI CONTEXT - PRIORITIZES COMPANY DATA
+    //    FOR PACKAGES AND COUPLE EXAMPLES
+    // ================================================
     buildContextForAI(userMessage, wantsExamples, shootType) {
         const contextParts = [];
-        console.log(`ðŸ” Building AI context for: "${userMessage}"`);
+        const msgLower = userMessage.toLowerCase();
 
-        contextParts.push(`ðŸ“Š DATA SOURCE: ${this.dataSource === "LIVE" ? "LIVE (Website)" : "CACHED"}`);
-        contextParts.push(`- Use LIVE WEBSITE DATA first. Only use cached company fallback if no live website data answers the query.`);
+        console.log(`🔍 Building AI context for: "${userMessage}"`);
 
-        const results = this.searchHybrid(userMessage);
-
-        if (results.length > 0) {
-            contextParts.push(`\nðŸ“„ **LIVE WEBSITE DATA:**`);
-            for (const result of results) {
-                contextParts.push(`\nðŸ“Œ **${result.title}**:`);
-                let count = 0;
-                for (const match of result.matches) {
-                    if (count >= 3) break;
-                    contextParts.push(`  ${match.snippet}`);
-                    count++;
+        // ============================================
+        // 🔥 STEP 1: ALWAYS include hardcoded packages
+        // ============================================
+        const packages = this.getHardcodedPackages();
+        if (packages && Object.keys(packages).length > 0) {
+            contextParts.push(`\n📦 **FOTOGRAPHIYA PACKAGES (FROM COMPANY DATA):**`);
+            contextParts.push(`- Use these package names and details when users ask about packages.`);
+            
+            for (const [key, pkg] of Object.entries(packages)) {
+                if (pkg.name && pkg.includes) {
+                    contextParts.push(`\n**${pkg.name}**:`);
+                    contextParts.push(`  Includes: ${pkg.includes.join(', ')}`);
+                    if (pkg.description) {
+                        contextParts.push(`  Description: ${pkg.description}`);
+                    }
                 }
             }
-        } else {
-            contextParts.push(`\nðŸ“„ No live data found for this query.`);
-            contextParts.push(`- NOTE: If the user is asking about packages, example shoots, or couple names, use the HARDCODED company fallback data (companyData) for package names and example couple names. Only use hardcoded examples when live website data does not answer the question.`);
         }
 
-        const totalPages = Object.keys(this.scrapedData).length;
-        const successPages = Object.values(this.scrapedData).filter(r => r.success).length;
-        contextParts.push(`\nðŸ“Š Scraped: ${successPages}/${totalPages} pages`);
+        // ============================================
+        // 🔥 STEP 2: ALWAYS include hardcoded couples
+        // ============================================
+        const couples = this.getHardcodedCouples();
+        if (couples && couples.length > 0) {
+            contextParts.push(`\n💕 **COUPLE EXAMPLES (FROM COMPANY DATA):**`);
+            contextParts.push(`- Use these as examples when users ask about couples, weddings, or pre-wedding shoots.`);
+            
+            // Show first 6 couples
+            const sampleCouples = couples.slice(0, 6);
+            for (const couple of sampleCouples) {
+                let line = `• ${couple.name || 'Couple'}`;
+                if (couple.location) line += ` (${couple.location})`;
+                if (couple.description && couple.description.length < 60) line += ` - ${couple.description}`;
+                contextParts.push(line);
+            }
+            contextParts.push(`- There are ${couples.length}+ featured couples in our portfolio.`);
+        }
 
-        contextParts.push(`\nðŸ“Œ RULES:`);
+        // ============================================
+        // 🔥 STEP 3: Check if it's a package-specific query
+        // ============================================
+        const packageNames = ['pearl', 'gold', 'platinum', 'diamond', 'silver', 'premium', 'golden'];
+        let isPackageQuery = packageNames.some(name => msgLower.includes(name));
+        
+        // Also check for general package keywords
+        const generalPackageKeywords = ['package', 'packages', 'pricing', 'budget', 'cost', 'price'];
+        if (!isPackageQuery) {
+            isPackageQuery = generalPackageKeywords.some(kw => msgLower.includes(kw));
+        }
+
+        // ============================================
+        // 🔥 STEP 4: Check if it's a couple/example query
+        // ============================================
+        const coupleKeywords = ['couple', 'wedding', 'pre-wedding', 'prewedding', 'engagement', 'shoot', 'example', 'sample', 'featured', 'celebrity'];
+        let isCoupleQuery = coupleKeywords.some(kw => msgLower.includes(kw));
+
+        // ============================================
+        // 🔥 STEP 5: Add LIVE data ONLY for non-package, non-couple queries
+        // ============================================
+        if (!isPackageQuery && !isCoupleQuery) {
+            // Only use live data for general questions
+            contextParts.push(`\n📡 **DATA SOURCE: ${this.dataSource === "LIVE" ? "LIVE (Website)" : "CACHED"}`);
+
+            const results = this.searchHybrid(userMessage);
+            
+            if (results.length > 0) {
+                contextParts.push(`\n📄 **RELEVANT WEBSITE DATA:**`);
+                let resultCount = 0;
+                for (const result of results) {
+                    if (resultCount >= 3) break;
+                    contextParts.push(`\n📌 **${result.title}**:`);
+                    let matchCount = 0;
+                    for (const match of result.matches) {
+                        if (matchCount >= 2) break;
+                        if (match.snippet && match.snippet.length > 30) {
+                            contextParts.push(`  ${match.snippet.slice(0, 200)}`);
+                            matchCount++;
+                        }
+                    }
+                    resultCount++;
+                }
+            } else {
+                contextParts.push(`\nℹ️ No specific live data found for this query.`);
+            }
+        } else {
+            // For package or couple queries, use hardcoded data
+            contextParts.push(`\n📡 **DATA SOURCE: HARDCODED COMPANY DATA (for packages/couples)**`);
+            contextParts.push(`- The information above comes directly from Fotographiya's company data.`);
+        }
+
+        // ============================================
+        // 🔥 STEP 6: Add company info
+        // ============================================
+        contextParts.push(`\n🏢 **COMPANY INFO:**`);
+        contextParts.push(`- Name: Fotographiya`);
+        contextParts.push(`- Tagline: ${companyData.company?.tagline || 'Integrating technology in the art of wedding photography'}`);
+        contextParts.push(`- Location: ${companyData.company?.location || 'Kota, Rajasthan, India'}`);
+        contextParts.push(`- Founded: ${companyData.company?.established || '2023'} by ${companyData.company?.founder || 'Mohit Barthunia'}`);
+        contextParts.push(`- Team: ${companyData.team?.total || '50+'}`);
+        contextParts.push(`- Rating: ${companyData.company?.rating || '4.9/5'}`);
+
+        // ============================================
+        // 🔥 STEP 7: Rules
+        // ============================================
+        contextParts.push(`\n📌 **RULES:**`);
         contextParts.push(`- Always refer to company as "Fotographiya"`);
         contextParts.push(`- Always refer to team as "the Fotographiya team"`);
-        contextParts.push(`- NEVER say "I don't know"`);
+        contextParts.push(`- NEVER say "I don't know" - always redirect positively`);
+        contextParts.push(`- DO NOT share: photographer count, pricing, contact details`);
+        contextParts.push(`- Keep responses SHORT: 2-5 lines maximum`);
+        contextParts.push(`- Provide accurate information from the data above`);
 
         return contextParts.join("\n");
     }
 }
 
 module.exports = new ScraperService();
-
