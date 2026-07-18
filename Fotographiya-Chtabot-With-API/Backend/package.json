@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "nodemon --max-old-space-size=4096 server.js",
     "start": "node --max-old-space-size=4096 server.js",
-    "scrape": "node -e \"require('./src/services/scraperService').scrapeAllPages().then(() => console.log('Scraping done')).catch(console.error)\""
+    "scrape": "node -e \"require('./src/services/scraperService').scrapeAllPages().then(() => console.log('Scraping done')).catch(console.error)\"",
+    "test-scraper": "node test-improved-scraper.js",
+    "scrape-improved": "node test-improved-scraper.js"
   },
   "dependencies": {
     "@google/generative-ai": "^0.21.0",

@@ -1,6 +1,6 @@
 ﻿// Backend/src/services/scraperService.js
 // ========================================
-// HYBRID SCRAPER - LIVE DATA + HARDCODED FALLBACK
+// HYBRID SCRAPER - EXACT COMPANY DATA ONLY
 // ========================================
 
 const axios = require("axios");
@@ -82,19 +82,33 @@ function isFuzzyMatch(query, text) {
     return distance <= threshold;
 }
 
-// Load puppeteer
+// Load improved puppeteer scraper
 let puppeteerScraper = null;
 try {
-    console.log("🔍 Attempting to load puppeteerScraper...");
-    const loaded = require('./puppeteerScraper');
+    console.log("🔍 Attempting to load IMPROVED puppeteerScraper...");
+    const loaded = require('./improvedScraper');
     if (loaded && typeof loaded === "object" && loaded.scrapeAllPages) {
         puppeteerScraper = loaded;
-        console.log("✅ Puppeteer scraper loaded successfully");
+        console.log("✅ ✨ IMPROVED Puppeteer scraper loaded successfully!");
     } else {
-        console.log("⚠️ Puppeteer loaded but scrapeAllPages not found");
+        console.log("⚠️ Improved scraper loaded but scrapeAllPages not found, trying fallback...");
+        const fallback = require('./puppeteerScraper');
+        if (fallback && typeof fallback === "object" && fallback.scrapeAllPages) {
+            puppeteerScraper = fallback;
+            console.log("✅ Fallback Puppeteer scraper loaded");
+        }
     }
 } catch (error) {
-    console.log("⚠️ Puppeteer scraper not available: " + error.message);
+    console.log("⚠️ IMPROVED scraper not available, trying fallback: " + error.message);
+    try {
+        const fallback = require('./puppeteerScraper');
+        if (fallback && typeof fallback === "object" && fallback.scrapeAllPages) {
+            puppeteerScraper = fallback;
+            console.log("✅ Fallback Puppeteer scraper loaded");
+        }
+    } catch (e) {
+        console.log("⚠️ No scraper available: " + e.message);
+    }
 }
 
 class ScraperService {
@@ -349,46 +363,71 @@ class ScraperService {
     }
 
     // ================================================
-    // 📌 GET HARDCODED DATA FOR PACKAGES & COUPLES
+    // 📌 GET EXACT COMPANY DATA (NO HALLUCINATION)
     // ================================================
+
     getHardcodedPackages() {
         return companyData.packages || {};
     }
 
+    // ✅ FIX: Return EXACT data from companyData - NO extra fields!
     getHardcodedCouples() {
         const couples = [];
         
-        // Featured weddings
+        // ✅ Featured weddings - EXACT data only
         if (companyData.weddings && companyData.weddings.featured) {
             for (const wedding of companyData.weddings.featured) {
                 couples.push({
-                    name: wedding.couple || wedding.couple,
+                    name: wedding.couple || '',
                     location: wedding.location || '',
                     description: wedding.description || '',
-                    venue: wedding.venue || ''
+                    venue: wedding.venue || '',
+                    services: wedding.services || [],
+                    date: wedding.date || '',
+                    type: 'featured'
                 });
             }
         }
         
-        // Pre-wedding shoots
+        // ✅ Pre-wedding shoots - EXACT data only (NO fake locations!)
         if (companyData.weddings && companyData.weddings.prewedding) {
             for (const shoot of companyData.weddings.prewedding) {
                 couples.push({
                     name: shoot.couple || '',
                     style: shoot.style || '',
-                    highlights: shoot.highlights || []
+                    highlights: shoot.highlights || [],
+                    type: 'prewedding'
+                    // ❌ NO location field - it doesn't exist in companyData!
                 });
             }
         }
         
-        // Celebrity weddings
+        // ✅ Celebrity weddings - EXACT data only
         if (companyData.weddings && companyData.weddings.celebrity && companyData.weddings.celebrity.featured) {
             for (const celeb of companyData.weddings.celebrity.featured) {
                 couples.push({
                     name: celeb.couple || '',
                     location: celeb.location || '',
                     description: celeb.description || '',
-                    highlights: celeb.highlights || []
+                    highlights: celeb.highlights || [],
+                    date: celeb.date || '',
+                    type: 'celebrity'
+                });
+            }
+        }
+        
+        // ✅ Destination weddings - EXACT data only
+        if (companyData.weddings && companyData.weddings.destination) {
+            for (const dest of companyData.weddings.destination) {
+                couples.push({
+                    name: dest.couple || '',
+                    location: dest.location || '',
+                    description: dest.description || '',
+                    venue: dest.venue || '',
+                    style: dest.style || '',
+                    highlights: dest.highlights || [],
+                    date: dest.date || '',
+                    type: 'destination'
                 });
             }
         }
@@ -396,127 +435,174 @@ class ScraperService {
         return couples;
     }
 
+    // ✅ NEW: Get exact pre-wedding data (NO fake locations!)
+    getExactPreWeddingData() {
+        if (companyData.weddings && companyData.weddings.prewedding) {
+            return companyData.weddings.prewedding;
+        }
+        return [];
+    }
+
+    // ✅ NEW: Get exact destination wedding data
+    getExactDestinationData() {
+        if (companyData.weddings && companyData.weddings.destination) {
+            return companyData.weddings.destination;
+        }
+        return [];
+    }
+
+    // ✅ NEW: Get exact featured wedding data
+    getExactFeaturedWeddings() {
+        if (companyData.weddings && companyData.weddings.featured) {
+            return companyData.weddings.featured;
+        }
+        return [];
+    }
+
     // ================================================
-    // 📌 BUILD AI CONTEXT - PRIORITIZES COMPANY DATA
-    //    FOR PACKAGES AND COUPLE EXAMPLES
+    // 📌 BUILD AI CONTEXT - EXACT DATA ONLY!
     // ================================================
     buildContextForAI(userMessage, wantsExamples, shootType) {
         const contextParts = [];
         const msgLower = userMessage.toLowerCase();
 
         console.log(`🔍 Building AI context for: "${userMessage}"`);
+        console.log(`📌 Shoot type: ${shootType || 'none'}`);
 
         // ============================================
         // 🔥 STEP 1: ALWAYS include hardcoded packages
         // ============================================
         const packages = this.getHardcodedPackages();
         if (packages && Object.keys(packages).length > 0) {
-            contextParts.push(`\n📦 **FOTOGRAPHIYA PACKAGES (FROM COMPANY DATA):**`);
-            contextParts.push(`- Use these package names and details when users ask about packages.`);
+            contextParts.push(`📦 **FOTOGRAPHIYA PACKAGES (FROM COMPANY DATA):**`);
             
             for (const [key, pkg] of Object.entries(packages)) {
                 if (pkg.name && pkg.includes) {
-                    contextParts.push(`\n**${pkg.name}**:`);
-                    contextParts.push(`  Includes: ${pkg.includes.join(', ')}`);
-                    if (pkg.description) {
-                        contextParts.push(`  Description: ${pkg.description}`);
-                    }
+                    contextParts.push(`• ${pkg.name}: ${pkg.includes.join(', ')}`);
                 }
             }
+            contextParts.push(`- NO PRICING information is available in company data.`);
+            contextParts.push(`- Direct users to contact the Fotographiya team for pricing.`);
+            contextParts.push(``);
         }
 
         // ============================================
-        // 🔥 STEP 2: ALWAYS include hardcoded couples
+        // 🔥 STEP 2: Check if user is asking about PRE-WEDDING
         // ============================================
-        const couples = this.getHardcodedCouples();
-        if (couples && couples.length > 0) {
-            contextParts.push(`\n💕 **COUPLE EXAMPLES (FROM COMPANY DATA):**`);
-            contextParts.push(`- Use these as examples when users ask about couples, weddings, or pre-wedding shoots.`);
-            
-            // Show first 6 couples
-            const sampleCouples = couples.slice(0, 6);
-            for (const couple of sampleCouples) {
-                let line = `• ${couple.name || 'Couple'}`;
-                if (couple.location) line += ` (${couple.location})`;
-                if (couple.description && couple.description.length < 60) line += ` - ${couple.description}`;
-                contextParts.push(line);
-            }
-            contextParts.push(`- There are ${couples.length}+ featured couples in our portfolio.`);
-        }
+        const isPreWeddingQuery = msgLower.includes('pre') || 
+                                   msgLower.includes('pre-wedding') || 
+                                   msgLower.includes('prewedding') ||
+                                   shootType === 'prewedding';
 
-        // ============================================
-        // 🔥 STEP 3: Check if it's a package-specific query
-        // ============================================
-        const packageNames = ['pearl', 'gold', 'platinum', 'diamond', 'silver', 'premium', 'golden'];
-        let isPackageQuery = packageNames.some(name => msgLower.includes(name));
-        
-        // Also check for general package keywords
-        const generalPackageKeywords = ['package', 'packages', 'pricing', 'budget', 'cost', 'price'];
-        if (!isPackageQuery) {
-            isPackageQuery = generalPackageKeywords.some(kw => msgLower.includes(kw));
-        }
-
-        // ============================================
-        // 🔥 STEP 4: Check if it's a couple/example query
-        // ============================================
-        const coupleKeywords = ['couple', 'wedding', 'pre-wedding', 'prewedding', 'engagement', 'shoot', 'example', 'sample', 'featured', 'celebrity'];
-        let isCoupleQuery = coupleKeywords.some(kw => msgLower.includes(kw));
-
-        // ============================================
-        // 🔥 STEP 5: Add LIVE data ONLY for non-package, non-couple queries
-        // ============================================
-        if (!isPackageQuery && !isCoupleQuery) {
-            // Only use live data for general questions
-            contextParts.push(`\n📡 **DATA SOURCE: ${this.dataSource === "LIVE" ? "LIVE (Website)" : "CACHED"}`);
-
-            const results = this.searchHybrid(userMessage);
-            
-            if (results.length > 0) {
-                contextParts.push(`\n📄 **RELEVANT WEBSITE DATA:**`);
-                let resultCount = 0;
-                for (const result of results) {
-                    if (resultCount >= 3) break;
-                    contextParts.push(`\n📌 **${result.title}**:`);
-                    let matchCount = 0;
-                    for (const match of result.matches) {
-                        if (matchCount >= 2) break;
-                        if (match.snippet && match.snippet.length > 30) {
-                            contextParts.push(`  ${match.snippet.slice(0, 200)}`);
-                            matchCount++;
-                        }
+        if (isPreWeddingQuery) {
+            const preWeddingData = this.getExactPreWeddingData();
+            if (preWeddingData && preWeddingData.length > 0) {
+                contextParts.push(`💕 **PRE-WEDDING SHOOTS (FROM COMPANY DATA - EXACT):**`);
+                contextParts.push(`- ONLY use the following exact data. DO NOT add locations or details that don't exist.`);
+                
+                for (const shoot of preWeddingData) {
+                    let line = `• ${shoot.couple || 'Couple'}`;
+                    if (shoot.style) line += ` - Style: ${shoot.style}`;
+                    if (shoot.highlights && shoot.highlights.length > 0) {
+                        line += ` [${shoot.highlights.join(', ')}]`;
                     }
-                    resultCount++;
+                    contextParts.push(line);
                 }
-            } else {
-                contextParts.push(`\nℹ️ No specific live data found for this query.`);
+                contextParts.push(`- ⚠️ These couples DO NOT have specific locations in the data.`);
+                contextParts.push(`- NEVER invent locations like "Jaipur" or "Udaipur" for pre-wedding shoots.`);
+                contextParts.push(``);
             }
-        } else {
-            // For package or couple queries, use hardcoded data
-            contextParts.push(`\n📡 **DATA SOURCE: HARDCODED COMPANY DATA (for packages/couples)**`);
-            contextParts.push(`- The information above comes directly from Fotographiya's company data.`);
         }
 
         // ============================================
-        // 🔥 STEP 6: Add company info
+        // 🔥 STEP 3: Check if user is asking about DESTINATION WEDDINGS
         // ============================================
-        contextParts.push(`\n🏢 **COMPANY INFO:**`);
-        contextParts.push(`- Name: Fotographiya`);
+        const isDestinationQuery = msgLower.includes('destination') || 
+                                    msgLower.includes('destination wedding') ||
+                                    shootType === 'destination';
+
+        if (isDestinationQuery) {
+            const destData = this.getExactDestinationData();
+            if (destData && destData.length > 0) {
+                contextParts.push(`🏖️ **DESTINATION WEDDINGS (FROM COMPANY DATA - EXACT):**`);
+                contextParts.push(`- ONLY use the following exact data.`);
+                
+                for (const dest of destData) {
+                    let line = `• ${dest.couple || 'Couple'}`;
+                    if (dest.location) line += ` at ${dest.location}`;
+                    if (dest.venue) line += ` (${dest.venue})`;
+                    if (dest.style) line += ` - ${dest.style}`;
+                    if (dest.highlights && dest.highlights.length > 0) {
+                        line += ` [${dest.highlights.join(', ')}]`;
+                    }
+                    contextParts.push(line);
+                }
+                contextParts.push(`- ⚠️ ONLY use the couples listed above.`);
+                contextParts.push(`- DO NOT invent couples like "Rohan & Kavya" in Goa.`);
+                contextParts.push(``);
+            }
+        }
+
+        // ============================================
+        // 🔥 STEP 4: Check if user is asking about FEATURED WEDDINGS
+        // ============================================
+        const isFeaturedQuery = msgLower.includes('featured') || 
+                                 msgLower.includes('wedding') ||
+                                 msgLower.includes('couple') ||
+                                 msgLower.includes('example');
+
+        if (isFeaturedQuery && !isPreWeddingQuery && !isDestinationQuery) {
+            const featuredData = this.getExactFeaturedWeddings();
+            if (featuredData && featuredData.length > 0) {
+                contextParts.push(`💍 **FEATURED WEDDINGS (FROM COMPANY DATA - EXACT):**`);
+                
+                for (const wedding of featuredData) {
+                    let line = `• ${wedding.couple || 'Couple'}`;
+                    if (wedding.location) line += ` at ${wedding.location}`;
+                    if (wedding.venue) line += ` (${wedding.venue})`;
+                    if (wedding.services && wedding.services.length > 0) {
+                        line += ` - ${wedding.services.join(', ')}`;
+                    }
+                    contextParts.push(line);
+                }
+                contextParts.push(``);
+            }
+        }
+
+        // ============================================
+        // 🔥 STEP 5: Add general company info
+        // ============================================
+        contextParts.push(`🏢 **COMPANY INFO (FROM COMPANY DATA):**`);
+        contextParts.push(`- Name: ${companyData.company?.name || 'Fotographiya'}`);
         contextParts.push(`- Tagline: ${companyData.company?.tagline || 'Integrating technology in the art of wedding photography'}`);
         contextParts.push(`- Location: ${companyData.company?.location || 'Kota, Rajasthan, India'}`);
         contextParts.push(`- Founded: ${companyData.company?.established || '2023'} by ${companyData.company?.founder || 'Mohit Barthunia'}`);
-        contextParts.push(`- Team: ${companyData.team?.total || '50+'}`);
+        contextParts.push(`- Team: ${companyData.team?.total || '50+'} professionals`);
         contextParts.push(`- Rating: ${companyData.company?.rating || '4.9/5'}`);
+        contextParts.push(`- Customers: ${companyData.company?.customers || '200+ Happy Couples'}`);
+        contextParts.push(``);
 
         // ============================================
-        // 🔥 STEP 7: Rules
+        // 🔥 STEP 6: Data source info
         // ============================================
-        contextParts.push(`\n📌 **RULES:**`);
+        contextParts.push(`📡 **DATA SOURCE:** ${this.dataSource === "LIVE" ? "LIVE (Website)" : "COMPANY DATA (Hardcoded)"}`);
+        contextParts.push(`- ✅ For packages and couple examples, ALWAYS use COMPANY DATA.`);
+        contextParts.push(`- ❌ NEVER invent data that doesn't exist in the company data.`);
+        contextParts.push(`- ⚠️ If a couple's location is not in the data, DO NOT add one.`);
+        contextParts.push(``);
+
+        // ============================================
+        // 🔥 STEP 7: RULES
+        // ============================================
+        contextParts.push(`📌 **RULES:**`);
         contextParts.push(`- Always refer to company as "Fotographiya"`);
         contextParts.push(`- Always refer to team as "the Fotographiya team"`);
         contextParts.push(`- NEVER say "I don't know" - always redirect positively`);
         contextParts.push(`- DO NOT share: photographer count, pricing, contact details`);
         contextParts.push(`- Keep responses SHORT: 2-5 lines maximum`);
-        contextParts.push(`- Provide accurate information from the data above`);
+        contextParts.push(`- ONLY use data that exists in the COMPANY DATA`);
+        contextParts.push(`- NEVER invent couple names, locations, or venues`);
+        contextParts.push(`- If asked about something not in data, say: "The Fotographiya team would be happy to share more details."`);
 
         return contextParts.join("\n");
     }

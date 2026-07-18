@@ -51,7 +51,7 @@ class Config {
 class ConversationMemory {
   constructor() {
     this.sessions = new Map();
-    this.maxMessages = 10; // Keep last 10 messages per session
+    this.maxMessages = 6; // Keep last 6 messages per session
   }
 
   add(sessionId, role, content) {
@@ -77,7 +77,6 @@ class ConversationMemory {
 
   getHistoryForAI(sessionId) {
     const messages = this.get(sessionId);
-    // Format as conversation history for AI context
     return messages
       .map((m) => `${m.role === "user" ? "USER" : "ASSISTANT"}: ${m.content}`)
       .join("\n");
@@ -97,8 +96,8 @@ class AIProvider {
   constructor(apiKey) {
     this.apiKey = apiKey;
     this.timeout = 30000;
-    this.temperature = 0.7;
-    this.maxTokens = 900;
+    this.temperature = 0.5; // Lower = more focused/shorter
+    this.maxTokens = 200; // ✅ REDUCED from 900 to 200!
   }
 
   async getResponse(userMessage, systemPrompt) {
@@ -118,6 +117,7 @@ class GroqProvider extends AIProvider {
     super(Config.GROQ_API_KEY);
     this.url = Config.GROQ_API_URL;
     this.model = Config.AI_MODEL;
+    this.maxTokens = 200; // ✅ SHORT RESPONSES
   }
 
   async getResponse(userMessage, systemPrompt) {
@@ -135,8 +135,8 @@ class GroqProvider extends AIProvider {
             { role: "system", content: systemPrompt },
             { role: "user", content: userMessage },
           ],
-          temperature: this.temperature,
-          max_tokens: this.maxTokens,
+          temperature: 0.5, // ✅ Lower for concise responses
+          max_tokens: 200, // ✅ SHORT!
         },
         {
           headers: {
@@ -168,6 +168,7 @@ class MistralProvider extends AIProvider {
     super(Config.MISTRAL_API_KEY);
     this.url = "https://api.mistral.ai/v1/chat/completions";
     this.model = "mistral-small-latest";
+    this.maxTokens = 200; // ✅ SHORT RESPONSES
   }
 
   async getResponse(userMessage, systemPrompt) {
@@ -182,8 +183,8 @@ class MistralProvider extends AIProvider {
             { role: "system", content: systemPrompt },
             { role: "user", content: userMessage },
           ],
-          temperature: this.temperature,
-          max_tokens: this.maxTokens,
+          temperature: 0.5,
+          max_tokens: 200, // ✅ SHORT!
         },
         {
           headers: {
@@ -210,6 +211,7 @@ class CerebrasProvider extends AIProvider {
     super(Config.CEREBRAS_API_KEY);
     this.url = "https://api.cerebras.ai/v1/chat/completions";
     this.model = "llama-3.3-70b";
+    this.maxTokens = 200; // ✅ SHORT RESPONSES
   }
 
   async getResponse(userMessage, systemPrompt) {
@@ -224,8 +226,8 @@ class CerebrasProvider extends AIProvider {
             { role: "system", content: systemPrompt },
             { role: "user", content: userMessage },
           ],
-          temperature: this.temperature,
-          max_tokens: this.maxTokens,
+          temperature: 0.5,
+          max_tokens: 200, // ✅ SHORT!
         },
         {
           headers: {
@@ -251,7 +253,7 @@ class GeminiProvider extends AIProvider {
   constructor() {
     super(Config.GEMINI_API_KEY);
     this.model = "gemini-2.0-flash";
-    this.maxTokens = 900;
+    this.maxTokens = 200; // ✅ SHORT RESPONSES
   }
 
   async getResponse(userMessage, systemPrompt) {
@@ -262,13 +264,13 @@ class GeminiProvider extends AIProvider {
       const model = genAI.getGenerativeModel({
         model: this.model,
         generationConfig: {
-          maxOutputTokens: this.maxTokens,
-          temperature: this.temperature,
+          maxOutputTokens: 200, // ✅ SHORT!
+          temperature: 0.5,
         },
       });
 
       const result = await model.generateContent(
-        `${systemPrompt}\n\nUSER QUESTION: ${userMessage}\n\nYOUR RESPONSE:`,
+        `${systemPrompt}\n\nUSER QUESTION: ${userMessage}\n\nYOUR RESPONSE (2-5 lines only):`,
       );
 
       return (await result.response).text() || null;
@@ -280,7 +282,7 @@ class GeminiProvider extends AIProvider {
 }
 
 // ============================================
-// ✅ PROMPT BUILDER - NO NEGATIVE RESPONSES
+// ✅ PROMPT BUILDER - SHORT RESPONSE ENFORCED
 // ============================================
 
 class PromptBuilder {
@@ -304,39 +306,22 @@ class PromptBuilder {
     wantsPrice,
     wantsPackage
   ) {
-    let basePrompt = `You are Fotographiya's official AI photography assistant. You MUST ALWAYS give positive, helpful responses about Fotographiya.
+    // ✅ CRITICAL: SHORT RESPONSE INSTRUCTION AT THE TOP
+    let basePrompt = `You are Fotographiya's official AI photography assistant.
 
-CRITICAL RULE: NEVER say "I don't know", "sorry", "cannot", "unable", "not available", or any negative response. Always redirect to "the Fotographiya team" for more details.
+🚨 **CRITICAL: RESPOND IN EXACTLY 2-5 SHORT LINES. MAXIMUM 5 LINES. BE BRIEF.**
+
+RULES:
+• NEVER say "I don't know", "sorry", "cannot", "unable", "not available"
+• Always redirect to "the Fotographiya team" for more details
+• Keep responses to 2-5 lines maximum
+• Use full sentences, not bullet points
+• Be helpful and positive
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-📌 **CORE RULES**
+🏢 **COMPANY DATA**
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-✅ **ALLOWED (You CAN share):**
-• Team size: Fotographiya has 50+ team members
-• Experience: 2+ years (established 2023 by Mohit Barthunia)
-• Services: Wedding, pre-wedding, destination, maternity, birthday, roka, corporate
-• Locations: All over India (Rajasthan, Delhi, Maharashtra, Goa, etc.)
-• GoldenBox: AI-powered photo delivery system
-• Academy: Photography courses with internships
-• Rating: 4.9/5 | Customers: 200+ happy couples
-
-❌ **RESTRICTED (NEVER share):**
-• Number of photographers who will come to any wedding/shoot
-• Any pricing, cost, budget, charges, fees
-• Specific numbers (hours, photo count, team size breakdown)
-• Contact details (phone, WhatsApp, email, links)
-
-🔄 **HOW TO RESPOND TO RESTRICTED QUESTIONS:**
-• "Photographers assigned based on your requirements. Contact the Fotographiya team."
-• "Fotographiya offers customized packages. Contact the Fotographiya team for pricing."
-• "Photo delivery varies by package. Contact the Fotographiya team for details."
-
-📝 **ANSWER STYLE:**\n• Answer in full sentences and natural paragraphs whenever possible.\n• Use longer, richer responses instead of only short phrases.\n• When the user asks for details, provide 2-4 sentences or more.\n• Vary your wording and avoid repeating the same phrasing for repeated questions.\n• Use live website data naturally and cite it when relevant.\n• Only use bullet points when the user specifically requests a short summary.\n\n📌 **BRANDING RULES:**
-• Always use "Fotographiya" (NEVER "we", "our", "us")
-• Always use "the Fotographiya team" (NEVER "our team")
-• NEVER say "I don't know" - always redirect positively
-• NEVER give negative or拒绝 responses
+${context}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 📖 **CONVERSATION HISTORY**
@@ -344,16 +329,21 @@ CRITICAL RULE: NEVER say "I don't know", "sorry", "cannot", "unable", "not avail
 ${conversationHistory || "No previous conversation."}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🏢 **COMPANY DATA**
+📌 **RESPONSE FORMAT**
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-${context}
+• RESPOND IN EXACTLY 2-5 LINES
+• Use full, natural sentences
+• Be direct and helpful
+• DO NOT use bullet points unless listing packages
+• End with a complete thought
 
-• If the context contains LIVE WEBSITE DATA, use that information first.
-• If no LIVE WEBSITE DATA is available, use the fallback company data only when necessary to answer the user.
-• Do NOT use hardcoded fallback company data unless the live website data does not answer the user question.
-• If no LIVE WEBSITE DATA is available, use the fallback company data carefully.
-
-${wantsExamples ? "• User wants EXAMPLES - provide from COMPANY DATA only" : "• Do NOT list examples unless asked"}`;
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🚫 **WHAT NOT TO SAY**
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• NEVER say "I don't know"
+• NEVER give pricing
+• NEVER say "sorry"
+• NEVER say "unable to"`;
 
     // ==========================================
     // 🎯 SHOOT TYPE
@@ -366,9 +356,8 @@ ${wantsExamples ? "• User wants EXAMPLES - provide from COMPANY DATA only" : "
 🎯 **SHOOT TYPE: ${shootType.toUpperCase()}**
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 • Heading MUST be: "${heading}"
-• Describe the service from COMPANY DATA
+• Describe the service in 2-3 lines
 • NO pricing, NO numbers, NO contact details
-• Max 5 lines
 • End with: "Contact the Fotographiya team for more details."`;
     }
 
@@ -382,8 +371,7 @@ ${wantsExamples ? "• User wants EXAMPLES - provide from COMPANY DATA only" : "
 💰 **PRICE QUERY DETECTED**
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 • NEVER give specific price, cost, or numbers
-• Describe the service from COMPANY DATA
-• Max 4 lines
+• Describe the service in 2-3 lines
 • End with: "Contact the Fotographiya team for pricing details."`;
     }
 
@@ -400,23 +388,30 @@ ${wantsExamples ? "• User wants EXAMPLES - provide from COMPANY DATA only" : "
 **IF GENERAL QUESTION ("What packages do you offer?"):**
 • ONLY list names: Pearl, Gold, Platinum, Diamond
 • NO description, NO includes, NO pricing
-• Max 4 lines
+• Example: "Fotographiya offers Pearl, Gold, Platinum, and Diamond packages."
 • End with: "Ask me about any specific package! 😊"
 
 **IF SPECIFIC PACKAGE ("Tell me about Pearl"):**
-• Give full details (what's included)
+• Give full details (what's included) in 3-4 lines
 • NO pricing, NO photographer count
-• Max 6 lines
 • End with: "For pricing, contact the Fotographiya team."`;
+
+    // ✅ If package data is available, include it explicitly
+    const packages = scraperService.getHardcodedPackages ? scraperService.getHardcodedPackages() : {};
+    if (packages && Object.keys(packages).length > 0) {
+      basePrompt += `\n\n📦 **PACKAGE DATA:**`;
+      for (const [key, pkg] of Object.entries(packages)) {
+        if (pkg.name && pkg.includes) {
+          basePrompt += `\n• ${pkg.name}: ${pkg.includes.join(', ')}`;
+        }
+      }
+    }
     }
 
     return basePrompt;
   }
 }
 
-// ============================================
-// ✅ RESPONSE FORMATTER
-// ============================================
 // ============================================
 // ✅ RESPONSE FORMATTER - ENFORCES 2-5 LINES
 // ============================================
@@ -429,30 +424,33 @@ class ResponseFormatter {
     // Remove markdown links
     cleanText = cleanText.replace(/\[([^\]]+)\]\([^)]+\)/g, "$1");
 
-    // Clean up extra spaces
+    // Remove extra newlines
     cleanText = cleanText.replace(/\n{3,}/g, "\n\n");
-    cleanText = cleanText.replace(/[ \t]+\n/g, "\n");
-    cleanText = cleanText.replace(/\n[ \t]+/g, "\n");
 
-    // Split into sentences
+    // ✅ Split into sentences
     const sentences = cleanText
       .replace(/\s+\n/g, " ")
       .split(/(?<=[.!?])\s+/)
       .map(s => s.trim())
       .filter(Boolean);
 
+    console.log(`📊 Found ${sentences.length} sentences`);
+
     // ✅ ENFORCE 2-5 LINES
     let chosen = sentences.slice(0, 5);
     
     // ✅ Ensure at least 2 sentences
     if (chosen.length < 2) {
-      // Try to split longer sentences
       const combined = chosen.join(" ");
       if (combined.length > 60) {
         const parts = combined.match(/.{1,60}(?:\s|$)/g) || [combined];
         chosen = parts.slice(0, 5).map(p => p.trim());
-      } else {
+      } else if (combined.length > 0) {
+        // Add a second sentence if only one
         chosen.push("Contact the Fotographiya team for more details.");
+      } else {
+        // Completely empty - use fallback
+        return "Fotographiya offers premium photography services. Contact the Fotographiya team for more details.";
       }
     }
 
@@ -461,15 +459,22 @@ class ResponseFormatter {
       chosen = chosen.slice(0, 5);
     }
 
-    // Present one sentence per line (2-5 lines)
+    // ✅ Join with newlines
     let finalText = chosen.join("\n");
     
-    // ✅ Ensure it ends with proper punctuation
-    if (finalText && !/[.!?]$/.test(finalText)) {
-      finalText += ".";
-    }
+    // ✅ Ensure each sentence ends with proper punctuation
+    finalText = finalText.split("\n").map(line => {
+      if (line.trim() && !/[.!?]$/.test(line.trim())) {
+        return line.trim() + ".";
+      }
+      return line.trim();
+    }).join("\n");
 
-    return finalText.trim();
+    // ✅ Final cleanup
+    finalText = finalText.replace(/\n{2,}/g, "\n");
+
+    console.log(`📝 Final response: ${finalText.split("\n").length} lines`);
+    return finalText;
   }
 
   static ensurePositiveResponse(text) {
@@ -491,6 +496,17 @@ class ResponseFormatter {
     }
 
     return text;
+  }
+
+  // ✅ NEW: Force-shorten any response that's too long
+  static forceShorten(text, maxLines = 5) {
+    if (!text) return text;
+    
+    const lines = text.split("\n").filter(line => line.trim().length > 0);
+    if (lines.length <= maxLines) return text;
+    
+    // Take only first maxLines lines
+    return lines.slice(0, maxLines).join("\n");
   }
 }
 
@@ -535,10 +551,14 @@ class AIResponseHandler {
         const provider = new ProviderClass();
         const response = await provider.getResponse(userMessage, systemPrompt);
         if (response) {
-          const cleanResponse = ResponseFormatter.formatResponse(response);
+          // ✅ Format and shorten
+          let cleanResponse = ResponseFormatter.formatResponse(response);
+          
+          // ✅ Force shorten if still too long
+          cleanResponse = ResponseFormatter.forceShorten(cleanResponse, 5);
+          
           const positiveCheck = ResponseFormatter.ensurePositiveResponse(cleanResponse);
           if (positiveCheck) {
-            // Store AI response in memory
             this.memory.add(sessionId, "assistant", positiveCheck);
             return positiveCheck;
           }
@@ -550,14 +570,7 @@ class AIResponseHandler {
     }
 
     console.log("⚠️ All providers failed. Returning positive fallback response.");
-    return `**📸 Fotographiya Photography Services**
-Fotographiya offers premium photography and cinematography services across India.
-• Wedding, pre-wedding, maternity, birthday, roka, and corporate photography
-• Professional team of 50+ creative professionals
-• GoldenBox AI-powered instant photo delivery system
-• Fotographiya Academy with photography courses
-
-The Fotographiya team would be happy to assist you with personalized information.`;
+    return "Fotographiya offers premium photography services across India. Contact the Fotographiya team for more details.";
   }
 }
 
@@ -586,4 +599,3 @@ module.exports = {
     );
   },
 };
-
