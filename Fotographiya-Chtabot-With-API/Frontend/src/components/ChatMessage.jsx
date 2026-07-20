@@ -177,8 +177,8 @@ const LINK_CONFIG = {
     links: [
       { label: '🖼️ Photo 1', link: 'https://in.pinterest.com/pin/967288826241112251/' },
       { label: '🖼️ Photo 2', link: 'https://in.pinterest.com/pin/967288826220643904/' },
-      { label: '🖼️ Photo 3', link: 'https://i.pinimg.com/736x/dd/04/df/dd04df71da4dbd3531bd5dc9a9bd3dd4.jpg' },
-      { label: '🖼️ Photo 4', link: 'https://i.pinimg.com/736x/b1/ae/00/b1ae00c4563b599ee5a662d538c35188.jpg' },
+      { label: '🖼️ Photo 3', link: 'https://in.pinterest.com/pin/967288826241343455/' },
+      { label: '🖼️ Photo 4', link: 'https://in.pinterest.com/pin/967288826220606710/' },
     ]
   },
 

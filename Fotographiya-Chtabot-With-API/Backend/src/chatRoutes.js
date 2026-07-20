@@ -327,6 +327,10 @@ router.post("/message", async (req, res) => {
     }
 
     const context = scraperService.buildContextForAI(message, false, shootType);
+    // ✅ VERIFICATION STEP: Log the context being sent to the AI
+    console.log("--- AI CONTEXT START ---");
+    console.log(context);
+    console.log("--- AI CONTEXT END ---");
     const reply = await getAIResponse(
       message,
       context,
