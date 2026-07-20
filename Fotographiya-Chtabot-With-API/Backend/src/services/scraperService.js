@@ -1,4 +1,4 @@
-﻿// Backend/src/services/scraperService.js
+﻿﻿// Backend/src/services/scraperService.js
 // ========================================
 // HYBRID SCRAPER - EXACT COMPANY DATA ONLY
 // ========================================
@@ -460,7 +460,7 @@ class ScraperService {
     }
 
     // ================================================
-    // 📌 BUILD AI CONTEXT - EXACT DATA ONLY!
+    // 📌 BUILD AI CONTEXT - EXACT DATA + LIVE SCRAPED DATA!
     // ================================================
     buildContextForAI(userMessage, wantsExamples, shootType) {
         const contextParts = [];
@@ -468,6 +468,57 @@ class ScraperService {
 
         console.log(`🔍 Building AI context for: "${userMessage}"`);
         console.log(`📌 Shoot type: ${shootType || 'none'}`);
+        console.log(`📡 Data source: ${this.dataSource}`);
+        console.log(`📄 Scraped pages count: ${Object.keys(this.scrapedData).length}`);
+
+        // ============================================
+        // 🔥 STEP 0: INCLUDE LIVE SCRAPED DATA FIRST (if available)
+        // ============================================
+        if (this.dataSource === "LIVE" && Object.keys(this.scrapedData).length > 0) {
+            console.log("✅ LIVE scraped data is available! Including in AI context...");
+            
+            // First, try to find relevant search results from scraped data
+            const searchResults = this.searchInScrapedData(userMessage);
+            
+            if (searchResults.length > 0) {
+                contextParts.push(`🌐 **RELEVANT SCRAPED INFORMATION (FROM LIVE WEBSITE):**`);
+                contextParts.push(`- The following information was extracted LIVE from the Fotographiya website.`);
+                contextParts.push(`- Use this information to answer the user's question accurately.`);
+                contextParts.push(``);
+                
+                for (const result of searchResults) {
+                    contextParts.push(`📄 **Page: ${result.title}**`);
+                    for (const match of result.matches) {
+                        contextParts.push(`  • ${match.snippet}`);
+                    }
+                    contextParts.push(``);
+                }
+            }
+            
+            // Also include general scraped content overview for broader context
+            const liveContentParts = [];
+            for (const [key, data] of Object.entries(this.scrapedData)) {
+                if (data.success && data.content && data.content.length > 100) {
+                    // Include a summary of each scraped page
+                    const summary = data.content.slice(0, 300).trim();
+                    liveContentParts.push(`📄 **${data.title || key}**: ${summary}`);
+                }
+            }
+            
+            if (liveContentParts.length > 0) {
+                contextParts.push(`🌐 **LIVE WEBSITE CONTENT OVERVIEW (FROM SCRAPED DATA):**`);
+                contextParts.push(`- The following content was scraped LIVE from the Fotographiya website pages.`);
+                contextParts.push(`- PRIORITIZE this live information over hardcoded data when answering.`);
+                contextParts.push(`- If the user's question relates to any of these topics, use this data to answer.`);
+                contextParts.push(``);
+                for (const part of liveContentParts.slice(0, 8)) { // Limit to 8 pages to keep context manageable
+                    contextParts.push(part);
+                    contextParts.push(``);
+                }
+            }
+        } else {
+            console.log("⚠️ No LIVE scraped data available. Using only COMPANY DATA.");
+        }
 
         // ============================================
         // 🔥 STEP 1: ALWAYS include hardcoded packages
@@ -586,8 +637,9 @@ class ScraperService {
         // 🔥 STEP 6: Data source info
         // ============================================
         contextParts.push(`📡 **DATA SOURCE:** ${this.dataSource === "LIVE" ? "LIVE (Website)" : "COMPANY DATA (Hardcoded)"}`);
-        contextParts.push(`- ✅ For packages and couple examples, ALWAYS use COMPANY DATA.`);
-        contextParts.push(`- ❌ NEVER invent data that doesn't exist in the company data.`);
+        contextParts.push(`- ✅ When LIVE data is available, use it as the primary source.`);
+        contextParts.push(`- ✅ For packages, pricing rules, and couples data, ALWAYS use COMPANY DATA.`);
+        contextParts.push(`- ❌ NEVER invent data that doesn't exist in the provided context.`);
         contextParts.push(`- ⚠️ If a couple's location is not in the data, DO NOT add one.`);
         contextParts.push(``);
 
@@ -599,8 +651,8 @@ class ScraperService {
         contextParts.push(`- Always refer to team as "the Fotographiya team"`);
         contextParts.push(`- NEVER say "I don't know" - always redirect positively`);
         contextParts.push(`- DO NOT share: photographer count, pricing, contact details`);
-        contextParts.push(`- Keep responses SHORT: 2-5 lines maximum`);
-        contextParts.push(`- ONLY use data that exists in the COMPANY DATA`);
+        contextParts.push(`- Keep responses CONCISE: 2-5 lines maximum`);
+        contextParts.push(`- ONLY use data that exists in the provided context above.`);
         contextParts.push(`- NEVER invent couple names, locations, or venues`);
         contextParts.push(`- If asked about something not in data, say: "The Fotographiya team would be happy to share more details."`);
 
